@@ -42,7 +42,7 @@
   left: 0px;
   display: flex;            
 }
-.page1 .left_search_wrap {
+.left_search_wrap {
   box-sizing: border-box;
   width: 15%;
   min-width: 140px;
@@ -52,43 +52,44 @@
   align-items: center;
   justify-content: center;
 }
-.page1 .search_wrap {
+.search_wrap {
   height: 85%;
-  max-height: 390px;
+  max-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
-.page1 .left_search_wrap .search_btn {
+.left_search_wrap .search_btn {
   width: 60%;
 }
-.page1 .select_date_wrap {
+.select_date_wrap {
   width: 140px;
   text-align: center;
 }
-.page1 .select_date_wrap span {            
+.select_date_wrap span {            
   display: block;
   font-size: 12px;
   font-size: 16px;
   color: #555;
 }
-.page1 .select_date_wrap input {
+.select_date_wrap input {
   margin-top: 5px;
   width: 70%
 }
-.page1 .right_result_wrap {
+.right_result_wrap {
   flex-grow: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-.page1 .tab_wrap {
+.tab_wrap {
+  width: 100%;
   height: 35px;
   display: flex;
   background: #fff;
 }
-.page1 .tab_wrap span {
+.tab_wrap span {
   box-sizing: border-box;
   width: 100px;
   height: 35px;
@@ -96,7 +97,7 @@
   text-align: center;
   cursor: pointer;
 }
-.page1 .tab_wrap span.active {
+.tab_wrap span.active {
   color: #fff;
   background: #007bff;
 }
@@ -107,7 +108,31 @@
   height:300px;
   top: 400px;
   left: 0px;
+  display: flex; 
 }
+.page2 .left_search_wrap, .page2 .right_result_wrap {
+  /* display: none; */
+}
+.page2 .time_span_wrap, .page2 .cycle_num_wrap {
+  font-size: 16px;
+  color: #555;
+  text-align: center;
+}
+.page2 .dropdown button {
+  margin-top: 5px;
+  padding: 0;
+  width: 100px;
+  height: 30px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page2 .dropdown-menu li {
+  cursor: pointer;
+}
+
 .page3{
   background-color: #c2c6c9;
   z-index: 1;

@@ -52,7 +52,27 @@ $(function(){
 			$this.html('<i class="fa fa-angle-double-down" aria-hidden="true"></i>')
 		}else{
 			$this.html('<i class="fa fa-angle-double-up" aria-hidden="true"></i>')
-		}
+        }
+        
+    })
+    
+    // 添加周期数目选项
+    for (let i = 0; i < 20; i++) {
+        $('.cycle_num_wrap .dropdown-menu').append(`<li class="dropdown-item">${i + 1}</li>`)
+    }
+    // 全屏展示下左page2
+    $('.page2 .switch').click(function() {
+        $('.page2 .left_search_wrap, .page2 .right_result_wrap').css('display', 'flex')
+    })
+    
+    // 选择时间跨度
+    $('.page2 .time_span_wrap .dropdown-menu').on('click', 'li', function() {
+        $('.page2 .selected_time_span').text($(this).text())
+    })
+
+    // 选择周期数目
+    $('.page2 .cycle_num_wrap .dropdown-menu').on('click', 'li', function() {
+        $('.page2 .selected_cycle_num').text($(this).text())
     })
     
     // $.get('./static/json/myoptions.json',function(res){
@@ -63,12 +83,20 @@ $(function(){
     //     });
     // });
 
-    // main4 page1
-    $('.right_result_wrap .tab_wrap').on('click', 'span', function() {
-        let index = $(this).index()
-        let span = $('.right_result_wrap .tab_wrap span').eq(index)
-        span.addClass('active')
-        span.siblings().removeClass('active')
+    // main4 page1 切换tab
+    $('.page1 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+        changeTabClass($(this))
     })
+
+    // main4 page2 切换tab
+    $('.page2 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+        changeTabClass($(this))
+    })
+    
+    // 改变tab样式
+    function changeTabClass(el) {
+        el.addClass('active')
+        el.siblings().removeClass('active')
+    }
 });
 
