@@ -77,6 +77,15 @@ $(function(){
     $('.page2 .cycle_num_wrap .dropdown-menu').on('click', 'li', function() {
         $('.page2 .selected_cycle_num').text($(this).text())
     })
+
+    // 全屏展示下右page3
+    $('.page3 .switch').click(function() {
+        let display = 'flex'
+        if (!$('.page3').hasClass('all')) {
+            display = 'none'
+        }
+        $('.page3 .left_search_wrap, .page3 .right_result_wrap').css('display', display)
+    })
     
     // page3 tags 切换
     $(".page3-table ol li").on("click",function(){
@@ -103,6 +112,11 @@ $(function(){
 
     // main4 page2 切换tab
     $('.page2 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+        changeTabClass($(this))
+    })
+
+    // main4 page3 切换tab
+    $('.page3 .right_result_wrap .tab_wrap').on('click', 'span', function() {
         changeTabClass($(this))
     })
     

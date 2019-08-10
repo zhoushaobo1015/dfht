@@ -113,6 +113,10 @@ fieldset, img { border:0; vertical-align: middle;}
   color: #fff;
   background: #007bff;
 }
+.result_wrap {
+  flex-grow: 1;
+}
+
 .page2{
   background-color: #b1ca54;
   z-index: 1;
@@ -122,7 +126,7 @@ fieldset, img { border:0; vertical-align: middle;}
   left: 0px;
   display: flex; 
 }
-.page2 .left_search_wrap, .page2 .right_result_wrap {
+.page2 .left_search_wrap, .page2 .right_result_wrap, .page3 .left_search_wrap, .page3 .right_result_wrap {
   display: none;
 }
 .page2 .time_span_wrap, .page2 .cycle_num_wrap {
@@ -152,6 +156,7 @@ fieldset, img { border:0; vertical-align: middle;}
   height:300px;
   top: 400px;
   left: 50%;
+  display: flex;
 }
 .page3 .page3-table .tags ol li {
   padding-right: 20px;
