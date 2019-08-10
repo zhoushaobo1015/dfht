@@ -1,5 +1,17 @@
 /* common */
 @charset "utf-8";
+html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,abbr, address, cite, code,del, dfn, em, img, ins,kbd, q, samp,small, strong, sub, sup, var,b, i,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot,thead,tr, th, td,article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary,time, mark, audio, video {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;  /*设置4个边框的样式*/
+  outline-style:none;/*FF*/ 
+  vertical-align: middle;
+}
+ul, ol { list-style:none; } 
+a { text-decoration:none; color: rgba(0, 0, 0, 0.65);} 
+b, strong, i, em {font-weight: normal;font-style: normal;}
+fieldset, img { border:0; vertical-align: middle;}
 .wrapper {
   width: 110px;
   max-width: 100%;
@@ -55,6 +67,33 @@
   height:300px;
   top: 400px;
   left: 50%;
+}
+.page3 .page3-table .tags ol li {
+  padding-right: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 38px;
+  line-height: 38px;
+}
+.page3 .page3-table .tags ol li.selected {
+  color: #487af7;
+}
+.page3-table .page3-table-content table {
+  width: 100%;
+}
+.page3-table .page3-table-content table tr{
+  height: 40px;
+  line-height: 40px;
+}
+
+.page3-table .page3-table-content table thead tr{
+  background: #fff;
+}
+.page3-table .page3-table-content table tbody tr:nth-child(even){
+  background: #fff;
+}
+.page3-table .page3-table-content table tbody tr:nth-child(odd){
+  background: #c2c6c9;
 }
 .wrap {
   position: relative;
