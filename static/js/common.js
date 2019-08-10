@@ -91,6 +91,7 @@ $(function(){
     $('.search1_btn').click(function() {
         $("#search1Popup").modal('toggle');
         getSearch1Data()
+        $('#search1Popup .selector1').val("").trigger("change")
     })
 
     // 点击查询2按钮
@@ -196,6 +197,7 @@ $(function(){
         matcher: matchStart
     });
 
+
     $('#search1Popup .selector2').select2({
         matcher: matchStart
     });
@@ -224,7 +226,8 @@ $(function(){
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text()
-            if (!itemIsExist(id, className)) {
+
+            if (!itemIsExist(id, className) && text !== '请选择：') {
                 $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
             }
         })
@@ -349,6 +352,9 @@ $(function(){
         });
         
         function appendData(selectData, className) {
+            if (selectData.length > 0) {
+                $(`.${className}_wrap .${className}`).append('<option>请选择：</option>')
+            }
             selectData.map(data => {
                 $(`.${className}_wrap .${className}`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
             })
@@ -359,6 +365,9 @@ $(function(){
     function getSearch2Data() {
         $.get("/static/json/myoptions.json",function(result){
             let features = result.features
+            if (selectData.length > 0) {
+                $(`.target_selector_wrap .target_selector`).append('<option>请选择：</option>')
+            }
             features.map(data => {
                 $(`.target_selector_wrap .target_selector`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
             })
