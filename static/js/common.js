@@ -1,5 +1,6 @@
-// main3 
-var onClickMain3Btn1Fn = function(){
+
+var requestData = function(url,type,data){
+    console.log( url,type,data )
     $.ajax({
         url: "",
         type: "",
@@ -15,34 +16,43 @@ var onClickMain3Btn1Fn = function(){
             $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
         }
     })
-    // 展示沙漏
-    $("#Hourglass").modal('toggle');
-    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>')
 }
 
-var onClickMain3Btn2Fn = function(){
-    $("#date-list").modal('toggle');
+// main3 btn1
+var onClickMain3Btn1Fn = function(){
+    // 展示沙漏
+    $("#Hourglass").modal('toggle');
+    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+    
+    requestData("url","type","data");
 }
 
 var onClickMain3Btn3Fn = function(){
-
-    $.ajax({
-        url: "",
-        type: "",
-        data: "",
-        success: function(res){
-            
-        },
-        error: function(err){
-
-        }
-    })
     $("#Hourglass").modal('toggle');
-    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>')
+    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+
+    requestData("url","type","data");
 }
 
-var onClickHideModule = function(type){
-    $("#"+type).modal("hide");
+var onClickMain3Btn2Fn = function(id){
+    $form_control_value = $(".form_date .form-control").val();
+    if($form_control_value === '请选择时间'){
+        return false;
+    }
+    $("#"+id).modal('hide');
+    $("#Hourglass").modal('toggle');
+    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+
+    requestData("url","type","data");
+
+}
+
+var onClickModule = function(id, type){
+    if(type){
+        $("#"+id).modal("show");
+    }else{
+        $("#"+id).modal("hide");
+    }
 }
 
 $(function(){

@@ -215,7 +215,7 @@
             <div class="container col bg-light mx-3">
                 <div class="main3">
                     <button type="button" class="btn btn-primary btn-block" data-toggle="modal"  onclick="onClickMain3Btn1Fn()">强制更新</button>
-                    <button type="button" class="btn btn-primary btn-block main3Btn2" onclick="onClickMain3Btn2Fn()">回退到指定日期</button>
+                    <button type="button" class="btn btn-primary btn-block main3Btn2" onclick="onClickModule('date-list',true)">回退到指定日期</button>
                     <button type="button" class="btn btn-primary btn-block" onclick="onClickMain3Btn3Fn()">功能3</button>
                     <button type="button" class="btn btn-primary btn-block">功能4</button>
                     <button type="button" class="btn btn-primary btn-block">功能5</button>
@@ -246,7 +246,7 @@
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" onclick="onClickHideModule('date-list')">确认</button>
+                                <button type="button" class="btn btn-primary" onclick="onClickMain3Btn2Fn('date-list')">确认</button>
                             </div>
                         </div>
                     </div><!-- /.modal-content -->
