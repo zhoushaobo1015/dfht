@@ -63,7 +63,12 @@ $(function(){
     //     });
     // });
 
-    
-    
-
+    // main4 page1
+    $('.right_result_wrap .tab_wrap').on('click', 'span', function() {
+        let index = $(this).index()
+        let span = $('.right_result_wrap .tab_wrap span').eq(index)
+        span.addClass('active')
+        span.siblings().removeClass('active')
+    })
 });
+

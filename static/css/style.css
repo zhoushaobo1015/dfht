@@ -32,6 +32,7 @@
   z-index: 12 !important;
   left: 0px !important;
 }
+/* 上半区域样式 */
 .page1{
   background-color: #a5cfff;
   z-index: 1;
@@ -39,6 +40,65 @@
   height:400px;
   top: 0px;
   left: 0px;
+  display: flex;            
+}
+.page1 .left_search_wrap {
+  box-sizing: border-box;
+  width: 15%;
+  min-width: 140px;
+  height: 100%;
+  background: #1ABC9C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page1 .search_wrap {
+  height: 85%;
+  max-height: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.page1 .left_search_wrap .search_btn {
+  width: 60%;
+}
+.page1 .select_date_wrap {
+  width: 140px;
+  text-align: center;
+}
+.page1 .select_date_wrap span {            
+  display: block;
+  font-size: 12px;
+  font-size: 16px;
+  color: #555;
+}
+.page1 .select_date_wrap input {
+  margin-top: 5px;
+  width: 70%
+}
+.page1 .right_result_wrap {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.page1 .tab_wrap {
+  height: 35px;
+  display: flex;
+  background: #fff;
+}
+.page1 .tab_wrap span {
+  box-sizing: border-box;
+  width: 100px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  cursor: pointer;
+}
+.page1 .tab_wrap span.active {
+  color: #fff;
+  background: #007bff;
 }
 .page2{
   background-color: #b1ca54;
