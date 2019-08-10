@@ -189,8 +189,8 @@ $(function(){
     });
 
     // 查询弹框中的列表项点击事件
-    $('.selected_list_wrap ul').on('click', 'li', function() {
-        console.log($(this))
+    $('.selected_list_wrap ul').on('dblclick', 'li', function() {
+        $(this).remove()
     })
 
     $('.datepicker').datepicker();
