@@ -111,7 +111,7 @@
   display: flex; 
 }
 .page2 .left_search_wrap, .page2 .right_result_wrap {
-  /* display: none; */
+  display: none;
 }
 .page2 .time_span_wrap, .page2 .cycle_num_wrap {
   font-size: 16px;
