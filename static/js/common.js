@@ -24,25 +24,41 @@ var onClickMain3Btn2Fn = function(){
     $("#date-list").modal('toggle');
 }
 
-var onClickMain3Btn3Fn = function(){
+var onClickMain3Btn3Fn = function(id){
+    $form_control_value = $(".form_date .form-control").val();
+    console.log($form_control_value)
+    if(!$form_control_value === '请选择时间'){
+        return false;
+    }
+    
+
+    $("#"+id).modal('hide');
+    $("#Hourglass").modal('toggle');
+    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>')
 
     $.ajax({
         url: "",
         type: "",
         data: "",
         success: function(res){
-            
+            if(res.status===200){
+                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>强制更新成功</div></div>')
+            }else{
+                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
+            }
         },
         error: function(err){
-
+            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
         }
     })
-    $("#Hourglass").modal('toggle');
-    $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>')
 }
 
-var onClickHideModule = function(type){
-    $("#"+type).modal("hide");
+var onClickModule = function(id, type){
+    if(type){
+        $("#"+id).modal("hide");
+    }else{
+        $("#"+id).modal("show");
+    }
 }
 
 $(function(){
