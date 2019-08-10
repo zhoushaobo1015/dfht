@@ -80,11 +80,13 @@ $(function(){
     // 点击查询1按钮
     $('.search1_btn').click(function() {
         $("#search1Popup").modal('toggle');
+        getSearch1Data()
     })
 
     // 点击查询2按钮
     $('.search2_btn').click(function() {
         $("#search2Popup").modal('toggle');
+        getSearch2Data()
     })
     
     // 添加周期数目选项
@@ -198,7 +200,153 @@ $(function(){
         $(this).remove()
     })
 
-    $('.datepicker').datepicker();
+    // 查询弹框1中单标的选择和全部成分选择
+    selectData('selector1')
+    selectData('selector2')
 
+    // 查询弹框2中指标选择
+    selectData('target_selector')
+
+    // 查询弹框中选择事件
+    function selectData(className) {
+        $(`.${className}`).on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id')
+            let pinyin = $(this).val()
+            let text = checkedItem.text()
+            if (!itemIsExist(id, className)) {
+                $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
+            }
+        })
+    }
+
+    // 判断选择的选项是否已在列表中
+    function itemIsExist(id, className) {
+        let exist = false
+        $(`.${className}_wrap .list-group`).children().each(function(i, item) {
+            if (id === $(item).data('id')) {
+                exist = true
+            }
+        })
+        return exist
+    }
+
+    // 查询弹框1的加入按钮点击事件
+    addBtnClick('selector1', 'search1Popup')
+    addBtnClick('selector2', 'search1Popup')
+
+    // 查询弹框2的加入按钮点击事件
+    addBtnClick('target_selector', 'search2Popup')
+
+    // 查询弹框的加入按钮点击事件
+    function addBtnClick(className, targetId) {
+        $(`.${className}_wrap .add_btn`).click(function() {
+            let listGroup = $(`.${className}_wrap .selected_item_wrap .list-group`)
+            let items = listGroup.children()
+            Array.prototype.slice.call(items).map(item => {
+                let id = $(item).data('id')
+                let pinyin = $(item).data('pinyin')
+                let text = $(item).text()
+                if (!itemIsSelected(id, targetId)) {
+                    $(`#${targetId} .selected_list_wrap .list-group`).append(`<li data-id=${id} data-pinyin=${pinyin} class="list-group-item">${text}</li>`)
+                }
+            })
+            listGroup.empty()
+        })
+    }
+
+    // 选择的选项是否已在左侧已选中的列表中
+    function itemIsSelected(id, targetId) {
+        let selected = false
+        $(`#${targetId} .selected_list_wrap .list-group`).children().each(function(i, item) {
+            if (id === $(item).data('id')) {
+                selected = true
+            }
+        })
+        console.log('selected', selected)
+        return selected
+    }
+
+    // 查询1弹框选定按钮点击事件
+    $('.search1_confirm_btn').click(function() {
+        let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
+        let dataArr = getSelectedListData(selectedListGroup)
+        // 获取到所有选中的数据
+        console.log('dataArr', dataArr)
+        // 清空数据
+        selectedListGroup.empty()
+        $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
+        $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
+        // 关闭弹框
+        $("#search1Popup").modal('toggle');
+    })
+
+    // 获取选择的列表数据
+    function getSelectedListData(selectedListGroup) {
+        let selectedItems = selectedListGroup.children()
+        let dataArr = []
+        Array.prototype.slice.call(selectedItems).map(item => {
+            let id = $(item).data('id')
+            let pinyin = $(item).data('pinyin')
+            let text = $(item).text()
+            dataArr.push({
+                id,
+                pinyin,
+                text
+            })
+        })
+        return dataArr
+    }
+
+    // 查询2弹框选定按钮点击事件
+    $('.search2_confirm_btn').click(function() {
+        let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
+        let dataArr = getSelectedListData(selectedListGroup)
+        // 获取到所有选中的数据
+        console.log('dataArr', dataArr)
+        // 获取数据预处理和标准化处理选中的值
+        let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
+        let dataProcessText = checkedRadio.parent().text().trim()
+        let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
+        let standardPreProcessText = checkedRadio2.parent().text().trim()
+        console.log('dataProcessText', dataProcessText)
+        console.log('standardPreProcessText', standardPreProcessText)
+        // 清空数据
+        selectedListGroup.empty()
+        $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
+        // 关闭弹框
+        $("#search2Popup").modal('toggle');
+    })
+
+    // $('.datepicker').datepicker();
+
+    // 请求查询弹框1需要的数据
+    function getSearch1Data() {
+        $.get("/static/json/myoptions.json",function(result){
+            let { group, macro, sector, ticket } = result
+            // 查询1单标的选择数据
+            let select1Data = [...group, ...macro, ...sector, ...ticket]
+            // 查询1全部成分数据
+            let select2Data = [...ticket, ...group]
+            appendData(select1Data, 'selector1')
+            appendData(select2Data, 'selector2')
+        });
+        
+        function appendData(selectData, className) {
+            selectData.map(data => {
+                $(`.${className}_wrap .${className}`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
+            })
+        }
+    }
+
+    // 请求查询弹框2需要的数据
+    function getSearch2Data() {
+        $.get("/static/json/myoptions.json",function(result){
+            let features = result.features
+            features.map(data => {
+                $(`.target_selector_wrap .target_selector`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
+            })
+        });
+    }
 });
 
