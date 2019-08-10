@@ -25,6 +25,7 @@ var onClickMain3Btn2Fn = function(){
 }
 
 var onClickMain3Btn3Fn = function(){
+
     $.ajax({
         url: "",
         type: "",
@@ -38,6 +39,10 @@ var onClickMain3Btn3Fn = function(){
     })
     $("#Hourglass").modal('toggle');
     $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>')
+}
+
+var onClickHideModule = function(type){
+    $("#"+type).modal("hide");
 }
 
 $(function(){
