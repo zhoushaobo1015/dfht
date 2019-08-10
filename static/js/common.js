@@ -222,7 +222,7 @@ $(function(){
         $(`.${className}`).on('select2:select', function(){
             let checkedItem = $(this).find('option:checked')
             let id = checkedItem.data('id')
-            let pinyin = $(this).val()
+            let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text()
             if (!itemIsExist(id, className)) {
                 $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
@@ -273,7 +273,6 @@ $(function(){
                 selected = true
             }
         })
-        console.log('selected', selected)
         return selected
     }
 
@@ -324,9 +323,16 @@ $(function(){
         // 清空数据
         selectedListGroup.empty()
         $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
+        initRadio()
         // 关闭弹框
         $("#search2Popup").modal('toggle');
     })
+    
+    // 初始化单选按钮
+    function initRadio() {
+        $('.data_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
+        $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
+    }
 
     // $('.datepicker').datepicker();
 
