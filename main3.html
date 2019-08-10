@@ -13,6 +13,9 @@
 
     <!-- 单独引入 CSS -->
     <link rel="stylesheet" href="./static/css/style.css">
+    <link rel="stylesheet" href="./static/css/bootstrap-datetimepicker.min.css">
+
+
 
     <title>
         宏观择时【1】
@@ -212,7 +215,7 @@
             <div class="container col bg-light mx-3">
                 <div class="main3">
                     <button type="button" class="btn btn-primary btn-block" data-toggle="modal"  onclick="onClickMain3Btn1Fn()">强制更新</button>
-                    <button type="button" class="btn btn-primary btn-block" >回退到指定日期</button>
+                    <button type="button" class="btn btn-primary btn-block main3Btn2" onclick="onClickMain3Btn2Fn()">回退到指定日期</button>
                     <button type="button" class="btn btn-primary btn-block" onclick="onClickMain3Btn3Fn()">功能3</button>
                     <button type="button" class="btn btn-primary btn-block">功能4</button>
                     <button type="button" class="btn btn-primary btn-block">功能5</button>
@@ -221,20 +224,34 @@
             
             <!-- 沙漏弹窗 -->
             <div class="modal fade" id="Hourglass" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-body">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- 沙漏弹窗 content -->
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
 
-
-                                <!-- <div class="wrapper">
-                                    <div>强制更新成功</div>
-                                </div> -->
-
-
+            <!-- 时间弹窗 -->
+            <div class="modal fade" id="date-list" tabindex="-1" role="dialog" aria-labelledby="date-list" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-date-body">
+                            <div class="modal-header">
+                                <h4 class="modal-title">时间选择</h4>
                             </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal -->
-                </div>  
+                            <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                <input type="button" class="form-control" size="16" type="text" value="请选择时间" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">确认</button>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
 
         </div>
     </section>
@@ -248,6 +265,18 @@
             $("#sidebar-container a").eq(1).addClass('active');
             $("#smallerscreenmenu a").eq(1).addClass('active');
             $("body").css("background-image", "url(" + pics[0] + ")");
+
+            $('.form_date').datetimepicker({
+                language:  'fr',
+                weekStart: 1,
+                todayBtn:  1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+
         });
     </script>
 
@@ -262,6 +291,9 @@
 </footer>
 
 </body>
+<script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./static/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
 <script src="./static/js/common.js"></script>
 
 

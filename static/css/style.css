@@ -36,7 +36,7 @@
   background-color: #a5cfff;
   z-index: 1;
   width: 100%;
-  height:300px;
+  height:400px;
   top: 0px;
   left: 0px;
 }
@@ -45,7 +45,7 @@
   z-index: 1;
   width: 50%;
   height:300px;
-  top: 300px;
+  top: 400px;
   left: 0px;
 }
 .page3{
@@ -53,12 +53,12 @@
   z-index: 1;
   width: 50%;
   height:300px;
-  top: 300px;
+  top: 400px;
   left: 50%;
 }
 .wrap {
   position: relative;
-  min-height: 600px;
+  min-height: 700px;
 }
 .all {
   position: absolute;
@@ -69,243 +69,16 @@
   z-index: 3;
 }
 
+/* 沙漏 */
+#Hourglass .modal-body {
+  text-align: center;
+}
 
-
-
-
-
-@-webkit-keyframes timerRotate {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  50% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(-180deg);
-  }
-}
-@-moz-keyframes timerRotate {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  50% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(-180deg);
-  }
-}
-@-ms-keyframes timerRotate {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  50% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(-180deg);
-  }
-}
-@keyframes timerRotate {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  50% {
-    transform: rotateZ(0deg);
-  }
-  100% {
-    transform: rotateZ(-180deg);
-  }
-}
-@-webkit-keyframes bottomFill {
-  0% {
-    border-bottom-width: 0px;
-  }
-  50% {
-    border-bottom-width: 60px;
-  }
-  100% {
-    border-bottom-width: 60px;
-  }
-}
-@-moz-keyframes bottomFill {
-  0% {
-    border-bottom-width: 0px;
-  }
-  50% {
-    border-bottom-width: 60px;
-  }
-  100% {
-    border-bottom-width: 60px;
-  }
-}
-@-ms-keyframes bottomFill {
-  0% {
-    border-bottom-width: 0px;
-  }
-  50% {
-    border-bottom-width: 60px;
-  }
-  100% {
-    border-bottom-width: 60px;
-  }
-}
-@keyframes bottomFill {
-  0% {
-    border-bottom-width: 0px;
-  }
-  50% {
-    border-bottom-width: 60px;
-  }
-  100% {
-    border-bottom-width: 60px;
-  }
-}
-@-webkit-keyframes topEmpty {
-  0% {
-    top: 19px;
-    border-top-width: 60px;
-    border-left-width: 35px;
-    border-right-width: 35px;
-  }
-  50% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-  100% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-}
-@-moz-keyframes topEmpty {
-  0% {
-    top: 19px;
-    border-top-width: 60px;
-    border-left-width: 35px;
-    border-right-width: 35px;
-  }
-  50% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-  100% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-}
-@-ms-keyframes topEmpty {
-  0% {
-    top: 19px;
-    border-top-width: 60px;
-    border-left-width: 35px;
-    border-right-width: 35px;
-  }
-  50% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-  100% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-}
-@keyframes topEmpty {
-  0% {
-    top: 19px;
-    border-top-width: 60px;
-    border-left-width: 35px;
-    border-right-width: 35px;
-  }
-  50% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-  100% {
-    top: 80px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-  }
-}
-.loader {
-  width: 50%;
-  height: 230px;
-  float: left;
-  -webkit-transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000;
-}
-.loader .timerWrap {
+#date-list .modal-date-body {
   position: relative;
-  animation: timerRotate 1s infinite ease;
-  -webkit-animation: timerRotate 1s infinite ease;
-  -moz-animation: timerRotate 1s infinite ease;
-  -ms-animation: timerRotate 1s infinite ease;
-  width: 120px;
-  height: 160px;
-  margin: auto;
-  top: 40px;
 }
-.loader .timerWrap:before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 60px 35px 0 35px;
-  border-color: #e08f24 transparent transparent transparent;
-  position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  animation: topEmpty 1s infinite ease;
-  -webkit-animation: topEmpty 1s infinite ease;
-  -moz-animation: topEmpty 1s infinite ease;
-  -ms-animation: topEmpty 1s infinite ease;
-}
-.loader .timerWrap:after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 35px 60px 35px;
-  border-color: transparent transparent #e08f24 transparent;
-  position: absolute;
-  bottom: 19px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  animation: bottomFill 1s infinite ease;
-  -webkit-animation: bottomFill 1s infinite ease;
-  -moz-animation: bottomFill 1s infinite ease;
-  -ms-animation: bottomFill 1s infinite ease;
-}
-.loader .timerWrap .timer {
-  width: 120px;
-  max-width: 100%;
-  height: 160px;
-  position: relative;
-  top: 0;
-  left: 0;
-}
-.loader .timerWrap .timer path {
-  fill: #3f6b9d;
+#date-list .modal-date-body .form_date {
+  padding: 20px;
 }
 
 /* 1 */
