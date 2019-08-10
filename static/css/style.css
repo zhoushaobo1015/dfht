@@ -235,8 +235,12 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;  
   padding-top: 20px;
+}
+#search1Popup .selected_item_wrap, #search2Popup .selected_item_wrap {
+  width: 200px;
+  height: 300px;
 }
 #search1Popup .selector_wrap .selector, #search2Popup .selector_wrap .selector {
   width: 200px;
