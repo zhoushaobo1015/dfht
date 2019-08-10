@@ -180,6 +180,12 @@ fieldset, img { border:0; vertical-align: middle;}
 .page3-table .page3-table-content table tbody tr:nth-child(odd){
   background: #c2c6c9;
 }
+.page3-table .page3-table-content table tbody tr td.red {
+  color: red;
+}
+.page3-table .page3-table-content table tbody tr td.blue {
+  color: blue;
+}
 .wrap {
   position: relative;
   min-height: 700px;
