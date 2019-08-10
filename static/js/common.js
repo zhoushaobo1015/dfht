@@ -61,7 +61,11 @@ $(function(){
     }
     // 全屏展示下左page2
     $('.page2 .switch').click(function() {
-        $('.page2 .left_search_wrap, .page2 .right_result_wrap').css('display', 'flex')
+        let display = 'flex'
+        if (!$('.page2').hasClass('all')) {
+            display = 'none'
+        }
+        $('.page2 .left_search_wrap, .page2 .right_result_wrap').css('display', display)
     })
     
     // 选择时间跨度
