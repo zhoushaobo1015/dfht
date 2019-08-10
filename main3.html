@@ -1,0 +1,269 @@
+
+
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="./static/img/dfht_favicon.ico"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.3.1.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome-5.9.0.all.min.css">
+
+    <!-- 单独引入 CSS -->
+    <link rel="stylesheet" href="./static/css/style.css">
+
+    <title>
+        宏观择时【1】
+    </title>
+    
+    <style>
+        .nav-item {
+            font-size: 36px;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        /* Sidebar sizes when expanded and expanded */
+        .sidebar-expanded {
+            width: 150px;
+        }
+
+        .sidebar-collapsed {
+            width: 60px;
+        }
+
+        #sidebar-container .list-group a {
+            height: 50px;
+            color: white;
+        }
+
+        /* Separators */
+        .sidebar-separator-title {
+            background-color: #333;
+            height: 35px;
+        }
+
+        .sidebar-separator {
+            background-color: #333;
+            height: 25px;
+        }
+
+        #sidebar-container {
+            min-height: 100%;
+            background-color: #333;
+            padding: 1px;
+        }
+
+        body {
+            background: url("/static/img/bg01.jpg") center / cover no-repeat;
+            min-height: 100vh;
+        }
+
+        .flex-grow {
+            flex: 1;
+        }
+    </style>
+
+</head>
+<body class="d-flex flex-column">
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="./static/js/jquery-3.4.1.min.js"></script>
+<script src="./static/js/popper-1.14.7.min.js"></script>
+<script src="./static/js/bootstrap-4.3.1.min.js"></script>
+
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark my-2">
+        <a class="navbar-brand" href="/">
+            <img src="./static/img/dfht-logo.png" alt="logo" width="auto" height="60px"
+                 class="d-inline-block align-top">
+            <a style="font-family: SimSun; font-size: 2em; color:white;"></a>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  nav-fill w-100" id="topmenu">
+                
+    <li class="nav-item">
+    <a class="nav-link" href="/dfht/macro/">宏观择时</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/dfht/quant/">量化选股</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/dfht/arbitrage/">对冲套利</a>
+</li>
+
+            </ul>
+            <ul class="navbar-nav nav-fill">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animate slideIn"
+                         aria-labelledby="navbarDropdown">
+                        
+                            <a class="dropdown-item" href="/dfht/updatemacro/">指标更新</a>
+                            <a class="dropdown-item" href="/dfht/updatesector/">板块定制</a>
+                            <a class="dropdown-item" href="/dfht/updatesetting/">更新设置</a>
+                        
+                        
+                            <a class="dropdown-item" href="/users/profiles/">用户管理</a>
+                        
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/users/me/set">修改个人信息</a>
+                        <a class="dropdown-item" href="/user_logout/">退出登录</a>
+                    </div>
+                </li>
+                
+    <li class="nav-item dropdown d-sm-block d-md-none" id="smallerscreenmenu">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">模块菜单</a>
+        <div class="dropdown-menu" aria-labelledby="smallerscreenmenu">
+            
+                <a class="dropdown-item" href="/dfht/macro/1">宏观指标</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/2">市场趋势</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/3">市场顶底</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/4">市场估值</a>
+            
+        </div>
+    </li><!-- Smaller devices menu END -->
+
+            </ul>
+        </div>
+    </nav>
+</header>
+
+    <section class="container-fluid flex-grow">
+        <div class="row" id="body-row">
+            <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+                <ul class="list-group">
+                    <a href="#" data-toggle="sidebar-colapse"
+                       class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                        <div class="d-flex w-100 justify-content-start align-items-center">
+                            <span id="collapse-icon" class="fa fa-angle-double-left fa-fw mr-3"></span>
+                            <span id="collapse-text" class="menu-collapsed">收起菜单</span>
+                        </div>
+                    </a>
+                    <li class="list-group-item sidebar-separator menu-collapsed"></li>
+                    <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                        <small>宏观择时模块</small>
+                    </li>
+                    
+                        <a href="/dfht/macro/1" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fa fa-chart-pie mr-3"></span>
+                                <span class="menu-collapsed">宏观指标</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/2" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-signal mr-3"></span>
+                                <span class="menu-collapsed">市场趋势</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/3" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-chart-bar mr-3"></span>
+                                <span class="menu-collapsed">市场顶底</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/4" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-hand-holding-usd mr-3"></span>
+                                <span class="menu-collapsed">市场估值</span>
+                            </div>
+                        </a>
+                    
+                </ul>
+                <script>
+                    // Collapse/Expand icon
+                    
+                    // Collapse click
+                    $('[data-toggle=sidebar-colapse]').click(function () {
+                        $('.menu-collapsed').toggleClass('d-none');
+                        $('.sidebar-submenu').toggleClass('d-none');
+                        $('.submenu-icon').toggleClass('d-none');
+                        $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+                        // Treating d-flex/d-none on separators with title
+                        var SeparatorTitle = $('.sidebar-separator-title');
+                        if (SeparatorTitle.hasClass('d-flex')) {
+                            SeparatorTitle.removeClass('d-flex');
+                        } else {
+                            SeparatorTitle.addClass('d-flex');
+                        }
+                        // Collapse/Expand icon
+                        $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+                    });
+                </script>
+            </div>
+            <div class="container col bg-light mx-3">
+                <div class="main3">
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"  onclick="onClickMain3Btn1Fn()">强制更新</button>
+                    <button type="button" class="btn btn-primary btn-block" >回退到指定日期</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="onClickMain3Btn3Fn()">功能3</button>
+                    <button type="button" class="btn btn-primary btn-block">功能4</button>
+                    <button type="button" class="btn btn-primary btn-block">功能5</button>
+                </div>
+            </div>
+            
+            <!-- 沙漏弹窗 -->
+            <div class="modal fade" id="Hourglass" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+
+
+                                <!-- <div class="wrapper">
+                                    <div>强制更新成功</div>
+                                </div> -->
+
+
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>  
+
+        </div>
+    </section>
+    <script>
+        var pics = ["./static/img/bg_0.jpg", "./static/img/bg_1.jpg", "./static/img/bg_2.jpg"];
+        $(document).ready(function () {
+            $("#topmenu li").removeClass('active');
+            $("#sidebar-container a").removeClass('active');
+            $("#smallerscreenmenu a").removeClass('active');
+            $("#topmenu li").eq(0).addClass('active');
+            $("#sidebar-container a").eq(1).addClass('active');
+            $("#smallerscreenmenu a").eq(1).addClass('active');
+            $("body").css("background-image", "url(" + pics[0] + ")");
+        });
+    </script>
+
+
+<footer class="bg-dark text-white mt-3">
+    <div class="d-flex justify-content-between mx-2 ">
+        <div></div>
+        <div>© 2019:<a href="http://www.orientever.com/index.php">
+            东方恒泰投资管理有限公司</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+<script src="./static/js/common.js"></script>
+
+
+
+</html>

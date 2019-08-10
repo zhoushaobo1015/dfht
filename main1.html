@@ -1,0 +1,405 @@
+
+
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="./static/img/dfht_favicon.ico"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.3.1.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome-5.9.0.all.min.css">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <title>
+        宏观择时【1】
+    </title>
+    
+    <style>
+        .nav-item {
+            font-size: 36px;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        /* Sidebar sizes when expanded and expanded */
+        .sidebar-expanded {
+            width: 150px;
+        }
+
+        .sidebar-collapsed {
+            width: 60px;
+        }
+
+        #sidebar-container .list-group a {
+            height: 50px;
+            color: white;
+        }
+
+        /* Separators */
+        .sidebar-separator-title {
+            background-color: #333;
+            height: 35px;
+        }
+
+        .sidebar-separator {
+            background-color: #333;
+            height: 25px;
+        }
+
+        #sidebar-container {
+            min-height: 100%;
+            background-color: #333;
+            padding: 1px;
+        }
+
+        body {
+            background: url("/static/img/bg01.jpg") center / cover no-repeat;
+            min-height: 100vh;
+        }
+
+        .flex-grow {
+            flex: 1;
+        }
+    </style>
+
+    </style>
+
+
+</head>
+<body class="d-flex flex-column">
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="./static/js/jquery-3.4.1.min.js"></script>
+<script src="./static/js/popper-1.14.7.min.js"></script>
+<script src="./static/js/bootstrap-4.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
+
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark my-2">
+        <a class="navbar-brand" href="/">
+            <img src="./static/img/dfht-logo.png" alt="logo" width="auto" height="60px"
+                 class="d-inline-block align-top">
+            <a style="font-family: SimSun; font-size: 2em; color:white;"></a>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  nav-fill w-100" id="topmenu">
+                
+    <li class="nav-item">
+    <a class="nav-link" href="/dfht/macro/">宏观择时</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/dfht/quant/">量化选股</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/dfht/arbitrage/">对冲套利</a>
+</li>
+
+            </ul>
+            <ul class="navbar-nav nav-fill">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animate slideIn"
+                         aria-labelledby="navbarDropdown">
+                        
+                            <a class="dropdown-item" href="/dfht/updatemacro/">指标更新</a>
+                            <a class="dropdown-item" href="/dfht/updatesector/">板块定制</a>
+                            <a class="dropdown-item" href="/dfht/updatesetting/">更新设置</a>
+                        
+                        
+                            <a class="dropdown-item" href="/users/profiles/">用户管理</a>
+                        
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/users/me/set">修改个人信息</a>
+                        <a class="dropdown-item" href="/user_logout/">退出登录</a>
+                    </div>
+                </li>
+                
+    <li class="nav-item dropdown d-sm-block d-md-none" id="smallerscreenmenu">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">模块菜单</a>
+        <div class="dropdown-menu" aria-labelledby="smallerscreenmenu">
+            
+                <a class="dropdown-item" href="/dfht/macro/1">宏观指标</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/2">市场趋势</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/3">市场顶底</a>
+            
+                <a class="dropdown-item" href="/dfht/macro/4">市场估值</a>
+            
+        </div>
+    </li><!-- Smaller devices menu END -->
+
+            </ul>
+        </div>
+    </nav>
+</header>
+
+
+    <section class="container-fluid flex-grow">
+        <div class="row" id="body-row">
+            <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+                <ul class="list-group">
+                    <a href="#" data-toggle="sidebar-colapse"
+                       class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                        <div class="d-flex w-100 justify-content-start align-items-center">
+                            <span id="collapse-icon" class="fa fa-angle-double-left fa-fw mr-3"></span>
+                            <span id="collapse-text" class="menu-collapsed">收起菜单</span>
+                        </div>
+                    </a>
+                    <li class="list-group-item sidebar-separator menu-collapsed"></li>
+                    <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                        <small>宏观择时模块</small>
+                    </li>
+                    
+                        <a href="/dfht/macro/1" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fa fa-chart-pie mr-3"></span>
+                                <span class="menu-collapsed">宏观指标</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/2" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-signal mr-3"></span>
+                                <span class="menu-collapsed">市场趋势</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/3" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-chart-bar mr-3"></span>
+                                <span class="menu-collapsed">市场顶底</span>
+                            </div>
+                        </a>
+                    
+                        <a href="/dfht/macro/4" class="bg-dark list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="fas fa-hand-holding-usd mr-3"></span>
+                                <span class="menu-collapsed">市场估值</span>
+                            </div>
+                        </a>
+                    
+                </ul>
+                <script>
+                    // Collapse/Expand icon
+                    
+                    // Collapse click
+                    $('[data-toggle=sidebar-colapse]').click(function () {
+                        $('.menu-collapsed').toggleClass('d-none');
+                        $('.sidebar-submenu').toggleClass('d-none');
+                        $('.submenu-icon').toggleClass('d-none');
+                        $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+                        // Treating d-flex/d-none on separators with title
+                        var SeparatorTitle = $('.sidebar-separator-title');
+                        if (SeparatorTitle.hasClass('d-flex')) {
+                            SeparatorTitle.removeClass('d-flex');
+                        } else {
+                            SeparatorTitle.addClass('d-flex');
+                        }
+                        // Collapse/Expand icon
+                        $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+                    });
+                </script>
+            </div>
+            <div class="container col bg-light mx-3">
+                <div class="main1" style="margin-bottom: 20px;" >
+                    <!-- <select class="js-example-responsive" multiple="multiple" style="width: 75%"></select> -->
+                    <select class="js-example-basic-multiple" name="states[]" style="width: 75%">
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                        <option value="huhui">胡辉</option>
+                    </select>
+                    <button type="button" class="btn btn-primary formAdd">添加</button>
+                </div>
+
+                <div class="formOne"></div>
+
+                <div class="formTow"></div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var pics = ["./static/img/bg_0.jpg", "./static/img/bg_1.jpg", "./static/img/bg_2.jpg"];
+        $(document).ready(function () {
+            $("#topmenu li").removeClass('active');
+            $("#sidebar-container a").removeClass('active');
+            $("#smallerscreenmenu a").removeClass('active');
+            $("#topmenu li").eq(0).addClass('active');
+            $("#sidebar-container a").eq(1).addClass('active');
+            $("#smallerscreenmenu a").eq(1).addClass('active');
+            $("body").css("background-image", "url(" + pics[0] + ")");
+
+            var selcxt =  
+            `<form>
+                    <div class="form-group row">
+                        <label for="formOnemid" class="col-sm-1 col-form-label col-form-label-sm">MID：</label>
+                        <div class="col-sm-8">
+                            MID：(被填充)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOnejcode" class="col-sm-1 col-form-label col-form-label-sm">代码：</label>
+                        <div class="col-sm-8">
+                            代码：(被填充)
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="formOneshortname" class="col-sm-1 col-form-label col-form-label-sm">中文名：</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" id="formOneshortname" name="formOneshortname" placeholder="col-form-label-sm">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="formOnecodestring" class="col-sm-1 col-form-label col-form-label-sm">更新代码：</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" id="formOnecodestring" name="formOnecodestring" placeholder="col-form-label-sm">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="formOneunit" class="col-sm-1 col-form-label col-form-label-sm">数值单位：</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" id="formOneunit" name="formOneunit" placeholder="col-form-label-sm">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="formOnefreq" class="col-sm-1 col-form-label col-form-label-sm">更新频率：</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" id="formOnefreq" name="formOnefreq" placeholder="col-form-label-sm">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="formOnenote" class="col-sm-1 col-form-label col-form-label-sm">附注说明：</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" id="formOnenote" name="formOnenote" placeholder="col-form-label-sm">
+                        </div>
+                        </div>
+                <input id="submitOne" name="submitOne" type="button" value="确认" class="btn btn-primary" >
+                <button type="button" class="btn btn-primary formOneCel">取消</button>
+                <button type="button" class="btn btn-primary formOneDel">删除</button>
+            </form>`;
+
+            // 选择框
+            $('.js-example-basic-multiple').select2();
+            $('.js-example-basic-multiple').on('select2:select', function(){
+                var data = $(this).val();
+			    // alert(data);
+                console.log('下拉框oncheng事件');
+                // selcxt
+                $('.formOne').empty();
+                $('.formTow').empty();
+                $('.formOne').append(selcxt);
+            })
+            // 选择框后的确定
+            $(".formOne").on("click","#submitOne",function(event){
+                var d = {};
+                var t = $('form').serializeArray();
+                $.each(t, function () {
+                    d[this.name] = this.value;
+                });
+                alert(JSON.stringify(d));
+             })
+
+            // 选择框后的取消
+            $(".formOne").on("click",".formOneCel",function(event){
+                $('.formOne').empty();
+            })
+
+            $(".formOne").on("click",".formOneDel",function(event){
+                $('.formOne').empty();
+            })
+            
+            // 添加 start
+            var addcxt = 
+            `<form>
+                <div class="form-group row">
+                    <label for="formTowjcode" class="col-sm-1 col-form-label col-form-label-sm">代码：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTowjcode" name="formTowjcode" placeholder="请输入代码">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="formTowshortname" class="col-sm-1 col-form-label col-form-label-sm">中文名：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTowshortname" name="formTowshortname" placeholder="请输入中文名">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="formTowcodestring" class="col-sm-1 col-form-label col-form-label-sm">更新代码：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTowcodestring" name="formTowcodestring" placeholder="请输入更新代码">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="formTowunit" class="col-sm-1 col-form-label col-form-label-sm">数值单位：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTowunit" name="formTowunit" placeholder="请输入代码数值单位">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="formTowfreq" class="col-sm-1 col-form-label col-form-label-sm">更新频率：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTowfreq" name="formTowfreq" placeholder="请输入更新频率">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="formTownote" class="col-sm-1 col-form-label col-form-label-sm">附注说明：</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control form-control-sm" id="formTownote" name="formTownote" placeholder="请输入附注说明">
+                    </div>
+                </div>
+                <input id="submit" name="submit" type="button" value="确认" class="btn btn-primary" >
+                <button type="button" class="btn btn-primary formTowCel">取消</button>
+            </form>`;
+
+            $('.formAdd').on('click', function(){
+                $('.formOne').empty();
+                $('.formTow').append(addcxt);
+            })
+            
+            // 添加后的确定
+            $(".formTow").on("click","#submit",function(event){
+                var d = {};
+                var t = $('form').serializeArray();
+                $.each(t, function () {
+                    d[this.name] = this.value;
+                });
+                alert(JSON.stringify(d));
+             })
+
+            // 添加后的取消
+            $(".formTow").on("click",".formTowCel",function(event){
+                $('.formTow').empty();
+            })
+            
+            // 添加 end
+            
+        });
+    </script>
+
+
+<footer class="bg-dark text-white mt-3">
+    <div class="d-flex justify-content-between mx-2 ">
+        <div></div>
+        <div>© 2019:<a href="http://www.orientever.com/index.php">
+            东方恒泰投资管理有限公司</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+
+
+
+
+</html>
