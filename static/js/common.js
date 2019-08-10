@@ -41,6 +41,23 @@ var onClickMain3Btn3Fn = function(){
 }
 
 $(function(){
+    function matchStart(params, data) {
+        if ($.trim(params.term) === '') {
+            return data;
+        }
+
+        if (typeof data.text === 'undefined') {
+            return null;
+        }
+
+        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1) {
+            var modifiedData = $.extend({}, data, true);
+            return modifiedData;
+        }
+
+        return null;
+    }
+
 	$('.pages .switch').click(function(){
 		var $this = $(this);
 		var $parent = $(this).parent();
@@ -53,6 +70,16 @@ $(function(){
 			$this.html('<i class="fas fa-expand-arrows-alt"></i>')
 		}
         
+    })
+    
+    // 点击查询1按钮
+    $('.search1_btn').click(function() {
+        $("#search1Popup").modal('toggle');
+    })
+
+    // 点击查询2按钮
+    $('.search2_btn').click(function() {
+        $("#search2Popup").modal('toggle');
     })
     
     // 添加周期数目选项
@@ -125,5 +152,27 @@ $(function(){
         el.addClass('active')
         el.siblings().removeClass('active')
     }
+
+    // 查询1-选择框
+    $('#search1Popup .selector1').select2({
+        matcher: matchStart
+    });
+
+    $('#search1Popup .selector2').select2({
+        matcher: matchStart
+    });
+    
+    // 查询2-选择框
+    $('#search2Popup .target_selector').select2({
+        matcher: matchStart
+    });
+
+    // 查询弹框中的列表项点击事件
+    $('.selected_list_wrap ul').on('click', 'li', function() {
+        console.log($(this))
+    })
+
+    $('.datepicker').datepicker();
+
 });
 
