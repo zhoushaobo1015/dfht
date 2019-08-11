@@ -156,6 +156,23 @@ $(function() {
         format: 'yyyy-mm-dd'
     });
 
+    // main1 selsect
+    $.get("/static/json/myoptions.json",function(result){
+        console.log(result);
+        let { macro } = result
+        let select2Data = [...macro]
+
+        var frag = document.createDocumentFragment();
+        if (select2Data.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        select2Data.map(data => {
+            frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $('#main1-select1').append(frag)
+
+    });
+
     // 选择框
     $('.selector').select2({
         matcher: matchStart
@@ -184,7 +201,8 @@ $(function() {
     }
 
     // main2-选择股票选项
-    $('.left_wrap .ticket_selector_wrap .selector').on('select2:select', function(){
+    $('.top_wrap .ticket_selector_wrap .selector').on('select2:select', function(){
+        console.log('111')
         $('.ticket_detail_wrap').removeClass('hide')
         $('.add_segments_wrap').addClass('hide')
 
@@ -216,10 +234,10 @@ $(function() {
 
     // 添加板块事件
     $('.ticket_detail_wrap .right_wrap .add_wrap').click(function() {
-        let checkedOption = $('.right_wrap .segments_select_wrap .selector').find('option:checked')
+        let checkedOption = $('.right_wrap .segments_selector_wrap .selector').find('option:checked')
         let id = checkedOption.data('id')
         let text = checkedOption.text()
-        console.log('exist', itemIsExist(id, 'selected_segments'))
+        // console.log('exist', itemIsExist(id, 'selected_segments'))
         if (!id || itemIsExist(id, 'selected_segments')) {
             return
         }
@@ -227,7 +245,7 @@ $(function() {
     })
 
     // main2-输入股票代码后确定按钮点击事件
-    $('.ticket_detail_wrap .segments_select_wrap .confirm_btn').click(function() {
+    $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {
         let end_date = $('.main2_enddate').val()
         let start_date = $('.main2_startdate').val()
         let groupbelong = []
@@ -253,12 +271,12 @@ $(function() {
     })
 
     // main2-输入股票代码后取消按钮点击事件
-    $('.segments_select_wrap .cancel_btn').click(function() {
+    $('.segments_selector_wrap .cancel_btn').click(function() {
         $('.ticket_detail_wrap').addClass('hide')
     })
 
     // 选择板块选项
-    $('.segments_select_wrap .selector').on('select2:select', function() {
+    $('.top_wrap .segments_selector_wrap .selector').on('select2:select', function() {
         $('.add_segments_wrap').removeClass('hide')
         $('.ticket_detail_wrap').addClass('hide')
 
@@ -289,7 +307,7 @@ $(function() {
         let checkedOption = $('.right_wrap .ticket_selector_wrap .selector').find('option:checked')
         let id = checkedOption.data('id')
         let text = checkedOption.text()
-        console.log('exist', itemIsExist(id, 'selected_cfg'))
+        // console.log('exist', itemIsExist(id, 'selected_cfg'))
         if (!id || itemIsExist(id, 'selected_cfg')) {
             return
         }
@@ -790,7 +808,7 @@ $(function() {
     getSegmentsData()
     // 请求板块数据
     function getSegmentsData() {
-        if ($(`.segments_select_wrap .selector`).length === 0) {
+        if ($(`.segments_selector_wrap .selector`).length === 0) {
             return
         }
         $.get("/static/json/myoptions.json",function(result){
@@ -802,7 +820,7 @@ $(function() {
             sector.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.segments_select_wrap .selector`).append(frag)
+            $(`.segments_selector_wrap .selector`).append(frag)
         });
     }
 });
