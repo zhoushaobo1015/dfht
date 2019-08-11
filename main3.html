@@ -244,8 +244,7 @@
                                 <h4 class="modal-title">时间选择</h4>
                             </div>
                             <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                <input type="button" class="form-control" size="16" type="text" value="请选择时间" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input class="page3_startdate page_datepicker" data-date-end-date="0d" value="请选择时间"/>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" onclick="onClickMain3Btn2Fn('date-list')">确认</button>
@@ -398,19 +397,6 @@
             $("#sidebar-container a").eq(1).addClass('active');
             $("#smallerscreenmenu a").eq(1).addClass('active');
             $("body").css("background-image", "url(" + pics[0] + ")");
-
-            $('.form_date').datetimepicker({
-                language:  'zh',
-                weekStart: 1,
-                todayBtn:  1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,
-                forceParse: 0,
-                Boolean: true,
-            });
-
         });
     </script>
 
@@ -425,9 +411,9 @@
 </footer>
 
 </body>
-<script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./static/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<!-- <script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script> -->
+<!-- <script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script> -->
+<!-- <script type="text/javascript" src="./static/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 <script src="./static/js/common.js"></script>
