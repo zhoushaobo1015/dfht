@@ -72,12 +72,21 @@ fieldset, img { border:0; vertical-align: middle;}
   align-items: center;
   justify-content: space-between;
 }
-.left_search_wrap .search_btn {
+.left_search_wrap .confirm_btn {
   width: 60%;
 }
 .text_input_wrap, .time_span_wrap {
-  width: 140px;
+  /* width: 140px; */
   text-align: center;
+}
+.select_date_wrap .page_datepicker {
+  width: 100px;
+  padding-left: 6px;
+  background: #fff;
+  z-index: 1;
+}
+.select_date_wrap .page_datepicker .datepicker {
+  padding: 10px;
 }
 .text_input_wrap span {            
   display: block;
@@ -242,6 +251,15 @@ fieldset, img { border:0; vertical-align: middle;}
   justify-content: space-between;  
   padding-top: 20px;
 }
+.selector_wrap .selected_item_wrap {
+  margin-top: 10px;
+}
+#search1Popup .top_wrap, #search2Popup .top_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #search1Popup .selected_item_wrap, #search2Popup .selected_item_wrap {
   width: 200px;
   /* height: 300px; */
@@ -272,6 +290,10 @@ fieldset, img { border:0; vertical-align: middle;}
 #search2Popup .radio_content_wrap >div .radio {
   display: flex;
   flex-direction: column;
+}
+.normal_font {
+  font-size: 16px;
+  color: #555;
 }
 
 .page3-table .page3-table-content table tbody tr td.red {

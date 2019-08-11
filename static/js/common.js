@@ -86,24 +86,79 @@ $(function(){
 		}
         
     })
-    
-    // 点击查询1按钮
-    $('.search1_btn').click(function() {
-        $("#search1Popup").modal('toggle');
-        getSearch1Data()
-        $('#search1Popup .selector1').val("").trigger("change")
+
+    $('.page_datepicker').datepicker();
+
+    // page1-确定按钮点击事件
+    $('.page1_confirm_btn').click(function() {
+        let startDate = $('.page1_startdate').val()
+        let endDate = $('.page1_enddate').val()
+        let search1Data = $('.page1_search1_data').val()
+        let search2Data = $('.page1_search2_data').val()
+        console.log('startDate', startDate)
+        console.log('endDate', endDate)
+        console.log('search1Data', search1Data)
+        console.log('search2Data', search2Data)
     })
 
-    // 点击查询2按钮
-    $('.search2_btn').click(function() {
-        $("#search2Popup").modal('toggle');
-        getSearch2Data()
+    // page2-确定按钮点击事件
+    $('.page2_confirm_btn').click(function() {
+        let timeSpan = $('.selected_time_span').text()
+        let cycleNum = $('.selected_cycle_num').text()
+        let endDate = $('.page2_enddate').val()
+        let search1Data = $('.page2_search1_data').val()
+        let search2Data = $('.page2_search2_data').val()
+        console.log('timeSpan', timeSpan)
+        console.log('cycleNum', cycleNum)
+        console.log('endDate', endDate)
+        console.log('search1Data', search1Data)
+        console.log('search2Data', search2Data)
     })
-    
+
+    // page3-确定按钮点击事件
+    $('.page3_confirm_btn').click(function() {
+        let startDate = $('.page1_startdate').val()
+        let endDate = $('.page1_enddate').val()
+        let search1Data = $(`.${page}_search1_data`).val()
+        let search2Data = $(`.${page}_search2_data`).val()
+        console.log('startDate', startDate)
+        console.log('endDate', endDate)
+        console.log('search1Data', search1Data)
+        console.log('search2Data', search2Data)
+    })
+
+    search1BtnClick('page1')
+    search1BtnClick('page2')
+    search1BtnClick('page3')
+
+    // 点击查询按钮1
+    function search1BtnClick(page) {
+        $(`.${page} .search1_btn`).click(function() {
+            $("#search1Popup").attr('data-page', page)
+            $("#search1Popup").modal('toggle');
+            getSearch1Data()
+            $('#search1Popup .selector1').val("").trigger("change")
+        })
+    }
+
+    search2BtnClick('page1')
+    search2BtnClick('page2')
+    search2BtnClick('page3')
+
+    // 点击查询按钮2
+    function search2BtnClick(page) {
+        $(`.${page} .search2_btn`).click(function() {
+            $("#search2Popup").attr('data-page', page)
+            $("#search2Popup").modal('toggle');
+            getSearch2Data()
+        })
+    }
+
     // 添加周期数目选项
     for (let i = 0; i < 20; i++) {
         $('.cycle_num_wrap .dropdown-menu').append(`<li class="dropdown-item">${i + 1}</li>`)
     }
+
     // 全屏展示下左page2
     $('.page2 .switch').click(function() {
         let display = 'flex'
@@ -197,7 +252,6 @@ $(function(){
         matcher: matchStart
     });
 
-
     $('#search1Popup .selector2').select2({
         matcher: matchStart
     });
@@ -227,7 +281,22 @@ $(function(){
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text()
 
-            if (!itemIsExist(id, className) && text !== '请选择：') {
+            let canAdd = true
+            let selector1Length = $('.selector1_wrap .list-group').children().length
+            let selector2Length = $('.selector2_wrap .list-group').children().length
+            if (className === 'selector1') {
+                // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
+                if (selector2Length > 1 && selector1Length === 1) {
+                    canAdd = false
+                }
+            } else if (className === 'selector2') {
+                // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
+                if (selector1Length > 1 && selector2Length === 1) {
+                    canAdd = false
+                }
+            }
+
+            if (canAdd && !itemIsExist(id, className) && text !== '请选择：') {
                 $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
             }
         })
@@ -285,12 +354,16 @@ $(function(){
         let dataArr = getSelectedListData(selectedListGroup)
         // 获取到所有选中的数据
         console.log('dataArr', dataArr)
+        // 获得弹框时从哪个page点击弹出的
+        let page = $('#search1Popup').data('page')
+        $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
         // 清空数据
         selectedListGroup.empty()
         $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
         $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
         // 关闭弹框
         $("#search1Popup").modal('toggle');
+        $('#search1Popup').removeAttr('data-page')
     })
 
     // 获取选择的列表数据
@@ -314,21 +387,33 @@ $(function(){
     $('.search2_confirm_btn').click(function() {
         let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
         let dataArr = getSelectedListData(selectedListGroup)
-        // 获取到所有选中的数据
-        console.log('dataArr', dataArr)
+        console.log('dataArr', dataArr)        
+
         // 获取数据预处理和标准化处理选中的值
         let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
-        let dataProcessText = checkedRadio.parent().text().trim()
+        let dataPreProcessText = checkedRadio.parent().text().trim()
         let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
         let standardPreProcessText = checkedRadio2.parent().text().trim()
-        console.log('dataProcessText', dataProcessText)
+        console.log('dataPreProcessText', dataPreProcessText)
         console.log('standardPreProcessText', standardPreProcessText)
+
+        // 获取到所有选中的数据，存入隐藏的input中
+        let data = {
+            list: dataArr,
+            dataPreProcessText,
+            standardPreProcessText
+        }
+        // 获得弹框时从哪个page点击弹出的
+        let page = $('#search2Popup').data('page')
+        $(`.${page}_search2_data`).val(JSON.stringify(data))
+
         // 清空数据
         selectedListGroup.empty()
         $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
         initRadio()
         // 关闭弹框
         $("#search2Popup").modal('toggle');
+        $('#search2Popup').removeAttr('data-page')
     })
     
     // 初始化单选按钮
@@ -336,8 +421,6 @@ $(function(){
         $('.data_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
         $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
     }
-
-    // $('.datepicker').datepicker();
 
     // 请求查询弹框1需要的数据
     function getSearch1Data() {
@@ -352,12 +435,14 @@ $(function(){
         });
         
         function appendData(selectData, className) {
+            var frag = document.createDocumentFragment();
             if (selectData.length > 0) {
-                $(`.${className}_wrap .${className}`).append('<option>请选择：</option>')
+                frag.append($('<option>请选择：</option>')[0])
             }
             selectData.map(data => {
-                $(`.${className}_wrap .${className}`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
+                frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
+            $(`.${className}_wrap .${className}`).append(frag)
         }
     }
 
@@ -365,12 +450,14 @@ $(function(){
     function getSearch2Data() {
         $.get("/static/json/myoptions.json",function(result){
             let features = result.features
+            var frag = document.createDocumentFragment();
             if (selectData.length > 0) {
-                $(`.target_selector_wrap .target_selector`).append('<option>请选择：</option>')
+                frag.append($('<option>请选择：</option>')[0])
             }
             features.map(data => {
-                $(`.target_selector_wrap .target_selector`).append(`<option data-id=${data.id} data-pinyin=${data.pinyin}>${data.text}</option>`)
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
+            $(`.target_selector_wrap .target_selector`).append(frag)
         });
     }
 });
