@@ -215,7 +215,7 @@
             <div class="container col bg-light mx-3">
                 <div class="top_wrap">
                     <div class="select_wrap">
-                        <div class="ticket_select_wrap">
+                        <div class="ticket_selector_wrap">
                             <span>股票：</span>
                             <select class="selector">
                                 <!-- <option value="AL">Alabama</option>
@@ -226,9 +226,9 @@
                         <div class="segments_select_wrap">
                             <span>板块：</span>
                             <select class="selector">
-                                <option value="AL">Alabama</option>
+                                <!-- <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
-                                <option value="huhui">胡辉</option>
+                                <option value="huhui">胡辉</option> -->
                             </select>
                         </div>
                     </div>
@@ -277,20 +277,20 @@
                             </div>
                             <div class="text_input_wrap select_start_date_wrap select_date_wrap">
                                 <span class="normal_font">开始时间</span>
-                                <input class="main2_startdate page_datepicker" data-date-end-date="0d"/>
+                                <input class="main2_startdate page_datepicker"/>
                             </div>
                             <div class="text_input_wrap select_end_date_wrap select_date_wrap">
                                 <span class="normal_font">结束时间</span>
-                                <input class="main2_enddate page_datepicker" data-date-end-date="0d"/>
+                                <input class="main2_enddate page_datepicker"/>
                             </div>
                         </div>
                         <div class="center_wrap">
                             <span>所在的板块：</span>
-                            <div class="selected_egments_wrap">
+                            <div class="selected_segments_wrap">
                                 <ul class="list-group">
-                                    <li class="list-group-item">Cras justo odio</li>
+                                    <!-- <li class="list-group-item">Cras justo odio</li>
                                     <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Vestibulum at eros</li>
+                                    <li class="list-group-item">Vestibulum at eros</li> -->
                                 </ul>
                             </div>
                         </div>
@@ -299,13 +299,16 @@
                                 <span>《《</span>
                                 <span>（添加）</span>
                             </div>
-                            <div class="segments_select_wrap">
-                                <span>板块：</span>
+                            <div class="selector_wrap segments_selector_wrap">
                                 <select class="selector">
-                                    <option value="AL">Alabama</option>
+                                    <!-- <option value="AL">Alabama</option>
                                     <option value="WY">Wyoming</option>
-                                    <option value="huhui">胡辉</option>
+                                    <option value="huhui">胡辉</option> -->
                                 </select>
+                                <div class="btn_wrap">
+                                    <button class="confirm_btn btn btn-primary">确定</button>
+                                    <button class="cancel_btn btn btn-primary">取消</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -322,10 +325,10 @@
                             <div class="type_selector_wrap">
                                 <span class="normal_font">类型</span>
                                 <select class="selector">
-                                    <option value="zs">指数</option>
-                                    <option value="bzdy">半自定义</option>
-                                    <option value="hy">行业</option>
-                                    <option value="qzdy">全自定义</option>
+                                    <option value="指数">指数</option>
+                                    <option value="半自定义">半自定义</option>
+                                    <option value="行业">行业</option>
+                                    <option value="全自定义">全自定义</option>
                                 </select>
                             </div>
                             <div class="text_input_wrap select_start_date_wrap select_date_wrap">
@@ -335,21 +338,21 @@
                             <div class="grouping_selector_wrap">
                                 <span class="normal_font">分组</span>
                                 <select class="selector">
-                                    <option value="scz">市场组</option>
-                                    <option value="gmz">规模组</option>
-                                    <option value="qzhyz">全指行业组</option>
-                                    <option value="swhyz">申万行业组</option>
-                                    <option value="qtz">其它组</option>
+                                    <option value="市场组">市场组</option>
+                                    <option value="规模组">规模组</option>
+                                    <option value="全指行业组">全指行业组</option>
+                                    <option value="申万行业组">申万行业组</option>
+                                    <option value="其它组">其它组</option>
                                 </select>
                             </div>
                             <div class="text_input_wrap">
                                 <span class="normal_font">附注</span>
-                                <input type="text"/>
+                                <input class="notes" type="text"/>
                             </div>
                         </div>
                         <div class="center_wrap">
-                            <span>所在的板块：</span>
-                            <div class="selected_segments_wrap">
+                            <span>成分股列表：</span>
+                            <div class="selected_cfg_wrap">
                                 <ul class="list-group">
                                     <li class="list-group-item">Cras justo odio</li>
                                     <li class="list-group-item">Dapibus ac facilisis in</li>
@@ -362,13 +365,16 @@
                                 <span>《《</span>
                                 <span>（添加）</span>
                             </div>
-                            <div class="segments_select_wrap">
-                                <span>板块：</span>
+                            <div class="selector_wrap ticket_selector_wrap">
                                 <select class="selector">
-                                    <option value="AL">Alabama</option>
+                                    <!-- <option value="AL">Alabama</option>
                                     <option value="WY">Wyoming</option>
-                                    <option value="huhui">胡辉</option>
+                                    <option value="huhui">胡辉</option> -->
                                 </select>
+                                <div class="btn_wrap">
+                                    <button class="confirm_btn btn btn-primary">确定</button>
+                                    <button class="cancel_btn btn btn-primary">取消</button>
+                                </div>
                             </div>
                         </div>
                     </div>

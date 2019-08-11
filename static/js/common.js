@@ -152,7 +152,9 @@ var onClickModule = function(id, type){
 }
 
 $(function() {
-    $('.page_datepicker').datepicker();
+    $('.page_datepicker').datepicker({
+        format: 'yyyy-mm-dd'
+    });
 
     // 选择框
     $('.selector').select2({
@@ -181,28 +183,11 @@ $(function() {
         return null;
     }
 
-    // 转换时间格式，format / 或者 -
-    function formatDate(date, format) {
-        var d=new Date(date);
-        var year=d.getFullYear();
-        var month=change(d.getMonth()+1);
-        var day=change(d.getDate());
-        function change(t) {
-            if (t<10){
-                return "0"+t;
-            }else{
-                return t;
-            }
-        }
-        if (date.indexOf('-') > 0) {
-            return `${month}/${day}/${year}`
-        }
-        return `${year}-${month}-${day}`
-    }
+    // main2-选择股票选项
+    $('.left_wrap .ticket_selector_wrap .selector').on('select2:select', function(){
+        $('.ticket_detail_wrap').removeClass('hide')
+        $('.add_segments_wrap').addClass('hide')
 
-    // main2
-    // 选择股票选项
-    $('.selector').on('select2:select', function(){
         let checkedItem = $(this).find('option:checked')
         let id = checkedItem.data('id')
         let pinyin = checkedItem.data('pinyin')
@@ -210,20 +195,165 @@ $(function() {
         console.log(id, pinyin, text)
         $.get("/static/json/sample_股票.json", function(result) {
             console.log('result', result)
-            $('.ticket_detail_wrap').removeClass('hide')
-            $('.add_segments_wrap').addClass('hide')
 
-            $('.code_input').val(result.tcode)
+            $('.ticket_detail_wrap .code_input').val(result.tcode)
             $('.ticket_detail_wrap .name_input').val(result.shortname)
             let isstIndex = result.is_st === 0 ? 1 : 0
             $('input:radio[name="isstOption"]').eq(isstIndex).attr('checked', 'checked')
             let iszzIndex = result.is_zz === 0 ? 1 : 0
             $('input:radio[name="iszzOption"]').eq(iszzIndex).attr('checked', 'checked')
 
-            $('.main2_startdate').val(result.end_date)
+            // $('.main2_startdate').val(result.end_date)
+            $('.ticket_detail_wrap .main2_startdate').datepicker('update', result.start_date);
+            $('.main2_enddate').datepicker('update', result.end_date);
+
+            $('.selected_segments_wrap ul').empty()
+            result.groupbelong.map(item => {
+                $('.selected_segments_wrap ul').append(`<li data-id=${item[0]} class="list-group-item">${item[1]}</li>`)
+            })
         });
     })
 
+    // 添加板块事件
+    $('.ticket_detail_wrap .right_wrap .add_wrap').click(function() {
+        let checkedOption = $('.right_wrap .segments_select_wrap .selector').find('option:checked')
+        let id = checkedOption.data('id')
+        let text = checkedOption.text()
+        console.log('exist', itemIsExist(id, 'selected_segments'))
+        if (!id || itemIsExist(id, 'selected_segments')) {
+            return
+        }
+        $('.selected_segments_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+    })
+
+    // main2-输入股票代码后确定按钮点击事件
+    $('.ticket_detail_wrap .segments_select_wrap .confirm_btn').click(function() {
+        let end_date = $('.main2_enddate').val()
+        let start_date = $('.main2_startdate').val()
+        let groupbelong = []
+        $('.selected_segments_wrap ul').children().each((i, item) => {
+            let id = $(item).data('id')
+            let name = $(item).text()
+            groupbelong.push([id, name])
+        })
+        let is_st = Number($('input:radio[name="isstOption"]:checked').val())
+        let is_zz = Number($('input:radio[name="iszzOption"]:checked').val())
+        let shortname = $('.content_wrap .left_wrap .name_input').val()
+        let tcode = $('.ticket_detail_wrap .code_input').val()
+        let data = {
+            end_date,
+            groupbelong,
+            is_st,
+            is_zz,
+            shortname,
+            start_date,
+            tcode
+        }
+        console.log('data', data)
+    })
+
+    // main2-输入股票代码后取消按钮点击事件
+    $('.segments_select_wrap .cancel_btn').click(function() {
+        $('.ticket_detail_wrap').addClass('hide')
+    })
+
+    // 选择板块选项
+    $('.segments_select_wrap .selector').on('select2:select', function() {
+        $('.add_segments_wrap').removeClass('hide')
+        $('.ticket_detail_wrap').addClass('hide')
+
+        let checkedItem = $(this).find('option:checked')
+        let id = checkedItem.data('id')
+        let pinyin = checkedItem.data('pinyin')
+        let text = checkedItem.text()
+        console.log(id, pinyin, text)
+        $.get("/static/json/sample_板块.json", function(result) {
+            console.log('result', result)
+
+            $('.add_segments_wrap .code_input').val(result.scode)
+            $('.add_segments_wrap .name_input').val(result.shortname)
+            $('.add_segments_wrap .main2_startdate').datepicker('update', result.startdate);
+            $('.type_selector_wrap .selector').val(result.stype).select2()
+            $('.add_segments_wrap .grouping_selector_wrap .selector').val(result.sec_group).select2()
+            $('.add_segments_wrap .notes').val(result.notes)
+
+            $('.add_segments_wrap ul').empty()        
+            result.memberlist.map(item => {
+                $('.add_segments_wrap ul').append(`<li data-id=${item[0]} class="list-group-item">${item[1]}</li>`)
+            })
+        });
+    })
+
+    // 添加股票事件
+    $('.add_segments_wrap .right_wrap .add_wrap').click(function() {
+        let checkedOption = $('.right_wrap .ticket_selector_wrap .selector').find('option:checked')
+        let id = checkedOption.data('id')
+        let text = checkedOption.text()
+        console.log('exist', itemIsExist(id, 'selected_cfg'))
+        if (!id || itemIsExist(id, 'selected_cfg')) {
+            return
+        }
+        $('.selected_cfg_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+    })
+
+    // main2-输入板块代码后确定按钮点击事件
+    $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').click(function() {
+        let notes = $('.add_segments_wrap .notes').val()
+        let scode = $('.add_segments_wrap .code_input').val()
+        let sec_group = $('.add_segments_wrap .grouping_selector_wrap .selector').val()
+        let shortname = $('.add_segments_wrap .name_input').val()
+        let startdate = $('.add_segments_wrap .main2_startdate').val();            
+        let stype = $('.type_selector_wrap .selector').val()
+        let memberlist = []
+        $('.selected_cfg_wrap ul').children().each((i, item) => {
+            let id = $(item).data('id')
+            let name = $(item).text()
+            memberlist.push([id, name])
+        })
+        let data = {
+            memberlist,
+            notes,
+            scode,
+            sec_group,
+            shortname,
+            startdate,
+            stype
+        }
+        if ($(this).data('type') === 'add') {
+            console.log('调用添加接口')
+        } else {
+            console.log('调用编辑接口')
+        }
+        console.log('data', data)
+    })
+
+    // main2-输入板块代码后取消按钮点击事件
+    $('.add_segments_wrap .cancel_btn').click(function() {
+        $('.add_segments_wrap').addClass('hide')
+        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').removeAttr('data-type')
+    })
+
+    // 已选择的板块或成分股点击事件
+    $('.center_wrap >div ul').on('dblclick', 'li', function() {
+        $(this).remove()
+    })
+
+    // 添加板块按钮点击事件
+    $('.container .top_wrap .add_btn').click(function() {
+        $('.add_segments_wrap').removeClass('hide')
+        $('.ticket_detail_wrap').addClass('hide')
+        // 清空数据
+        $('.add_segments_wrap .notes').val('')
+        $('.add_segments_wrap .code_input').val('')
+        $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
+        $('.add_segments_wrap .name_input').val('')
+        $('.add_segments_wrap .main2_startdate').val('');            
+        $('.add_segments_wrap .type_selector_wrap .selector').val('').select2()
+        $('.selected_cfg_wrap ul').empty()
+
+        // 加上data-type="add"，表示这是添加板块
+        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
+    })
 
     // main4
 	$('.pages .switch').click(function(){
@@ -269,7 +399,7 @@ $(function() {
             outliers,
             standardize
         }
-        console.log('data', data, JSON.stringify(data))
+        console.log('data', data)
     })
 
     // page2-确定按钮点击事件
@@ -293,7 +423,7 @@ $(function() {
             standardize,
             charttype
         }
-        console.log('data', data, JSON.stringify(data))
+        console.log('data', data)
     })
 
     // page3-确定按钮点击事件
@@ -309,7 +439,7 @@ $(function() {
             targets,
             tabletype
         }
-        console.log('data', data, JSON.stringify(data))
+        console.log('data', data)
     })
 
     search1BtnClick('page1');
@@ -432,15 +562,6 @@ $(function() {
         el.siblings().removeClass('active')
     }
 
-    // $('#search1Popup .selector2').select2({
-    //     matcher: matchStart
-    // });
-    
-    // 查询2-选择框
-    // $('#search2Popup .target_selector').select2({
-    //     matcher: matchStart
-    // });
-
     // 查询弹框中的列表项点击事件
     $('.selected_list_wrap ul').on('dblclick', 'li', function() {
         $(this).remove()
@@ -484,7 +605,6 @@ $(function() {
 
     // 判断选择的选项是否已在列表中
     function itemIsExist(id, className) {
-        console.log(id, className)
         let exist = false
         $(`.${className}_wrap .list-group`).children().each(function(i, item) {
             if (id === $(item).data('id')) {
@@ -651,19 +771,38 @@ $(function() {
     getTicketData()
     // 请求股票数据
     function getTicketData() {
-        if ($(`.ticket_select_wrap .selector`).length === 0) {
+        if ($(`.ticket_selector_wrap .selector`).length === 0) {
             return
         }
         $.get("/static/json/myoptions.json",function(result){
             let ticket = result.ticket
             var frag = document.createDocumentFragment();
-            if (selectData.length > 0) {
+            if (ticket.length > 0) {
                 frag.append($('<option>请选择：</option>')[0])
             }
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.ticket_select_wrap .selector`).append(frag)
+            $(`.ticket_selector_wrap .selector`).append(frag)
+        });
+    }
+    
+    getSegmentsData()
+    // 请求板块数据
+    function getSegmentsData() {
+        if ($(`.segments_select_wrap .selector`).length === 0) {
+            return
+        }
+        $.get("/static/json/myoptions.json",function(result){
+            let sector = result.sector
+            var frag = document.createDocumentFragment();
+            if (sector.length > 0) {
+                frag.append($('<option>请选择：</option>')[0])
+            }
+            sector.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(`.segments_select_wrap .selector`).append(frag)
         });
     }
 });

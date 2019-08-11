@@ -99,6 +99,13 @@ fieldset, img { border:0; vertical-align: middle;}
 .container .content_wrap .center_wrap {
   width: 30%;
 }
+.container .center_wrap >div ul {
+  max-height: 540px;
+  overflow: auto;
+}
+.container .center_wrap >div ul li {
+  cursor: pointer;
+}
 .container .content_wrap .right_wrap {
   display: flex;
   align-items: center;
@@ -109,7 +116,21 @@ fieldset, img { border:0; vertical-align: middle;}
   flex-direction: column;
   cursor: pointer;
 }
-.container .segments_select_wrap >span {
+.container .right_wrap .selector_wrap {
+  padding-top: 200px;
+  box-sizing: border-box;
+  height: 570px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.container .right_wrap .btn_wrap button:first-child {
+  margin-right: 30px;
+}
+.container .right_wrap .selector_wrap .selector {
+  flex-grow: 1;
+}
+.container .selector_wrap >span {
   width: 200px!important;
 }
 
