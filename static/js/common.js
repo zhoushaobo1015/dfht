@@ -126,10 +126,45 @@ $(function() {
         return null;
     }
 
+    // 将时间格式 08/11/2019 转换成 2019-08-11
+    function formatDate(dateStr) {
+        var d=new Date(dateStr);
+        var year=d.getFullYear();
+        var month=change(d.getMonth()+1);
+        var day=change(d.getDate());
+        function change(t) {
+            if (t<10){
+                return "0"+t;
+            }else{
+                return t;
+            }
+        }
+        return `${year}-${month}-${day}`
+    }
+
     // main2
+    // 选择股票选项
+    $('.selector').on('select2:select', function(){
+        let checkedItem = $(this).find('option:checked')
+        let id = checkedItem.data('id')
+        let pinyin = checkedItem.data('pinyin')
+        let text = checkedItem.text()
+        console.log(id, pinyin, text)
+        $.get("/static/json/sample_股票.json", function(result) {
+            console.log('result', result)
+            $('.ticket_detail_wrap').removeClass('hide')
+            $('.add_segments_wrap').addClass('hide')
 
+            $('.code_input').val(result.tcode)
+            $('.ticket_detail_wrap .name_input').val(result.shortname)
+            let isstIndex = result.is_st === 0 ? 1 : 0
+            $('input:radio[name="isstOption"]').eq(isstIndex).attr('checked', 'checked')
+            let iszzIndex = result.is_zz === 0 ? 1 : 0
+            $('input:radio[name="iszzOption"]').eq(iszzIndex).attr('checked', 'checked')
 
-
+            $('.main2_startdate').val(result.end_date)
+        });
+    })
 
 
     // main4
@@ -161,36 +196,62 @@ $(function() {
     $('.page1_confirm_btn').click(function() {
         let startDate = $('.page1_startdate').val()
         let endDate = $('.page1_enddate').val()
-        let search1Data = $('.page1_search1_data').val()
+        let mytargets = $('.page1_search1_data').val()
+        mytargets = mytargets ? JSON.parse(mytargets) : []
         let search2Data = $('.page1_search2_data').val()
-        console.log('startDate', startDate)
-        console.log('endDate', endDate)
-        console.log('search1Data', search1Data)
-        console.log('search2Data', search2Data)
+        search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
+        let { myfeatures, outliers, standardize } = search2Data
+        let charttype = $('.page1 .tab_wrap .active').text()
+        let data = {
+            charttype, 
+            startdate: startDate,
+            enddate: endDate,
+            mytargets,
+            myfeatures,
+            outliers,
+            standardize
+        }
+        console.log('data', data, JSON.stringify(data))
     })
 
     // page2-确定按钮点击事件
     $('.page2_confirm_btn').click(function() {
-        let timeSpan = $('.selected_time_span').text()
-        let cycleNum = $('.selected_cycle_num').text()
-        let endDate = $('.page2_enddate').val()
-        let search1Data = $('.page2_search1_data').val()
+        let timespan = $('.selected_time_span').text()
+        let cycles = Number($('.selected_cycle_num').text())
+        let enddate = $('.page2_enddate').val()
+        let targets = $('.page2_search1_data').val()
+        targets = targets ? JSON.parse(targets) : []
         let search2Data = $('.page2_search2_data').val()
-        console.log('timeSpan', timeSpan)
-        console.log('cycleNum', cycleNum)
-        console.log('endDate', endDate)
-        console.log('search1Data', search1Data)
-        console.log('search2Data', search2Data)
+        search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
+        let { myfeatures, outliers, standardize } = search2Data
+        let charttype = $('.page2 .tab_wrap .active').text()
+        let data = {
+            timespan,
+            cycles,
+            enddate,
+            targets,
+            features: myfeatures,
+            outliers,
+            standardize,
+            charttype
+        }
+        console.log('data', data, JSON.stringify(data))
     })
 
     // page3-确定按钮点击事件
     $('.page3_confirm_btn').click(function() {
-        let search1Data = $('.page3_search1_data').val()
-        let endDate = $('.page3_enddate').val()
-        let timeSpan = $('.page3_time_span_input').val()
-        console.log('search1Data', search1Data)
-        console.log('endDate', endDate)
-        console.log('timeSpan', timeSpan)
+        let targets = $('.page3_search1_data').val()
+        targets = targets ? JSON.parse(targets) : []
+        let enddate = $('.page3_enddate').val()
+        let timespan = $('.page3_time_span_input').val()
+        let tabletype = $('.page3-table li.selected').text()
+        let data = {
+            timespan,
+            enddate,
+            targets,
+            tabletype
+        }
+        console.log('data', data, JSON.stringify(data))
     })
 
     search1BtnClick('page1');
@@ -448,21 +509,21 @@ $(function() {
     $('.search2_confirm_btn').click(function() {
         let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
         let dataArr = getSelectedListData(selectedListGroup)
-        console.log('dataArr', dataArr)        
+        console.log('dataArr', dataArr)
 
         // 获取数据预处理和标准化处理选中的值
         let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
-        let dataPreProcessText = checkedRadio.parent().text().trim()
+        let outliers = Number(checkedRadio.val())
         let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
-        let standardPreProcessText = checkedRadio2.parent().text().trim()
-        console.log('dataPreProcessText', dataPreProcessText)
-        console.log('standardPreProcessText', standardPreProcessText)
+        let standardize = Number(checkedRadio2.val())
+        console.log('outliers', outliers)
+        console.log('standardize', standardize)
 
         // 获取到所有选中的数据，存入隐藏的input中
         let data = {
-            list: dataArr,
-            dataPreProcessText,
-            standardPreProcessText
+            myfeatures: dataArr,
+            outliers,
+            standardize
         }
         // 获得弹框时从哪个page点击弹出的
         let page = $('#search2Popup').data('page')

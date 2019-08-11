@@ -74,6 +74,7 @@ fieldset, img { border:0; vertical-align: middle;}
   width: 100%;
 }
 .container .radio_text_wrap {
+  width: 157px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
