@@ -152,6 +152,25 @@ var onClickModule = function(id, type){
 }
 
 $(function() {
+
+    // main1 selsect
+    $.get("/static/json/myoptions.json",function(result){
+        console.log(result);
+        let { macro } = result
+        let select2Data = [...macro]
+
+        var frag = document.createDocumentFragment();
+        if (select2Data.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        select2Data.map(data => {
+            frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $('#main1-select1').append(frag)
+
+    });
+
+
     $('.page_datepicker').datepicker();
 
     // 选择框
@@ -180,7 +199,7 @@ $(function() {
 
         return null;
     }
-
+    
     // 转换时间格式，format / 或者 -
     function formatDate(date, format) {
         var d=new Date(date);
