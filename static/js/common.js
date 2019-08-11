@@ -96,6 +96,7 @@ $(function(){
     })
 
     $('.page_datepicker').datepicker();
+    $('.page3_time_span_input').val(new Date().getFullYear())
 
     // page1-确定按钮点击事件
     $('.page1_confirm_btn').click(function() {
@@ -125,14 +126,12 @@ $(function(){
 
     // page3-确定按钮点击事件
     $('.page3_confirm_btn').click(function() {
-        let startDate = $('.page1_startdate').val()
-        let endDate = $('.page1_enddate').val()
-        let search1Data = $(`.${page}_search1_data`).val()
-        let search2Data = $(`.${page}_search2_data`).val()
-        console.log('startDate', startDate)
-        console.log('endDate', endDate)
+        let search1Data = $('.page3_search1_data').val()
+        let endDate = $('.page3_enddate').val()
+        let timeSpan = $('.page3_time_span_input').val()
         console.log('search1Data', search1Data)
-        console.log('search2Data', search2Data)
+        console.log('endDate', endDate)
+        console.log('timeSpan', timeSpan)
     })
 
     search1BtnClick('page1')

@@ -168,6 +168,9 @@ fieldset, img { border:0; vertical-align: middle;}
   left: 50%;
   display: flex;
 }
+.page3 .page3_time_span_input {
+  width: 100px;
+}
 .page3 .search1_wrap span {
   display: block;
   font-size: 16px;
