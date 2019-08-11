@@ -35,8 +35,9 @@ var onClickMain3Btn3Fn = function(){
 }
 
 var onClickMain3Btn2Fn = function(id){
-    $form_control_value = $(".form_date .form-control").val();
-    if($form_control_value === '请选择时间'){
+    $form_control_value = $(".form_date .page3_startdate").val();
+    console.log($form_control_value)
+    if($form_control_value === '请选择时间' || !$form_control_value){
         return false;
     }
     $("#"+id).modal('hide');
