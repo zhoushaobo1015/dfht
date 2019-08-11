@@ -220,14 +220,17 @@
                             <a class="switch" href="javascript:;"><i class="fas fa-expand-arrows-alt"></i></a>
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
-                                    <button class="search_btn btn btn-primary">确定</button>
-                                    <div class="text_input_wrap select_start_date_wrap">
+                                    <button class="page1_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
+                                    <input class="page1_search1_data" type="hidden">
+                                    <input class="page1_search2_data" type="hidden">
+                                    <div class="text_input_wrap select_start_date_wrap select_date_wrap">
                                         <span>开始时间</span>
-                                        <input type="text" value="2019-08-10">
+                                        <input class="page1_startdate page_datepicker" data-date-end-date="0d"/>
                                     </div>
-                                    <div class="text_input_wrap select_end_date_wrap">
+                                    <div class="text_input_wrap select_end_date_wrap select_date_wrap">
                                         <span>结束时间</span>
-                                        <input type="text" value="2019-08-10">
+                                        <input class="page1_enddate page_datepicker" data-date-end-date="0d"/>
                                     </div>
                                     <button class="search1_btn btn btn-primary">标的选择查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择查询2</button>
@@ -251,7 +254,10 @@
                             <a class="switch" href="javascript:;"><i class="fas fa-expand-arrows-alt"></i></a>
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
-                                    <button class="search_btn btn btn-primary">确定</button>
+                                    <button class="page2_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
+                                    <input class="page2_search1_data" type="hidden">
+                                    <input class="page2_search2_data" type="hidden">
                                     <div class="time_span_wrap">
                                         <span>时间跨度</span>
                                         <div class="dropdown">
@@ -276,9 +282,9 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="text_input_wrap select_end_date_wrap">
+                                    <div class="text_input_wrap select_date_wrap">
                                         <span>截止时间</span>
-                                        <input type="text" value="2019-08-10">
+                                        <input class="page2_enddate page_datepicker" data-date-end-date="0d"/>
                                     </div>
                                     <button class="search1_btn btn btn-primary">标的选择查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择查询2</button>
@@ -302,18 +308,21 @@
                             <a class="switch" href="javascript:;"><i class="fas fa-expand-arrows-alt"></i></a>
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
-                                    <button class="search_btn btn btn-primary">确定</button>
+                                    <button class="page3_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
+                                    <input class="page3_search1_data" type="hidden">
+                                    <input class="page3_search2_data" type="hidden">
                                     <div class="search1_wrap">
                                         <span>标的：</span>
                                         <button class="search1_btn btn btn-primary">标的选择查询1</button>
                                     </div>
                                     <div class="text_input_wrap select_end_date_wrap">
                                         <span>截止时间</span>
-                                        <input type="text" value="2019-08-10">
+                                        <input class="date_input" type="text" value="2019-08-10">
                                     </div>
                                     <div class="text_input_wrap time_span_wrap">
                                         <span>时间跨度</span>
-                                        <input type="text" value="2019-08-10">
+                                        <input type="text" value="2019">
                                     </div>
                                     <button class="search2_btn btn btn-primary">指标选择查询2</button>
                                 </div>
@@ -351,7 +360,7 @@
                 <!-- ----------------------- -->
             </div>
             <!-- 查询1弹框 -->
-            <div class="modal fade show" id="search1Popup" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
+            <div class="modal fade show" id="search1Popup" data-page1="111" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -365,32 +374,38 @@
                                 <button class="search1_confirm_btn btn btn-primary">选定</button>
                             </div>
                             <div class="selector_wrap selector1_wrap">
-                                <select class="selector selector1">
-                                    <!-- <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="huhui">胡辉</option> -->
-                                </select>
-                                <div class="selected_item_wrap">
-                                    <ul class="list-group">
-                                        <!-- <li class="list-group-item">Cras justo odio</li>
-                                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                                        <li class="list-group-item">Vestibulum at eros</li> -->
-                                    </ul>
+                                <div class="top_wrap">
+                                    <span class="normal_font">单标的选择</span>
+                                    <select class="selector selector1">
+                                        <!-- <option value="AL">Alabama</option>
+                                        <option value="WY">Wyoming</option>
+                                        <option value="huhui">胡辉</option> -->
+                                    </select>
+                                    <div class="selected_item_wrap">
+                                        <ul class="list-group">
+                                            <!-- <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                                            <li class="list-group-item">Vestibulum at eros</li> -->
+                                        </ul>
+                                    </div>
                                 </div>
                                 <button type="button" class="add_btn btn btn-primary">加入</button>
                             </div>
                             <div class="selector_wrap selector2_wrap">
-                                <select class="selector selector2">
-                                    <!-- <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="huhui">胡辉</option> -->
-                                </select>
-                                <div class="selected_item_wrap">
-                                    <ul class="list-group">
-                                        <!-- <li class="list-group-item">Cras justo odio</li>
-                                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                                        <li class="list-group-item">Vestibulum at eros</li> -->
-                                    </ul>
+                                <div class="top_wrap">
+                                    <span class="normal_font">全部成分</span>
+                                    <select class="selector selector2">
+                                        <!-- <option value="AL">Alabama</option>
+                                        <option value="WY">Wyoming</option>
+                                        <option value="huhui">胡辉</option> -->
+                                    </select>
+                                    <div class="selected_item_wrap">
+                                        <ul class="list-group">
+                                            <!-- <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                                            <li class="list-group-item">Vestibulum at eros</li> -->
+                                        </ul>
+                                    </div>
                                 </div>
                                 <button type="button" class="add_btn btn btn-primary">加入</button>
                             </div>
@@ -409,17 +424,20 @@
                                 <button class="search2_confirm_btn btn btn-primary">选定</button>
                             </div>
                             <div class="selector_wrap target_selector_wrap">
-                                <select class="selector target_selector">
-                                    <!-- <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="huhui">胡辉</option> -->
-                                </select>
-                                <div class="selected_item_wrap">
-                                    <ul class="list-group">
-                                        <!-- <li class="list-group-item">Cras justo odio</li>
-                                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                                        <li class="list-group-item">Vestibulum at eros</li> -->
-                                    </ul>
+                                <div class="top_wrap">
+                                    <span class="normal_font">指标选择</span>
+                                    <select class="selector target_selector">
+                                        <!-- <option value="AL">Alabama</option>
+                                        <option value="WY">Wyoming</option>
+                                        <option value="huhui">胡辉</option> -->
+                                    </select>
+                                    <div class="selected_item_wrap">
+                                        <ul class="list-group">
+                                            <!-- <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                                            <li class="list-group-item">Vestibulum at eros</li> -->
+                                        </ul>
+                                    </div>
                                 </div>
                                 <button type="button" class="add_btn btn btn-primary formAdd">加入</button>
                             </div>
