@@ -18,7 +18,7 @@ var requestData = function(url,type,data){
     })
 }
 
-// 其他页面展示
+// 查询1
 var onShowSelect1Get = function() {
     $.get("/static/json/myoptions.json",function(result){
         let { group, macro, sector, ticket } = result
@@ -41,6 +41,57 @@ var onShowSelect1Get = function() {
         $(`.${className}_wrap .${className}`).append(frag)
     }
 }
+
+
+// 查询2
+var onShowSelect2Get = function() {
+    $.get("/static/json/myoptions.json",function(result){
+        let features = result.features
+        var frag = document.createDocumentFragment();
+
+        let selectData = $(".target_selector").on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id')
+            let pinyin = checkedItem.data('pinyin')
+            let text = checkedItem.text()
+
+            let canAdd = true
+            let selector1Length = $('.selector1_wrap .list-group').children().length
+            let selector2Length = $('.selector2_wrap .list-group').children().length
+            if ('target_selector' === 'selector1') {
+                // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
+                if (selector2Length > 1 && selector1Length === 1) {
+                    canAdd = false
+                }
+            } else if ('target_selector' === 'selector2') {
+                // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
+                if (selector1Length > 1 && selector2Length === 1) {
+                    canAdd = false
+                }
+            }
+
+            let exist = false
+            $(`.target_selector_wrap .list-group`).children().each(function(i, item) {
+                if (id === $(item).data('id')) {
+                    exist = true
+                }
+            })
+
+            if (canAdd && !exist && text !== '请选择：') {
+                $(`.target_selector_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
+            }
+        })
+
+        if (selectData.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        features.map(data => {
+            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $(`.target_selector_wrap .target_selector`).append(frag)
+    });
+}
+
 
 // main3 btn1
 var onClickMain3Btn1Fn = function(){
@@ -72,7 +123,7 @@ var onClickMain3Btn2Fn = function(id){
 }
 
 
-// mail3 btn4
+// main3 btn4
 var onClickMain3Btn4Fn = function(){
     // $("#search1Popup").attr('data-page', page)
     $("#search1Popup").modal('toggle');
@@ -80,12 +131,16 @@ var onClickMain3Btn4Fn = function(){
     $('#search1Popup .selector1').val("").trigger("change")
 }
 
-
+// main3 btn5
 var onClickMain3Btn5Fn = function(){
-    // $("#search1Popup").attr('data-page', page)
     $("#search1Popup").modal('toggle');
     onShowSelect1Get();
-    $('#search1Popup .selector1').val("").trigger("change")
+    $('#search1Popup .selector1').val("").trigger("change");
+
+    // $("#search2Popup").modal('toggle');
+    // onShowSelect2Get();
+    // $('#search2Popup .selector').val("").trigger("change");
+
 }
 
 var onClickModule = function(id, type){
@@ -426,6 +481,7 @@ $(function() {
 
     // 判断选择的选项是否已在列表中
     function itemIsExist(id, className) {
+        console.log(id, className)
         let exist = false
         $(`.${className}_wrap .list-group`).children().each(function(i, item) {
             if (id === $(item).data('id')) {
@@ -485,7 +541,13 @@ $(function() {
         $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
         // 关闭弹框
         $("#search1Popup").modal('toggle');
-        $('#search1Popup').removeAttr('data-page')
+        $('#search1Popup').removeAttr('data-page');
+        
+        if( $(".main3").length > 0 ){
+            $("#search2Popup").modal('toggle');
+            onShowSelect2Get();
+            $('#search2Popup .selector').val("").trigger("change");
+        }
     })
 
     // 获取选择的列表数据
