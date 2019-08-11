@@ -18,6 +18,30 @@ var requestData = function(url,type,data){
     })
 }
 
+// 其他页面展示
+var onShowSelect1Get = function() {
+    $.get("/static/json/myoptions.json",function(result){
+        let { group, macro, sector, ticket } = result
+        // 查询1单标的选择数据
+        let select1Data = [...group, ...macro, ...sector, ...ticket]
+        // 查询1全部成分数据
+        let select2Data = [...ticket, ...group]
+        appendData(select1Data, 'selector1')
+        appendData(select2Data, 'selector2')
+    });
+    
+    function appendData(selectData, className) {
+        var frag = document.createDocumentFragment();
+        if (selectData.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        selectData.map(data => {
+            frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $(`.${className}_wrap .${className}`).append(frag)
+    }
+}
+
 // main3 btn1
 var onClickMain3Btn1Fn = function(){
     // 展示沙漏
@@ -45,6 +69,23 @@ var onClickMain3Btn2Fn = function(id){
 
     requestData("url","type","data");
 
+}
+
+
+// mail3 btn4
+var onClickMain3Btn4Fn = function(){
+    // $("#search1Popup").attr('data-page', page)
+    $("#search1Popup").modal('toggle');
+    onShowSelect1Get();
+    $('#search1Popup .selector1').val("").trigger("change")
+}
+
+
+var onClickMain3Btn5Fn = function(){
+    // $("#search1Popup").attr('data-page', page)
+    $("#search1Popup").modal('toggle');
+    onShowSelect1Get();
+    $('#search1Popup .selector1').val("").trigger("change")
 }
 
 var onClickModule = function(id, type){
