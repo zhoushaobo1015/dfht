@@ -181,9 +181,9 @@ $(function() {
         return null;
     }
 
-    // 将时间格式 08/11/2019 转换成 2019-08-11
-    function formatDate(dateStr) {
-        var d=new Date(dateStr);
+    // 转换时间格式，format / 或者 -
+    function formatDate(date, format) {
+        var d=new Date(date);
         var year=d.getFullYear();
         var month=change(d.getMonth()+1);
         var day=change(d.getDate());
@@ -193,6 +193,9 @@ $(function() {
             }else{
                 return t;
             }
+        }
+        if (date.indexOf('-') > 0) {
+            return `${month}/${day}/${year}`
         }
         return `${year}-${month}-${day}`
     }
