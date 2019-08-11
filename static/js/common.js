@@ -158,7 +158,7 @@ $(function() {
 
     // main1 selsect
     $.get("/static/json/myoptions.json",function(result){
-        console.log(result);
+        // console.log(result);
         let { macro } = result
         let select2Data = [...macro]
 
