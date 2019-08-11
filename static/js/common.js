@@ -23,7 +23,7 @@ var onClickMain3Btn1Fn = function(){
     // 展示沙漏
     $("#Hourglass").modal('toggle');
     $("#Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
-    
+
     requestData("url","type","data");
 }
 
@@ -75,13 +75,21 @@ $(function(){
 
 	$('.pages .switch').click(function(){
 		var $this = $(this);
-		var $parent = $(this).parent();
+        var $parent = $(this).parent();
+        var $brother = $parent.siblings();
 		$this.toggleClass('check');
 		$parent.toggleClass("all");
-		$parent.animate()
+        // $parent.animate();
+        
 		if($this.attr('class').indexOf('check')>-1){
+            $('.pages').css('position', 'inherit');
+            $('.all').css('position', 'inherit');
+            $brother.css('display','none');
 			$this.html('<i class="fas fa-compress-arrows-alt"></i>')
         }else{
+            $('.pages').css('position', 'absolute');
+            $('.all').css('position', 'absolute');
+            $brother.css('display','flex');
 			$this.html('<i class="fas fa-expand-arrows-alt"></i>')
 		}
         
