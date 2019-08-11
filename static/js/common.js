@@ -470,7 +470,6 @@ $(function() {
             $("#search1Popup").attr('data-page', page)
             $("#search1Popup").modal('toggle');
             getSearch1Data()
-            $('#search1Popup .selector1').val("").trigger("change")
         })
     }
 
