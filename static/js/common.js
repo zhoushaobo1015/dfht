@@ -151,7 +151,14 @@ var onClickModule = function(id, type){
     }
 }
 
-$(function(){
+$(function() {
+    $('.page_datepicker').datepicker();
+
+    // 选择框
+    $('.selector').select2({
+        matcher: matchStart
+    });
+
     function matchStart(params, data) {
         if ($.trim(params.term) === '') {
             return data;
@@ -161,7 +168,12 @@ $(function(){
             return null;
         }
 
-        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1) {
+        let id = $(data.element).data('id')
+        if (typeof id === 'undefined') {
+            return null
+        }
+
+        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
         }
@@ -169,6 +181,13 @@ $(function(){
         return null;
     }
 
+    // main2
+
+
+
+
+
+    // main4
 	$('.pages .switch').click(function(){
 		var $this = $(this);
         var $parent = $(this).parent();
@@ -191,7 +210,6 @@ $(function(){
         
     })
 
-    $('.page_datepicker').datepicker();
     $('.page3_time_span_input').val(new Date().getFullYear())
 
     // page1-确定按钮点击事件
@@ -350,19 +368,14 @@ $(function(){
         el.siblings().removeClass('active')
     }
 
-    // 查询1-选择框
-    $('#search1Popup .selector1').select2({
-        matcher: matchStart
-    });
-
-    $('#search1Popup .selector2').select2({
-        matcher: matchStart
-    });
+    // $('#search1Popup .selector2').select2({
+    //     matcher: matchStart
+    // });
     
     // 查询2-选择框
-    $('#search2Popup .target_selector').select2({
-        matcher: matchStart
-    });
+    // $('#search2Popup .target_selector').select2({
+    //     matcher: matchStart
+    // });
 
     // 查询弹框中的列表项点击事件
     $('.selected_list_wrap ul').on('dblclick', 'li', function() {
@@ -568,6 +581,25 @@ $(function(){
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
             $(`.target_selector_wrap .target_selector`).append(frag)
+        });
+    }
+
+    getTicketData()
+    // 请求股票数据
+    function getTicketData() {
+        if ($(`.ticket_select_wrap .selector`).length === 0) {
+            return
+        }
+        $.get("/static/json/myoptions.json",function(result){
+            let ticket = result.ticket
+            var frag = document.createDocumentFragment();
+            if (selectData.length > 0) {
+                frag.append($('<option>请选择：</option>')[0])
+            }
+            ticket.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(`.ticket_select_wrap .selector`).append(frag)
         });
     }
 });
