@@ -72,7 +72,12 @@ $(function() {
             return null;
         }
 
-        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1) {
+        let id = $(data.element).data('id')
+        if (typeof id === 'undefined') {
+            return null
+        }
+
+        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
         }
@@ -473,6 +478,25 @@ $(function() {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
             $(`.target_selector_wrap .target_selector`).append(frag)
+        });
+    }
+
+    getTicketData()
+    // 请求股票数据
+    function getTicketData() {
+        if ($(`.ticket_select_wrap .selector`).length === 0) {
+            return
+        }
+        $.get("/static/json/myoptions.json",function(result){
+            let ticket = result.ticket
+            var frag = document.createDocumentFragment();
+            if (selectData.length > 0) {
+                frag.append($('<option>请选择：</option>')[0])
+            }
+            ticket.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(`.ticket_select_wrap .selector`).append(frag)
         });
     }
 });
