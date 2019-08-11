@@ -14,6 +14,8 @@
     <!-- 单独引入 CSS -->
     <link rel="stylesheet" href="./static/css/style.css">
     <link rel="stylesheet" href="./static/css/bootstrap-datetimepicker.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
 
 
 
@@ -217,7 +219,7 @@
                     <button type="button" class="btn btn-primary btn-block" data-toggle="modal"  onclick="onClickMain3Btn1Fn()">强制更新</button>
                     <button type="button" class="btn btn-primary btn-block main3Btn2" onclick="onClickModule('date-list',true)">回退到指定日期</button>
                     <button type="button" class="btn btn-primary btn-block" onclick="onClickMain3Btn3Fn()">功能3</button>
-                    <button type="button" class="btn btn-primary btn-block">功能4</button>
+                    <button type="button" class="btn btn-primary btn-block search1_btn">功能4</button>
                     <button type="button" class="btn btn-primary btn-block">功能5</button>
                 </div>
             </div>
@@ -252,6 +254,137 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal -->
             </div>
+
+            <!-- 查询1弹框 -->
+            <div class="modal fade show" id="search1Popup" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="selected_list_wrap">
+                                <span>已选择</span>
+                                <ul class="list-group">
+                                    <!-- <li class="list-group-item">Cras justo odio</li>
+                                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item">Morbi leo risus</li> -->
+                                </ul>
+                                <button class="search1_confirm_btn btn btn-primary">选定</button>
+                            </div>
+                            <div class="selector_wrap selector1_wrap">
+                                <select class="selector selector1">
+                                    <!-- <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="huhui">胡辉</option> -->
+                                </select>
+                                <div class="selected_item_wrap">
+                                    <ul class="list-group">
+                                        <!-- <li class="list-group-item">Cras justo odio</li>
+                                        <li class="list-group-item">Dapibus ac facilisis in</li>
+                                        <li class="list-group-item">Vestibulum at eros</li> -->
+                                    </ul>
+                                </div>
+                                <button type="button" class="add_btn btn btn-primary">加入</button>
+                            </div>
+                            <div class="selector_wrap selector2_wrap">
+                                <select class="selector selector2">
+                                    <!-- <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="huhui">胡辉</option> -->
+                                </select>
+                                <div class="selected_item_wrap">
+                                    <ul class="list-group">
+                                        <!-- <li class="list-group-item">Cras justo odio</li>
+                                        <li class="list-group-item">Dapibus ac facilisis in</li>
+                                        <li class="list-group-item">Vestibulum at eros</li> -->
+                                    </ul>
+                                </div>
+                                <button type="button" class="add_btn btn btn-primary">加入</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 查询2弹框 -->
+            <div class="modal fade show" id="search2Popup" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="selected_list_wrap">
+                                <span>已选择</span>
+                                <ul class="list-group"></ul>
+                                <button class="search2_confirm_btn btn btn-primary">选定</button>
+                            </div>
+                            <div class="selector_wrap target_selector_wrap">
+                                <select class="selector target_selector">
+                                    <!-- <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="huhui">胡辉</option> -->
+                                </select>
+                                <div class="selected_item_wrap">
+                                    <ul class="list-group">
+                                        <!-- <li class="list-group-item">Cras justo odio</li>
+                                        <li class="list-group-item">Dapibus ac facilisis in</li>
+                                        <li class="list-group-item">Vestibulum at eros</li> -->
+                                    </ul>
+                                </div>
+                                <button type="button" class="add_btn btn btn-primary formAdd">加入</button>
+                            </div>
+                            <div class="radio_content_wrap">
+                                <div class="data_preprocessing_radio_wrap">
+                                    <span>数据预处理</span>
+                                    <div class="radio_wrap">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios" value="option1" checked>不处理
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios" value="option2">删极值
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios" value="option3">削极值
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="standard_preprocessing_radio_wrap">
+                                    <span>标准化处理</span>
+                                    <div class="radio_wrap">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios2" value="option4" checked>不处理
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios2" value="option5">MinMax
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios2" value="option6">MeanStd
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios2" value="option7">maxabs
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="optionsRadios2" value="option8">1start
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </section>
@@ -295,6 +428,8 @@
 <script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./static/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
 <script src="./static/js/common.js"></script>
 
 
