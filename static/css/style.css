@@ -23,6 +23,58 @@ fieldset, img { border:0; vertical-align: middle;}
     margin: 0 auto;
 }
 
+
+/* main2 */
+.container {
+  display: flex;
+  flex-direction: column;  
+}
+.container .top_wrap {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding-right: 30%;
+}
+.container .top_wrap .select_wrap {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 10%;
+  justify-content: space-between;
+}
+.container .select_wrap >div >span {
+  width: 200px!important;
+}
+.container .top_wrap .add_btn {
+  height: 30px;
+  line-height: 15px;
+}
+.container .content_wrap {
+  flex-grow: 1;
+  background: #fff;
+  display: flex;
+}
+.container .content_wrap .left_wrap {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container .radio_text_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.container .radio_text_wrap .radio_wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+}
+.container .select_date_wrap {
+  margin-top: 20px;
+}
+/* main4 */
 .pages{
   position: absolute;
 }

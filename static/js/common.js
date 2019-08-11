@@ -56,7 +56,14 @@ var onClickModule = function(id, type){
     }
 }
 
-$(function(){
+$(function() {
+    $('.page_datepicker').datepicker();
+
+    // 选择框
+    $('.selector').select2({
+        matcher: matchStart
+    });
+
     function matchStart(params, data) {
         if ($.trim(params.term) === '') {
             return data;
@@ -74,6 +81,13 @@ $(function(){
         return null;
     }
 
+    // main2
+
+
+
+
+
+    // main4
 	$('.pages .switch').click(function(){
 		var $this = $(this);
         var $parent = $(this).parent();
@@ -96,7 +110,6 @@ $(function(){
         
     })
 
-    $('.page_datepicker').datepicker();
     $('.page3_time_span_input').val(new Date().getFullYear())
 
     // page1-确定按钮点击事件
@@ -255,19 +268,14 @@ $(function(){
         el.siblings().removeClass('active')
     }
 
-    // 查询1-选择框
-    $('#search1Popup .selector1').select2({
-        matcher: matchStart
-    });
-
-    $('#search1Popup .selector2').select2({
-        matcher: matchStart
-    });
+    // $('#search1Popup .selector2').select2({
+    //     matcher: matchStart
+    // });
     
     // 查询2-选择框
-    $('#search2Popup .target_selector').select2({
-        matcher: matchStart
-    });
+    // $('#search2Popup .target_selector').select2({
+    //     matcher: matchStart
+    // });
 
     // 查询弹框中的列表项点击事件
     $('.selected_list_wrap ul').on('dblclick', 'li', function() {
