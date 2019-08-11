@@ -134,9 +134,9 @@ $(function(){
         console.log('timeSpan', timeSpan)
     })
 
-    search1BtnClick('page1')
-    search1BtnClick('page2')
-    search1BtnClick('page3')
+    search1BtnClick('page1');
+    search1BtnClick('page2');
+    search1BtnClick('page3');
 
     // 点击查询按钮1
     function search1BtnClick(page) {
@@ -148,9 +148,9 @@ $(function(){
         })
     }
 
-    search2BtnClick('page1')
-    search2BtnClick('page2')
-    search2BtnClick('page3')
+    search2BtnClick('page1');
+    search2BtnClick('page2');
+    search2BtnClick('page3');
 
     // 点击查询按钮2
     function search2BtnClick(page) {
