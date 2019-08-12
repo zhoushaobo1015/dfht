@@ -295,14 +295,19 @@
                     return null;
                 }
 
-                if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1) {
+                let id = $(data.element).data('id')
+                if (typeof id === 'undefined') {
+                    return null
+                }
+
+                if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
                     var modifiedData = $.extend({}, data, true);
                     return modifiedData;
                 }
 
                 return null;
             }
-
+            
             // 选择框
             $('.js-example-basic-multiple').select2({
                 matcher: matchStart
