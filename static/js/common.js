@@ -1,4 +1,7 @@
-
+var onTest = function() {
+    let $this = $("#main1-select1");
+    console.log( $this.val(), $this.attr  )
+}
 var requestData = function(url,type,data){
     console.log( url,type,data )
     $.ajax({
@@ -161,7 +164,6 @@ $(function() {
         // console.log(result);
         let { macro } = result
         let select2Data = [...macro]
-
         var frag = document.createDocumentFragment();
         if (select2Data.length > 0) {
             frag.append($('<option>请选择：</option>')[0])
@@ -196,7 +198,6 @@ $(function() {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
         }
-
         return null;
     }
 
