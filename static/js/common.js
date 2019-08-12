@@ -155,13 +155,15 @@ var onClickModule = function(id, type){
 }
 
 $(function() {
-    $('.page_datepicker').datepicker({
-        format: 'yyyy-mm-dd'
-    });
+    if ($('.page_datepicker').length > 0) {
+        $('.page_datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    }
 
     // main1 selsect
     $.get("/static/json/myoptions.json",function(result){
-        // console.log(result);
+        console.log(result);
         let { macro } = result
         let select2Data = [...macro]
         var frag = document.createDocumentFragment();
