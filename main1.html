@@ -215,7 +215,7 @@
             <div class="container col bg-light mx-3">
                 <div class="main1" style="margin-bottom: 20px;" >
                     <!-- <select class="js-example-responsive" multiple="multiple" style="width: 75%"></select> -->
-                    <select onchange="onTest()" class="js-example-basic-multiple main1-select1" id="main1-select1" name="states[]" style="width: 75%">
+                    <select class="js-example-basic-multiple main1-select1" id="main1-select1" name="states[]" style="width: 75%">
                     </select>
                     <button type="button" class="btn btn-primary formAdd">添加</button>
                 </div>
@@ -224,9 +224,22 @@
 
                 <div class="formTow"></div>
             </div>
+
+            <!-- 沙漏弹窗 -->
+            <div class="modal fade" id="main1Hourglass" tabindex="-1" role="dialog" aria-labelledby="main1Hourglass" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- 沙漏弹窗 content -->
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
         </div>
+         
     </section>
     <script>
+            // <!-- select2 渲染 -->
         var pics = ["./static/img/bg_0.jpg", "./static/img/bg_1.jpg", "./static/img/bg_2.jpg"];
         $(document).ready(function () {
             $("#topmenu li").removeClass('active');
@@ -237,74 +250,54 @@
             $("#smallerscreenmenu a").eq(1).addClass('active');
             $("body").css("background-image", "url(" + pics[0] + ")");
 
-            var selcxt = 
-            `<form>
-                    <div class="form-group row">
-                        <label for="formOnemid" class="col-sm-1 col-form-label col-form-label-sm">MID：</label>
-                        <div class="col-sm-8">
-                            MID：(被填充)
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="formOnejcode" class="col-sm-1 col-form-label col-form-label-sm">代码：</label>
-                        <div class="col-sm-8">
-                            代码：(被填充)
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="formOneshortname" class="col-sm-1 col-form-label col-form-label-sm">中文名：</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control form-control-sm" id="formOneshortname" name="formOneshortname" placeholder="col-form-label-sm">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="formOnecodestring" class="col-sm-1 col-form-label col-form-label-sm">更新代码：</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control form-control-sm" id="formOnecodestring" name="formOnecodestring" placeholder="col-form-label-sm">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="formOneunit" class="col-sm-1 col-form-label col-form-label-sm">数值单位：</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control form-control-sm" id="formOneunit" name="formOneunit" placeholder="col-form-label-sm">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="formOnefreq" class="col-sm-1 col-form-label col-form-label-sm">更新频率：</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control form-control-sm" id="formOnefreq" name="formOnefreq" placeholder="col-form-label-sm">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="formOnenote" class="col-sm-1 col-form-label col-form-label-sm">附注说明：</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control form-control-sm" id="formOnenote" name="formOnenote" placeholder="col-form-label-sm">
-                        </div>
-                        </div>
-                <input id="submitOne" name="submitOne" type="button" value="确认" class="btn btn-primary" >
-                <button type="button" class="btn btn-primary formOneCel">取消</button>
-                <button type="button" class="btn btn-primary formOneDel">删除</button>
-            </form>`;
+
+            // 判断session中是否有内容如果没有请求数据
+            var sessionS = sessionStorage.getItem('myoptions');
+            if(sessionS !== null && sessionS !== "undefined" ){
+                let { macro } = JSON.parse( sessionS );
+                let select2Data = [...macro];
+                var frag = document.createDocumentFragment();
+                if (select2Data.length > 0) {
+                    frag.append($('<option>请选择：</option>')[0]);
+                }
+                select2Data.map(data => {
+                    frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0]);
+                })
+                $('#main1-select1').append(frag);
+            }else {
+                // let url = "dfht/ajax_get_options"; //上线解开这个即可
+                let url = './static/json/myoptions.json'; //上线需要删除
+                $.get(url,function(result){
+                    let { macro } = result;
+                    // 存储到session
+                    sessionStorage.setItem("myoptions",JSON.stringify(result));
+                    let select2Data = [...macro];
+                    var frag = document.createDocumentFragment();
+                    if (select2Data.length > 0) {
+                        frag.append($('<option>请选择：</option>')[0])
+                    }
+                    select2Data.map(data => {
+                        frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+                    })
+                    $('#main1-select1').append(frag)
+                });
+            }
 
             function matchStart(params, data) {
                 if ($.trim(params.term) === '') {
                     return data;
                 }
-
                 if (typeof data.text === 'undefined') {
                     return null;
                 }
-
                 let id = $(data.element).data('id')
                 if (typeof id === 'undefined') {
                     return null
                 }
-
                 if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
                     var modifiedData = $.extend({}, data, true);
                     return modifiedData;
                 }
-
                 return null;
             }
             
@@ -312,69 +305,170 @@
             $('.js-example-basic-multiple').select2({
                 matcher: matchStart
             });
+
+            var selcxt = "";
+            var formData = 
             $('.js-example-basic-multiple').on('select2:select', function(){
-                var data = $(this).val();
-			    // alert(data);
-                console.log('下拉框oncheng事件');
-                // selcxt
-                $('.formOne').empty();
-                $('.formTow').empty();
-                $('.formOne').append(selcxt);
+                let checkedItem = $(this).find('option:checked')
+                let id = checkedItem.data('id');
+                $.ajax({
+                    // url: 'dfht/ajax_get_target?id='+id,  //获取线上代码需要解开这里
+                    url: './static/json/sample_宏观.json', //测试使用获取本地json
+                    type: "get",
+                    success: function(res){
+                        formData = res;
+                        selcxt = 
+                            `<form>
+                                    <div class="form-group row">
+                                        <label for="formOnemid" class="col-sm-2 col-form-label col-form-label-sm">MID：</label>
+                                        <div class="col-sm-8">
+                                            <input value="${res.MID}" disabled="true" type="text" class="form-control form-control-sm" id="formOnemid" name="formOnemid" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="formOnejcode" class="col-sm-2 col-form-label col-form-label-sm">代码：</label>
+                                        <div class="col-sm-8">
+                                            <input value="${res.jcode}" disabled="true" type="text" class="form-control form-control-sm" id="formOnejcode" name="formOnejcode" />
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <label for="formOneshortname" class="col-sm-2 col-form-label col-form-label-sm">中文名：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control form-control-sm" id="formOneshortname" value="" name="formOneshortname" />
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <label for="formOnecodestring" class="col-sm-2 col-form-label col-form-label-sm">更新代码：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control form-control-sm" id="formOnecodestring" name="formOnecodestring" />
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <la                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                bel for="formOneunit" class="col-sm-2 col-form-label col-form-label-sm">数值单位：</la>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control form-control-sm" id="formOneunit" name="formOneunit" />
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <label for="formOnefreq" class="col-sm-2 col-form-label col-form-label-sm">更新频率：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control form-control-sm" id="formOnefreq" name="formOnefreq" />
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                        <label for="formOnenote" class="col-sm-2 col-form-label col-form-label-sm">附注说明：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control form-control-sm" id="formOnenote" name="formOnenote" value="${res.note}" />
+                                        </div>
+                                        </div>
+                                <input id="submitOne" name="submitOne" type="button" value="确认" class="btn btn-primary" >
+                                <button type="button" class="btn btn-primary formOneCel">取消</button>
+                                <button type="button" class="btn btn-primary formOneDel">删除</button>
+                            </form>`;
+                        // selcxt
+                        $('.formOne').empty();
+                        $('.formTow').empty();
+                        $('.formOne').append(selcxt);
+                    }
+                })
             })
-            // 选择框后的确定
+            // 选择框后的 确定
             $(".formOne").on("click","#submitOne",function(event){
                 var d = {};
                 var t = $('form').serializeArray();
                 $.each(t, function () {
                     d[this.name] = this.value;
                 });
-                alert(JSON.stringify(d));
+                var s = {
+                    MID : formData.MID,
+                    jcode : formData.jcode,
+                    shortname : "string",
+                    codestring : "string",
+                    unit : "string" ,
+                    freq : "string" ,
+                    note : d.formOnenote  }
+                console.log( d,formData);
+
+                $("#main1Hourglass").modal('toggle');
+                $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+                $.ajax({
+                    url: 'dfht/ajax_get_target',  //获取线上代码需要解开这里
+                    type: "post",
+                    data: s,
+                    success: function(res){
+                        if(res.status===200){
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>强制更新成功</div></div>')
+                        }else{
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
+                        }
+                    },
+                    error: function(err){
+                        $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
+                    }
+                })
              })
 
-            // 选择框后的取消
+            // 选择框后的 取消
             $(".formOne").on("click",".formOneCel",function(event){
                 $('.formOne').empty();
             })
-
+            // 选择框后的 删除
             $(".formOne").on("click",".formOneDel",function(event){
-                $('.formOne').empty();
-            })
+                $("#main1Hourglass").modal('toggle');
+                $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+                $.ajax({
+                    url: 'dfht/ajax_get_target',
+                    type: "post",
+                    data: formData,
+                    success: function(res){
+                        if(res.status===200){
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>修改成功</div></div>');
+                            $('.formOne').empty();
+                        }else{
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>')
+                        }
+                    },
+                    error: function(err){
+                        $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>')
+                    }
+                });
+            });
             
             // 添加 start
             var addcxt = 
             `<form>
                 <div class="form-group row">
-                    <label for="formTowjcode" class="col-sm-1 col-form-label col-form-label-sm">代码：</label>
+                    <label for="formTowjcode" class="col-sm-2 col-form-label col-form-label-sm">代码：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowjcode" name="formTowjcode" placeholder="请输入代码">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowshortname" class="col-sm-1 col-form-label col-form-label-sm">中文名：</label>
+                    <label for="formTowshortname" class="col-sm-2 col-form-label col-form-label-sm">中文名：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowshortname" name="formTowshortname" placeholder="请输入中文名">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowcodestring" class="col-sm-1 col-form-label col-form-label-sm">更新代码：</label>
+                    <label for="formTowcodestring" class="col-sm-2 col-form-label col-form-label-sm">更新代码：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowcodestring" name="formTowcodestring" placeholder="请输入更新代码">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowunit" class="col-sm-1 col-form-label col-form-label-sm">数值单位：</label>
+                    <label for="formTowunit" class="col-sm-2 col-form-label col-form-label-sm">数值单位：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowunit" name="formTowunit" placeholder="请输入代码数值单位">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowfreq" class="col-sm-1 col-form-label col-form-label-sm">更新频率：</label>
+                    <label for="formTowfreq" class="col-sm-2 col-form-label col-form-label-sm">更新频率：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowfreq" name="formTowfreq" placeholder="请输入更新频率">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTownote" class="col-sm-1 col-form-label col-form-label-sm">附注说明：</label>
+                    <label for="formTownote" class="col-sm-2 col-form-label col-form-label-sm">附注说明：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTownote" name="formTownote" placeholder="请输入附注说明">
                     </div>
@@ -395,16 +489,44 @@
                 $.each(t, function () {
                     d[this.name] = this.value;
                 });
-                alert(JSON.stringify(d));
+
+                console.log(d);
+
+                s = { 
+                    MID : "int",
+                    jcode : "string",
+                    shortname : "string",
+                    codestring : "string",
+                    unit : "string",
+                    freq : "string",
+                    note : "string" 
+                }
+
+                $("#main1Hourglass").modal('toggle');
+                $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+                $.ajax({
+                    url: 'dfht/ajax_get_target',
+                    type: "post",
+                    data: s,
+                    success: function(res){
+                        if(res.status===200){
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>修改成功</div></div>');
+                            $('.formTow').empty();
+                        }else{
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>')
+                        }
+                    },
+                    error: function(err){
+                        $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>')
+                    }
+                });
+
              })
 
             // 添加后的取消
             $(".formTow").on("click",".formTowCel",function(event){
                 $('.formTow').empty();
             })
-            
-            // 添加 end
-            
         });
     </script>
 
@@ -420,7 +542,4 @@
 
 </body>
 <script src="./static/js/common.js"></script>
-
-
-
 </html>

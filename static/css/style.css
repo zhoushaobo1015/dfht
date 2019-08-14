@@ -33,13 +33,13 @@ fieldset, img { border:0; vertical-align: middle;}
   height: 60px;
   display: flex;
   align-items: center;
-  padding-right: 30%;
+  /* padding-right: 30%; */
 }
 .container .top_wrap .select_wrap {
   flex-grow: 1;
   display: flex;
   align-items: center;
-  padding: 0 10%;
+  padding: 0 3%;
   justify-content: space-between;
 }
 .container .select_wrap >div >span {
@@ -449,6 +449,11 @@ fieldset, img { border:0; vertical-align: middle;}
 
 /* 1 */
 /* 2 */
+.selected_cfg_wrap ul, .selected_segments_wrap ul{
+  min-height: 400px;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 5px;
+}
 /* 3 */
 .container .main3 {
     padding-bottom: 20px;
