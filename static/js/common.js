@@ -260,28 +260,6 @@ $(function() {
 
     $('.page3_time_span_input').val(1)
 
-    // page1-确定按钮点击事件
-    $('.page1_confirm_btn').click(function() {
-        let startDate = $('.page1_startdate').val()
-        let endDate = $('.page1_enddate').val()
-        let mytargets = $('.page1_search1_data').val()
-        mytargets = mytargets ? JSON.parse(mytargets) : []
-        let search2Data = $('.page1_search2_data').val()
-        search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
-        let { myfeatures, outliers, standardize } = search2Data
-        let charttype = $('.page1 .tab_wrap .active').text()
-        let data = {
-            charttype, 
-            startdate: startDate,
-            enddate: endDate,
-            mytargets,
-            myfeatures,
-            outliers,
-            standardize
-        }
-        console.log('data', data, "page1-确定按钮点击事件")
-    })
-
     search1BtnClick('page1');
     search1BtnClick('page2');
     search1BtnClick('page3');
@@ -340,27 +318,6 @@ $(function() {
         // }
         $('.page3 .left_search_wrap, .page3 .right_result_wrap').css('display', display)
     })
-    
-    // main4 page1 切换tab
-    $('.page1 .right_result_wrap .tab_wrap').on('click', 'span', function() {
-        changeTabClass($(this))
-    })
-
-    // main4 page2 切换tab
-    $('.page2 .right_result_wrap .tab_wrap').on('click', 'span', function() {
-        changeTabClass($(this))
-    })
-
-    // main4 page3 切换tab
-    $('.page3 .right_result_wrap .tab_wrap').on('click', 'span', function() {
-        changeTabClass($(this))
-    })
-    
-    // 改变tab样式
-    function changeTabClass(el) {
-        el.addClass('active')
-        el.siblings().removeClass('active')
-    }
 
     // 查询弹框中的列表项点击事件
     $('.selected_list_wrap ul').on('dblclick', 'li', function() {

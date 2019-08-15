@@ -278,7 +278,7 @@
                                                 <span class="selected_cycle_num">3</span>
                                                 <span class="caret"></span>
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <ul class="dropdown-menu" style="height: 160px; overflow-y: auto;" aria-labelledby="dropdownMenu1">
                                             </ul>
                                         </div>
                                     </div>
@@ -378,9 +378,6 @@
                             <div class="selected_list_wrap">
                                 <span>已选择</span>
                                 <ul class="list-group">
-                                    <!-- <li class="list-group-item">Cras justo odio</li>
-                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Morbi leo risus</li> -->
                                 </ul>
                                 <button class="search1_confirm_btn btn btn-primary">选定</button>
                             </div>
@@ -388,15 +385,9 @@
                                 <div class="top_wrap">
                                     <span class="normal_font">单标的选择</span>
                                     <select class="selector selector1">
-                                        <!-- <option value="AL">Alabama</option>
-                                        <option value="WY">Wyoming</option>
-                                        <option value="huhui">胡辉</option> -->
                                     </select>
                                     <div class="selected_item_wrap">
                                         <ul class="list-group">
-                                            <!-- <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Dapibus ac facilisis in</li>
-                                            <li class="list-group-item">Vestibulum at eros</li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -406,15 +397,9 @@
                                 <div class="top_wrap">
                                     <span class="normal_font">全部成分</span>
                                     <select class="selector selector2">
-                                        <!-- <option value="AL">Alabama</option>
-                                        <option value="WY">Wyoming</option>
-                                        <option value="huhui">胡辉</option> -->
                                     </select>
                                     <div class="selected_item_wrap">
                                         <ul class="list-group">
-                                            <!-- <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Dapibus ac facilisis in</li>
-                                            <li class="list-group-item">Vestibulum at eros</li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -438,15 +423,9 @@
                                 <div class="top_wrap">
                                     <span class="normal_font">指标选择</span>
                                     <select class="selector target_selector">
-                                        <!-- <option value="AL">Alabama</option>
-                                        <option value="WY">Wyoming</option>
-                                        <option value="huhui">胡辉</option> -->
                                     </select>
                                     <div class="selected_item_wrap">
                                         <ul class="list-group">
-                                            <!-- <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Dapibus ac facilisis in</li>
-                                            <li class="list-group-item">Vestibulum at eros</li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -540,26 +519,83 @@
 
 <script>
     $(function(){
+        // 公共
+        // 改变tab样式
+        function changeTabClass(el) {
+            el.addClass('active');
+            el.siblings().removeClass('active');
+        }
+
         // 上半 请求数据公共方法
         // *********** 开始 上半 *********** 
+        var page1RequestData = function(type){
+            let startDate = $('.page1_startdate').val();
+            let endDate = $('.page1_enddate').val();
+            let mytargets = $('.page1_search1_data').val();
+            mytargets = mytargets ? JSON.parse(mytargets) : [];
+            let search2Data = $('.page1_search2_data').val();
+            search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''};
+            let { myfeatures, outliers, standardize } = search2Data
+            let charttype = type || $('.page1 .tab_wrap .active').text();
+
+            if(!startDate || !endDate || !targets.length>0 || !myfeatures.length>0 ){
+                return false;
+            }
+
+            let data = {
+                charttype, 
+                startdate: startDate,
+                enddate: endDate,
+                mytargets,
+                myfeatures,
+                outliers,
+                standardize
+            }
+
+            console.log('page1RequestData', data)
+            // $.ajax({
+            //     url: 'dfht/ajax_drawchart',  //上线时候需要解开
+            //     type: "post",    //上线时候需要解开
+            //     data: data,
+            //     success: function(res){
+            //         console.log(res);
+            //         // 这里需要将html和js添加到页面上去
+            //     },
+            //     error: function(err){
+            //     }
+            // })
+        }
 
 
-        // *********** 开始 上半 *********** 
+        // page1-确定按钮点击事件
+        $('.page1_confirm_btn').click(function() {
+            page1RequestData($('.page1 .tab_wrap .active').text())
+        })
 
+        // main4 page1 切换tab
+        $('.page1 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+            changeTabClass($(this));
+            page1RequestData($(this).text())
+        })
+        // *********** 结束 上半 *********** 
 
         // 下左 请求数据公共方法
         // *********** 开始 下左 *********** 
         var page2RequestData = function(type){
-            console.log(type)
-            let timespan = $('.selected_time_span').text()
-            let cycles = Number($('.selected_cycle_num').text())
-            let enddate = $('.page2_enddate').val()
-            let targets = $('.page2_search1_data').val()
-            targets = targets ? JSON.parse(targets) : []
-            let search2Data = $('.page2_search2_data').val()
-            search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
-            let { myfeatures, outliers, standardize } = search2Data
-            let charttype = $('.page2 .tab_wrap .active').text()
+            let timespan = $('.selected_time_span').text();
+            let cycles = Number($('.selected_cycle_num').text());
+            let enddate = $('.page2_enddate').val();
+            let targets = $('.page2_search1_data').val();
+            targets = targets ? JSON.parse(targets) : [];
+            let search2Data = $('.page2_search2_data').val();
+            search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''};
+            let { myfeatures, outliers, standardize } = search2Data;
+            let charttype = type || $('.page2 .tab_wrap .active').text();
+
+            if(!enddate || !targets.length>0 || !myfeatures.length>0 ){
+                return false;
+            }
+
             let data = {
                 timespan,
                 cycles,
@@ -570,49 +606,33 @@
                 standardize,
                 charttype
             }
-            console.log('page2RequestData', data)
-            $.ajax({
-                // url: 'dfht/ajax_getstattable',  //上线时候需要解开
-                url: './static/json/sample_'+type+'.json',
-                // type: "post",    //上线时候需要解开
-                type: 'get',
-                data: data,
-                success: function(res){
-                    RenderingTable(res);
-                },
-                error: function(err){
-                    $(".page3-table-content thead").html("")
-                    $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
-                }
-            })
-        }
 
+            console.log('page2RequestData', data)
+            // $.ajax({
+            //     url: 'dfht/ajax_drawchart',  //上线时候需要解开
+            //     type: "post",    //上线时候需要解开
+            //     data: data,
+            //     success: function(res){
+            //         console.log(res);
+            //         // 这里需要将html和js添加到页面上去
+            //     },
+            //     error: function(err){
+            //     }
+            // })
+        }
 
         // 下左-确定按钮点击事件
         $('.page2_confirm_btn').click(function() {
-            // let timespan = $('.selected_time_span').text()
-            // let cycles = Number($('.selected_cycle_num').text())
-            // let enddate = $('.page2_enddate').val()
-            // let targets = $('.page2_search1_data').val()
-            // targets = targets ? JSON.parse(targets) : []
-            // let search2Data = $('.page2_search2_data').val()
-            // search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
-            // let { myfeatures, outliers, standardize } = search2Data
-            // let charttype = $('.page2 .tab_wrap .active').text()
-            // let data = {
-            //     timespan,
-            //     cycles,
-            //     enddate,
-            //     targets,
-            //     features: myfeatures,
-            //     outliers,
-            //     standardize,
-            //     charttype
-            // }
-            // console.log('data', data)
+            page2RequestData($('.page2 .tab_wrap .active').text())
         })
 
-        // *********** 开始 下左 *********** 
+        // main4 page2 切换tab
+        $('.page2 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+            changeTabClass($(this));
+            page2RequestData($(this).text());
+        })
+
+        // *********** 结束 下左 *********** 
 
         // 下右 请求数据公共方法 
         // *********** 开始 下右 *********** 
@@ -688,6 +708,11 @@
             $ol_this.addClass("selected");
             $ol_this.siblings().removeClass("selected");
             page3RequestData($ol_this.text());
+        })
+
+        // main4 page3 切换tab
+        $('.page3 .right_result_wrap .tab_wrap').on('click', 'span', function() {
+            changeTabClass($(this))
         })
         // *********** 结束 下右 ***********
     })
