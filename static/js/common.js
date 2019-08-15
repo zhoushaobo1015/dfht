@@ -249,20 +249,16 @@ $(function() {
         // $parent.animate();
         
 		if($this.attr('class').indexOf('check')>-1){
-            $('.pages').css('position', 'inherit');
-            $('.all').css('position', 'inherit');
             $brother.css('display','none');
 			$this.html('<i class="fas fa-compress-arrows-alt"></i>')
         }else{
-            $('.pages').css('position', 'absolute');
-            $('.all').css('position', 'absolute');
             $brother.css('display','flex');
 			$this.html('<i class="fas fa-expand-arrows-alt"></i>')
 		}
         
     })
 
-    $('.page3_time_span_input').val(new Date().getFullYear())
+    $('.page3_time_span_input').val(1)
 
     // page1-确定按钮点击事件
     $('.page1_confirm_btn').click(function() {
@@ -284,46 +280,6 @@ $(function() {
             standardize
         }
         console.log('data', data, "page1-确定按钮点击事件")
-    })
-
-    // page2-确定按钮点击事件
-    $('.page2_confirm_btn').click(function() {
-        let timespan = $('.selected_time_span').text()
-        let cycles = Number($('.selected_cycle_num').text())
-        let enddate = $('.page2_enddate').val()
-        let targets = $('.page2_search1_data').val()
-        targets = targets ? JSON.parse(targets) : []
-        let search2Data = $('.page2_search2_data').val()
-        search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
-        let { myfeatures, outliers, standardize } = search2Data
-        let charttype = $('.page2 .tab_wrap .active').text()
-        let data = {
-            timespan,
-            cycles,
-            enddate,
-            targets,
-            features: myfeatures,
-            outliers,
-            standardize,
-            charttype
-        }
-        console.log('data', data)
-    })
-
-    // page3-确定按钮点击事件
-    $('.page3_confirm_btn').click(function() {
-        let targets = $('.page3_search1_data').val()
-        targets = targets ? JSON.parse(targets) : []
-        let enddate = $('.page3_enddate').val()
-        let timespan = $('.page3_time_span_input').val()
-        let tabletype = $('.page3-table li.selected').text()
-        let data = {
-            timespan,
-            enddate,
-            targets,
-            tabletype
-        }
-        console.log('data', data)
     })
 
     search1BtnClick('page1');
@@ -360,9 +316,9 @@ $(function() {
     // 全屏展示下左page2
     $('.page2 .switch').click(function() {
         let display = 'flex'
-        if (!$('.page2').hasClass('all')) {
-            display = 'none'
-        }
+        // if (!$('.page2').hasClass('all')) {
+        //     display = 'none'
+        // }
         $('.page2 .left_search_wrap, .page2 .right_result_wrap').css('display', display)
     })
     
@@ -379,49 +335,10 @@ $(function() {
     // 全屏展示下右page3
     $('.page3 .switch').click(function() {
         let display = 'flex'
-        if (!$('.page3').hasClass('all')) {
-            display = 'none'
-        }
+        // if (!$('.page3').hasClass('all')) {
+        //     display = 'none'
+        // }
         $('.page3 .left_search_wrap, .page3 .right_result_wrap').css('display', display)
-    })
-    
-    // page3 tags 切换
-    $(".page3-table ol li").on("click",function(){
-        let $ol_this = $(this);
-        $ol_this.addClass("selected");
-        $ol_this.siblings().removeClass("selected");
-
-        var data = {"columns":["现值","百分位","平均","最低","1/4位","中位数","3/4位","最高","标准差"],"index":["上证成份","上证50","沪深300","中证1000","中证500","中证全指","全指能源","全指材料","全指工业","全指可选","赣粤高速","航天信息","开开实业","嘉化能源","恒瑞医药","亿利洁能","东方创业","重庆港九","中央商场","太化股份"],"data":[[12.69,"23.90%",14.24,10.55,12.76,14.81,15.66,17.12,1.7],[9.82,"33.43%",10.23,8.52,9.59,10.13,10.76,13.05,0.82],[12.24,"28.45%",12.88,9.98,12.09,13.03,13.88,15.76,1.2],[37.34,"49.45%",42.86,19.4,30.68,37.43,46.94,79.35,18.15],[23.24,"38.67%",31.22,14.8,21.86,26.63,34.5,58.3,13.77],[16.02,"27.35%",18.01,12.31,15.76,18.7,20.03,23.16,2.83],[13.83,"4.01%",29.87,12.68,16.29,21.47,25.42,82.25,20.99],[16.43,"28.87%",114.22,11.46,16.16,26.4,39.06,1358.9,199.91],[21.12,"27.35%",26.81,16.01,20.77,26.16,32.35,41.1,7.1],[26.19,"73.07%",23.65,14.64,22.16,24.67,26.36,29.74,3.95],[6.95,"7.37%",10.78,6.12,9.5,10.51,12.51,14.73,2.07],[21.01,"3.76%",29.76,20.05,23.63,30.17,35.21,44.44,6.3],[69.79,"44.85%",127.09,35.56,51.73,93.55,161.89,340.74,91.17],[13.61,"34.35%",14.67,10.39,12.38,15.34,16.4,22.14,2.24],[68.71,"74.83%",59.98,41.33,48.89,60.69,68.75,90.47,12.09],[14.73,"0.70%",46.24,14.33,22.23,50.57,69.96,112.33,24.66],[32.64,"31.85%",44.02,21.15,30.15,42.07,53.25,93.33,16.14],[23.17,"34.91%",35.05,5.25,8.21,31.82,59.96,80.9,24.57],[-10.18,"15.02%",122.81,-19.64,30.68,39.61,94.7,586.21,172.48],[-21.57,"9.04%",143.04,-26.78,-13.71,138.98,186.39,743.52,175.57]]}
-        var thead = "<tr><th>&nbsp;</th>"
-        var tbody = "<tr>"
-        for(var i=0;i<=data.columns.length;i++){
-            if(data.columns[i]){
-                thead += "<th>"+data.columns[i]+"</th>"
-            }
-        }
-        thead += "</tr>"
-
-        for(var x=0;x<data.index.length;x++){
-            tbody += "<tr><td>"+data.index[x]+"</td>"
-            for(var y=0;y<data.data[x].length;y++){
-                if(y===1){
-                    if(Number(data.data[x][y].split('%')[0]<25)){
-                        tbody += "<td class='red'>"+data.data[x][y]+"</td>"
-                    }else if(Number(data.data[x][y].split('%')[0]>75)){
-                        tbody += "<td class='blue'>"+data.data[x][y]+"</td>"
-                    }else {
-                        tbody += "<td>"+data.data[x][y]+"</td>"
-                    }
-                }else{
-                    tbody += "<td>"+data.data[x][y]+"</td>"
-                }
-            }
-        }
-        tbody += "</tr>"
-        $(".page3-table-content thead").html(thead)
-        $(".page3-table-content tbody").html(tbody)
-
-
     })
     
     // main4 page1 切换tab

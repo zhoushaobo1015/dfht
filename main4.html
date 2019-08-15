@@ -212,7 +212,7 @@
                     });
                 </script>
             </div>
-            <div class="container col bg-light mx-3">
+            <div class="container col mx-3">
                 <!-- ----------------------- -->
                 <div class="main4">
                     <div class="wrap">
@@ -232,8 +232,8 @@
                                         <span>结束时间</span>
                                         <input class="page1_enddate page_datepicker" data-date-end-date="0d"/>
                                     </div>
-                                    <button class="search1_btn btn btn-primary">标的选择查询1</button>
-                                    <button class="search2_btn btn btn-primary">指标选择查询2</button>
+                                    <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
+                                    <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
                                 </div>
                             </div>
                             <div class="right_result_wrap">
@@ -286,8 +286,8 @@
                                         <span>截止时间</span>
                                         <input class="page2_enddate page_datepicker" data-date-end-date="0d"/>
                                     </div>
-                                    <button class="search1_btn btn btn-primary">标的选择查询1</button>
-                                    <button class="search2_btn btn btn-primary">指标选择查询2</button>
+                                    <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
+                                    <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
                                 </div>
                             </div>
                             <div class="right_result_wrap">
@@ -314,7 +314,7 @@
                                     <input class="page3_search2_data" type="hidden">
                                     <div class="search1_wrap">
                                         <span>标的：</span>
-                                        <button class="search1_btn btn btn-primary">标的选择查询1</button>
+                                        <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
                                     </div>
                                     <div class="text_input_wrap select_date_wrap">
                                         <span>截止时间</span>
@@ -322,7 +322,7 @@
                                     </div>
                                     <div class="text_input_wrap time_span_wrap">
                                         <span>时间跨度</span>
-                                        <input class="page3_time_span_input" type="text" />
+                                        <input class="page3_time_span_input" type="text" />年
                                     </div>
                                 </div>
                             </div>
@@ -331,7 +331,7 @@
                                     <div class="page3-table">
                                         <div class="tags">
                                             <ol class="clearfix">
-                                                <li class="fa-pull-left" onclick="">PE</li>
+                                                <li class="fa-pull-left selected" onclick="">PE</li>
                                                 <li class="fa-pull-left">PB</li>
                                                 <li class="fa-pull-left">PCF</li>
                                                 <li class="fa-pull-left">ROE</li>
@@ -358,6 +358,18 @@
             </div>
                 <!-- ----------------------- -->
             </div>
+
+            <!-- 沙漏弹窗 -->
+            <div class="modal fade" id="main4Hourglass" tabindex="-1" role="dialog" aria-labelledby="main4Hourglass" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- 沙漏弹窗 content -->
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+
             <!-- 查询1弹框 -->
             <div class="modal fade show" id="search1Popup" data-page1="111" tabindex="-1" role="dialog" aria-labelledby="Hourglass" aria-hidden="true">
                 <div class="modal-dialog">
@@ -526,6 +538,159 @@
 <script src="./static/js/bootstrap-datepicker.js"></script>
 <script src="./static/js/common.js"></script>
 
+<script>
+    $(function(){
+        // 上半 请求数据公共方法
+        // *********** 开始 上半 *********** 
 
+
+        // *********** 开始 上半 *********** 
+
+
+        // 下左 请求数据公共方法
+        // *********** 开始 下左 *********** 
+        var page2RequestData = function(type){
+            console.log(type)
+            let timespan = $('.selected_time_span').text()
+            let cycles = Number($('.selected_cycle_num').text())
+            let enddate = $('.page2_enddate').val()
+            let targets = $('.page2_search1_data').val()
+            targets = targets ? JSON.parse(targets) : []
+            let search2Data = $('.page2_search2_data').val()
+            search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
+            let { myfeatures, outliers, standardize } = search2Data
+            let charttype = $('.page2 .tab_wrap .active').text()
+            let data = {
+                timespan,
+                cycles,
+                enddate,
+                targets,
+                features: myfeatures,
+                outliers,
+                standardize,
+                charttype
+            }
+            console.log('page2RequestData', data)
+            $.ajax({
+                // url: 'dfht/ajax_getstattable',  //上线时候需要解开
+                url: './static/json/sample_'+type+'.json',
+                // type: "post",    //上线时候需要解开
+                type: 'get',
+                data: data,
+                success: function(res){
+                    RenderingTable(res);
+                },
+                error: function(err){
+                    $(".page3-table-content thead").html("")
+                    $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
+                }
+            })
+        }
+
+
+        // 下左-确定按钮点击事件
+        $('.page2_confirm_btn').click(function() {
+            // let timespan = $('.selected_time_span').text()
+            // let cycles = Number($('.selected_cycle_num').text())
+            // let enddate = $('.page2_enddate').val()
+            // let targets = $('.page2_search1_data').val()
+            // targets = targets ? JSON.parse(targets) : []
+            // let search2Data = $('.page2_search2_data').val()
+            // search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''}
+            // let { myfeatures, outliers, standardize } = search2Data
+            // let charttype = $('.page2 .tab_wrap .active').text()
+            // let data = {
+            //     timespan,
+            //     cycles,
+            //     enddate,
+            //     targets,
+            //     features: myfeatures,
+            //     outliers,
+            //     standardize,
+            //     charttype
+            // }
+            // console.log('data', data)
+        })
+
+        // *********** 开始 下左 *********** 
+
+        // 下右 请求数据公共方法 
+        // *********** 开始 下右 *********** 
+        var page3RequestData = function(type){
+            console.log(type)
+            let targets = $('.page3_search1_data').val();
+            targets = targets ? JSON.parse(targets) : [];
+            let enddate = $('.page3_enddate').val();
+            let cycles = $('.page3_time_span_input').val();
+            let tabletype = type||$('.page3-table li.selected').text();
+            
+            if(!enddate || !targets.length>0){
+                return false;
+            }
+
+            let data = {
+                cycles,
+                enddate,
+                targets,
+                tabletype
+            }
+            $.ajax({
+                // url: 'dfht/ajax_getstattable',  //上线时候需要解开
+                url: './static/json/sample_'+type+'.json',
+                // type: "post",    //上线时候需要解开
+                type: 'get',
+                data: data,
+                success: function(res){
+                    RenderingTable(res);
+                },
+                error: function(err){
+                    $(".page3-table-content thead").html("")
+                    $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
+                }
+            })
+        }
+        var RenderingTable = function(data){
+            var thead = "<tr><th>&nbsp;</th>"
+            var tbody = "<tr>"
+            for(var i=0;i<=data.columns.length;i++){
+                if(data.columns[i]){
+                    thead += "<th>"+data.columns[i]+"</th>"
+                }
+            }
+            thead += "</tr>"
+            for(var x=0;x<data.index.length;x++){
+                tbody += "<tr><td>"+data.index[x]+"</td>"
+                for(var y=0;y<data.data[x].length;y++){
+                    if(y===1){
+                        if(Number(data.data[x][y].split('%')[0]<25)){
+                            tbody += "<td class='red'>"+data.data[x][y]+"</td>"
+                        }else if(Number(data.data[x][y].split('%')[0]>75)){
+                            tbody += "<td class='blue'>"+data.data[x][y]+"</td>"
+                        }else {
+                            tbody += "<td>"+data.data[x][y]+"</td>"
+                        }
+                    }else{
+                        tbody += "<td>"+data.data[x][y]+"</td>"
+                    }
+                }
+            }
+            tbody += "</tr>"
+            $(".page3-table-content thead").html(thead)
+            $(".page3-table-content tbody").html(tbody)
+        }
+        // page3-确定按钮点击事件
+        $('.page3_confirm_btn').on("click", function(){
+            page3RequestData($('.page3-table li.selected').text());
+        })
+        // page4 tags 切换
+        $(".page3-table ol li").on("click",function(){
+            let $ol_this = $(this);
+            $ol_this.addClass("selected");
+            $ol_this.siblings().removeClass("selected");
+            page3RequestData($ol_this.text());
+        })
+        // *********** 结束 下右 ***********
+    })
+</script>
 
 </html>

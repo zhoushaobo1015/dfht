@@ -10,9 +10,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="./static/css/bootstrap-4.3.1.min.css">
     <link rel="stylesheet" href="./static/css/fontawesome-5.9.0.all.min.css">
+
+    <!-- 单独引入 CSS -->
     <link rel="stylesheet" href="./static/css/style.css">
+    <link rel="stylesheet" href="./static/css/bootstrap-datetimepicker.min.css">
     <link href="./static/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./static/css/bootstrap-datepicker.css">
+
     <title>
         宏观择时【1】
     </title>
@@ -65,7 +69,6 @@
         }
     </style>
 
-    </style>
 
 
 </head>
@@ -225,7 +228,7 @@
                             </select>
                         </div>
                     </div>
-                    <button class="add_btn btn btn-primary">添加板块</button>
+                    <button class="add_btn btn btn-primary">&nbsp;添加板块&nbsp;</button>
                 </div>
                 <div class="content_wrap">
                     <div class="ticket_detail_wrap hide">
@@ -270,11 +273,11 @@
                             </div>
                             <div class="text_input_wrap select_start_date_wrap select_date_wrap">
                                 <span class="normal_font">开始时间</span>
-                                <input class="main2_startdate page_datepicker"/>
+                                <input class="main2_startdate page_datepicker" data-date-end-date="0d"/>
                             </div>
                             <div class="text_input_wrap select_end_date_wrap select_date_wrap">
                                 <span class="normal_font">结束时间</span>
-                                <input class="main2_enddate page_datepicker"/>
+                                <input class="main2_enddate page_datepicker" data-date-end-date="0d"/>
                             </div>
                         </div>
                         <div class="center_wrap">
@@ -294,8 +297,8 @@
                             <div class="selector_wrap segments_selector_wrap">
                                 <select class="selectors"> </select>
                                 <div class="btn_wrap">
-                                    <button class="confirm_btn btn btn-primary">确定</button>
-                                    <button class="cancel_btn btn btn-primary">取消</button>
+                                    <button class="confirm_btn btn btn-primary">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+                                    <button class="cancel_btn btn btn-primary">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
                                 </div>
                             </div>
                         </div>
@@ -351,8 +354,8 @@
                             <div class="selector_wrap ticket_selector_wrap">
                                 <select class="selectors"></select>
                                 <div class="btn_wrap">
-                                    <button class="confirm_btn btn btn-primary">确定</button>
-                                    <button class="cancel_btn btn btn-primary">取消</button>
+                                    <button class="confirm_btn btn btn-primary">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+                                    <button class="cancel_btn btn btn-primary">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
                                 </div>
                             </div>
                         </div>
@@ -407,34 +410,34 @@
         // 判断session中是否有内容如果没有请求数据 -->> 股票
         var sessionS = sessionStorage.getItem('myoptions');
         if(sessionS !== null && sessionS !== "undefined" ){
-                let { ticket } = JSON.parse( sessionS );
-                let select2Data = [...ticket];
+            let { ticket } = JSON.parse( sessionS );
+            let select2Data = [...ticket];
+            var frag = document.createDocumentFragment();
+            if (select2Data.length > 0) {
+                frag.append($('<option>请选择：</option>')[0]);
+            }
+            ticket.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(`.ticket_selector_wrap .selector`).append(frag)
+        }else {
+            // let url = "dfht/ajax_get_options"; //上线解开这个即可
+            let url = './static/json/myoptions.json'; //上线需要删除
+            $.get(url,function(result){
+                let { macro } = result;
+                // 存储到session
+                sessionStorage.setItem("myoptions",JSON.stringify(result));
+                let select2Data = [...macro];
                 var frag = document.createDocumentFragment();
                 if (select2Data.length > 0) {
-                    frag.append($('<option>请选择：</option>')[0]);
+                    frag.append($('<option>请选择：</option>')[0])
                 }
-                ticket.map(data => {
-                    frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+                select2Data.map(data => {
+                    frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.ticket_selector_wrap .selector`).append(frag)
-            }else {
-                // let url = "dfht/ajax_get_options"; //上线解开这个即可
-                let url = './static/json/myoptions.json'; //上线需要删除
-                $.get(url,function(result){
-                    let { macro } = result;
-                    // 存储到session
-                    sessionStorage.setItem("myoptions",JSON.stringify(result));
-                    let select2Data = [...macro];
-                    var frag = document.createDocumentFragment();
-                    if (select2Data.length > 0) {
-                        frag.append($('<option>请选择：</option>')[0])
-                    }
-                    select2Data.map(data => {
-                        frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-                    })
-                    $('#main1-select1').append(frag)
-                });
-            }
+                $('#main1-select1').append(frag)
+            });
+        }
 
         
         // 判断session中是否有内容如果没有请求数据 -->> 版块
@@ -467,8 +470,6 @@
                 $(`.segments_selector_wrap .selector`).append(frag)
             });
         }
-
-
 
         // main2-选择股票选项
         $('.top_wrap .ticket_selector_wrap .selector').on('select2:select', function(){
@@ -531,7 +532,6 @@
 
             });
         })
-
 
         // main2-输入股票代码后确定按钮点击事件
         $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {
