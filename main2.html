@@ -424,8 +424,10 @@
             // let url = "/dfht/ajax_get_options"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
             $.get(url,function(result){
+                // let { macro } = JSON.parse(result); //上线解开
                 let { macro } = result;
                 // 存储到session
+                // sessionStorage.setItem("myoptions", result );     //上线解开
                 sessionStorage.setItem("myoptions",JSON.stringify(result));
                 let select2Data = [...macro];
                 var frag = document.createDocumentFragment();
@@ -455,10 +457,12 @@
             })
             $(`.segments_selector_wrap .selector`).append(frag)
         }else {
-            let url = "/dfht/ajax_get_options"; //上线解开这个即可
+            // let url = "/dfht/ajax_get_options"; //上线解开这个即可
+            let url = './static/json/myoptions.json'; //上线需要删除
             $.get(url,function(result){
                 let sector = result.sector;
                 // 存储到session
+                // sessionStorage.setItem("myoptions", result );     //上线解开
                 sessionStorage.setItem("myoptions",JSON.stringify(result));
                 var frag = document.createDocumentFragment();
                 if (sector.length > 0) {
@@ -480,20 +484,22 @@
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
             
-            // let url = "/dfht/ajax_get_target?id="+id //线上时候需要开启这里
+            // let url = "/dfht/ajax_get_target" //线上解开
             let url = "./static/json/sample_股票.json"
 
-            $.get(url, function(result) {
-                $('.ticket_detail_wrap .code_input').val(result.tcode)
-                $('.ticket_detail_wrap .name_input').val(result.shortname)
-                let isstIndex = result.is_st === 0 ? 1 : 0
+            $.get(url, {id:id}, function(result) {
+                // var datas = JSON.parse(result); //线上解开
+                var datas = result;
+                $('.ticket_detail_wrap .code_input').val(datas.tcode)
+                $('.ticket_detail_wrap .name_input').val(datas.shortname)
+                let isstIndex = datas.is_st === 0 ? 1 : 0
                 $('input:radio[name="isstOption"]').eq(isstIndex).attr('checked', 'checked')
-                let iszzIndex = result.is_zz === 0 ? 1 : 0
+                let iszzIndex = datas.is_zz === 0 ? 1 : 0
                 $('input:radio[name="iszzOption"]').eq(iszzIndex).attr('checked', 'checked')
-                $('.ticket_detail_wrap .main2_startdate').datepicker('update', result.start_date);
-                $('.main2_enddate').datepicker('update', result.end_date);
+                $('.ticket_detail_wrap .main2_startdate').datepicker('update', datas.start_date);
+                $('.main2_enddate').datepicker('update', datas.end_date);
                 $('.selected_segments_wrap ul').empty();
-                let sector = result.groupbelong;
+                let sector = datas.groupbelong;
                 var frag = document.createDocumentFragment();
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
@@ -512,18 +518,21 @@
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
-            // let url = "/dfht/ajax_get_target?id="+id //线上时候需要开启这里
+            // let url = "/dfht/ajax_get_target" //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
-            $.get(url, function(result) {
-                $('.add_segments_wrap .code_input').val(result.scode)
-                $('.add_segments_wrap .name_input').val(result.shortname)
-                $('.add_segments_wrap .main2_startdate').datepicker('update', result.startdate);
-                $('.type_selector_wrap .selector').val(result.stype).select2()
-                $('.add_segments_wrap .grouping_selector_wrap .selector').val(result.sec_group).select2()
-                $('.add_segments_wrap .notes').val(result.notes)
+            $.get(url,{id: id}, function(result) {
+                // var data = JSON.parse(result); //线上解开
+                var datas = result;
+                console.log(datas)
+                $('.add_segments_wrap .code_input').val(datas.scode)
+                $('.add_segments_wrap .name_input').val(datas.shortname)
+                $('.add_segments_wrap .main2_startdate').datepicker('update', datas.startdate);
+                $('.type_selector_wrap .selector').val(datas.stype).select2()
+                $('.add_segments_wrap .grouping_selector_wrap .selector').val(datas.sec_group).select2()
+                $('.add_segments_wrap .notes').val(datas.notes)
                 $('.add_segments_wrap ul').empty();
                 
-                let sector = result.memberlist;
+                let sector = datas.memberlist;
                 var frag = document.createDocumentFragment();
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
@@ -561,7 +570,7 @@
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             $.ajax({
-                "url":"dfht/ajax_get_target",
+                "url":"/dfht/ajax_get_target",
                 "type":"post",
                 data: data,
                 success: function(res){
@@ -621,12 +630,7 @@
                     $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>提交失败</div></div>')
                 }
             })
-
-
-            
         })
-
-
     })
 
 </script>

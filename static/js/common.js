@@ -263,8 +263,9 @@ $(function() {
         $('.add_segments_wrap .code_input').val('')
         $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
         $('.add_segments_wrap .name_input').val('')
-        $('.add_segments_wrap .main2_startdate').val('');            
-        $('.add_segments_wrap .type_selector_wrap .selector').val('').select2()
+        $('.add_segments_wrap .main2_startdate').val('');   
+        $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
+        $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
         $('.selected_cfg_wrap ul').empty()
 
         // 加上data-type="add"，表示这是添加板块
@@ -279,7 +280,6 @@ $(function() {
 		$this.toggleClass('check');
 		$parent.toggleClass("all");
         // $parent.animate();
-        
 		if($this.attr('class').indexOf('check')>-1){
             $brother.css('display','none');
 			$this.html('<i class="fas fa-compress-arrows-alt"></i>')
