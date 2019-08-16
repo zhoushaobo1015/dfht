@@ -447,6 +447,27 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 
 /* 1 */
+.container .main1 > p {
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 5px;
+}
+.container .formOne .btn_wrap, .container .formTow .btn_wrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.container .formOne .btn_wrap .btn, .container .formTow .btn_wrap .btn {
+  width: 20%;
+}
+#main1Hourglass .modal-body {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+#main1Hourglass .modal-body .btn-warning {
+  margin-left: 60px;
+}
 /* 2 */
 .selected_cfg_wrap ul, .selected_segments_wrap ul{
   min-height: 400px;

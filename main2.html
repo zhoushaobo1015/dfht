@@ -421,7 +421,7 @@
             })
             $(`.ticket_selector_wrap .selector`).append(frag)
         }else {
-            // let url = "dfht/ajax_get_options"; //上线解开这个即可
+            // let url = "/dfht/ajax_get_options"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
             $.get(url,function(result){
                 let { macro } = result;
@@ -455,7 +455,7 @@
             })
             $(`.segments_selector_wrap .selector`).append(frag)
         }else {
-            let url = "dfht/ajax_get_options"; //上线解开这个即可
+            let url = "/dfht/ajax_get_options"; //上线解开这个即可
             $.get(url,function(result){
                 let sector = result.sector;
                 // 存储到session
@@ -480,7 +480,7 @@
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
             
-            // let url = "dfht/ajax_get_target?id="+id //线上时候需要开启这里
+            // let url = "/dfht/ajax_get_target?id="+id //线上时候需要开启这里
             let url = "./static/json/sample_股票.json"
 
             $.get(url, function(result) {
@@ -512,7 +512,7 @@
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
-            // let url = "dfht/ajax_get_target?id="+id //线上时候需要开启这里
+            // let url = "/dfht/ajax_get_target?id="+id //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
             $.get(url, function(result) {
                 $('.add_segments_wrap .code_input').val(result.scode)
@@ -607,7 +607,7 @@
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             $.ajax({
-                "url":"dfht/ajax_get_target",
+                "url":"/dfht/ajax_get_target",
                 "type":"post",
                 data: data,
                 success: function(res){

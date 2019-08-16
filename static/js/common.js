@@ -151,6 +151,38 @@ var onClickModule = function(id, type){
 }
 
 $(function() {
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    var csrftoken = getCookie('csrftoken');
+    
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
     if ($('.page_datepicker').length > 0) {
         $('.page_datepicker').datepicker({
             format: 'yyyy-mm-dd'
@@ -258,7 +290,7 @@ $(function() {
         
     })
 
-    $('.page3_time_span_input').val(1)
+    $('.page3_time_span_input').val(1);
 
     search1BtnClick('page1');
     search1BtnClick('page2');
@@ -524,25 +556,5 @@ $(function() {
             $(`.target_selector_wrap .target_selector`).append(frag)
         });
     }
-
-    // getTicketData()
-    // 请求股票数据
-    // function getTicketData() {
-    //     if ($(`.ticket_selector_wrap .selector`).length === 0) {
-    //         return
-    //     }
-    //     $.get("/static/json/myoptions.json",function(result){
-    //         let ticket = result.ticket;
-    //         var frag = document.createDocumentFragment();
-    //         if (ticket.length > 0) {
-    //             frag.append($('<option>请选择~~：</option>')[0])
-    //         }
-    //         ticket.map(data => {
-    //             frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-    //         })
-    //         $(`.ticket_selector_wrap .selector`).append(frag)
-    //     });
-    // }
-
 });
 
