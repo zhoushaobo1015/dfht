@@ -405,24 +405,22 @@ if(sessionS === null || sessionS === "undefined" ){
 }
 
 var requestData = function(sendData){
-
     $.ajax({
-        url: '/dfht/ajax_get_target/',
+        url: '/dfht/ajax_runfunctions/',
         type: "post",
-        data: JSON.stringify( s ),
+        data: JSON.stringify( sendData ),
         success: function(res){
             let results = JSON.parse(res)
             if(res.status===200){
-                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
-                $('.formTow').empty();
+                $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
             }else{
-                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
             }
         },
         error: function(err){
-            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>添加失败</div></div>')
+            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
         }
-    });
+    })
 }
 
 // 查询1
@@ -511,7 +509,7 @@ var onClickMain3Btn2Fn = function(id){
     $("#"+id).modal('hide');
     $("#main3Hourglass").modal('toggle');
     $("#main3Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
-    requestData({name:"btn2"});
+    requestData({name:"btn2", targetday:$form_control_value});
 }
 
 var onClickMain3Btn3Fn = function(){

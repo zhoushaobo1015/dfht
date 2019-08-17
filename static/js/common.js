@@ -1,23 +1,3 @@
-var requestData = function(url,type,data){
-    console.log( url,type,data )
-    $.ajax({
-        url: "",
-        type: "",
-        data: "",
-        success: function(res){
-            if(res.status===200){
-                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>强制更新成功</div></div>')
-            }else{
-                $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
-            }
-        },
-        error: function(err){
-            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
-        }
-    })
-}
-
-
 var onClickModule = function(id, type){
     if(type){
         $("#"+id).modal("show");
@@ -326,31 +306,31 @@ $(function() {
         return selected
     }
 
-    // // 查询1弹框选定按钮点击事件
-    // $('.search1_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     // 获取到所有选中的数据
-    //     console.log('dataArr', dataArr)
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search1Popup').data('page')
-    //     $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
-    //     $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
-    //     // 关闭弹框
-    //     $("#search1Popup").modal('toggle');
-    //     $('#search1Popup').removeAttr('data-page');
+    // 查询1弹框选定按钮点击事件
+    $('.search1_confirm_btn').click(function() {
+        let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
+        let dataArr = getSelectedListData(selectedListGroup)
+        // 获取到所有选中的数据
+        console.log('dataArr', dataArr)
+        // 获得弹框时从哪个page点击弹出的
+        let page = $('#search1Popup').data('page')
+        $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
+        // 清空数据
+        selectedListGroup.empty()
+        $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
+        $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
+        // 关闭弹框
+        $("#search1Popup").modal('toggle');
+        $('#search1Popup').removeAttr('data-page');
     
 
 
-    //     // if( $(".main3").length > 0 ){
-    //     //     $("#search2Popup").modal('toggle');
-    //     //     onShowSelect2Get();
-    //     //     $('#search2Popup .selector').val("").trigger("change");
-    //     // }
-    // })
+        // if( $(".main3").length > 0 ){
+        //     $("#search2Popup").modal('toggle');
+        //     onShowSelect2Get();
+        //     $('#search2Popup .selector').val("").trigger("change");
+        // }
+    })
 
     // 获取选择的列表数据
     function getSelectedListData(selectedListGroup) {
@@ -369,38 +349,38 @@ $(function() {
         return dataArr
     }
 
-    // // 查询2弹框选定按钮点击事件
-    // $('.search2_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     console.log('dataArr', dataArr)
+    // 查询2弹框选定按钮点击事件
+    $('.search2_confirm_btn').click(function() {
+        let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
+        let dataArr = getSelectedListData(selectedListGroup)
+        console.log('dataArr', dataArr)
 
-    //     // 获取数据预处理和标准化处理选中的值
-    //     let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
-    //     let outliers = Number(checkedRadio.val())
-    //     let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
-    //     let standardize = Number(checkedRadio2.val())
-    //     console.log('outliers', outliers)
-    //     console.log('standardize', standardize)
+        // 获取数据预处理和标准化处理选中的值
+        let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
+        let outliers = Number(checkedRadio.val())
+        let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
+        let standardize = Number(checkedRadio2.val())
+        console.log('outliers', outliers)
+        console.log('standardize', standardize)
 
-    //     // 获取到所有选中的数据，存入隐藏的input中
-    //     let data = {
-    //         myfeatures: dataArr,
-    //         outliers,
-    //         standardize
-    //     }
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search2Popup').data('page')
-    //     $(`.${page}_search2_data`).val(JSON.stringify(data))
+        // 获取到所有选中的数据，存入隐藏的input中
+        let data = {
+            myfeatures: dataArr,
+            outliers,
+            standardize
+        }
+        // 获得弹框时从哪个page点击弹出的
+        let page = $('#search2Popup').data('page')
+        $(`.${page}_search2_data`).val(JSON.stringify(data))
 
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
-    //     initRadio()
-    //     // 关闭弹框
-    //     $("#search2Popup").modal('toggle');
-    //     $('#search2Popup').removeAttr('data-page')
-    // })
+        // 清空数据
+        selectedListGroup.empty()
+        $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
+        initRadio()
+        // 关闭弹框
+        $("#search2Popup").modal('toggle');
+        $('#search2Popup').removeAttr('data-page')
+    })
     
     // 初始化单选按钮
     function initRadio() {
