@@ -454,7 +454,7 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 .container .formOne .btn_wrap, .container .formTow .btn_wrap {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 .container .formOne .btn_wrap .btn, .container .formTow .btn_wrap .btn {

@@ -266,7 +266,7 @@
                 })
                 $('#main1-select1').append(frag);
             }else {
-                $.get("/dfht/ajax_get_options",function(result){
+                $.get("/dfht/ajax_get_options/",function(result){
                     let { macro } = JSON.parse(result);
                     // 存储到session
                     sessionStorage.setItem("myoptions", result);
@@ -311,7 +311,7 @@
             $('.js-example-basic-multiple').on('select2:select', function(){
                 let checkedItem = $(this).find('option:checked')
                 let id = checkedItem.data('id');
-                // let url = '/dfht/ajax_get_target'; //上线解开
+                // let url = '/dfht/ajax_get_target/'; //上线解开
                 let url = './static/json/sample_宏观.json'
                 $.get(url,{id:id},function(res){
                     // formData = JSON.parse(res);  //上线解开
@@ -343,7 +343,7 @@
                                     </div>
                                     </div>
                                     <div class="form-group row">
-                                    <label for="formOnecodestimer" class="col-sm-2 col-form-label col-form-label-sm">更新代码：</label>
+                                    <label for="formOnecodestimer" class="col-sm-2 col-form-label col-form-label-sm">更新时间：</label>
                                     <div class="col-sm-8">
 
                                         <input class="page3_startdate page_datepicker form-control form-control-sm" id="formOnecodestimer" name="formOnecodestimer" value="${formData.startday}" />
@@ -399,14 +399,15 @@
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
                 $.ajax({
-                    url: '/dfht/ajax_get_target',  //获取线上代码需要解开这里
+                    url: '/dfht/ajax_get_target/',  //获取线上代码需要解开这里
                     type: "post",
-                    data: s,
+                    data: JSON.stringify( s ),
                     success: function(res){
+                        let results = JSON.parse(res)
                         if(res.status===200){
-                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>更新成功</div></div>')
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                         }else{
-                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                         }
                     },
                     error: function(err){
@@ -427,18 +428,19 @@
 
             $("#main1Hourglass .modal-body").on("click",".btn-warning",function(){
                 $.ajax({
-                    url: '/dfht/ajax_get_target',
+                    url: '/dfht/ajax_get_target/',
                     type: "post",
-                    data: formData,
+                    data: JSON.stringify( formData.MID ),
                     success: function(res){
+                        let results = JSON.parse(res)
                         if(res.status===200){
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>删除成功</div></div>');
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
                             $('.formOne').empty();
                             setTimeout(() => {
                                 $("#main1Hourglass").modal('hide');
                             }, 1000);
                         }else{
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>');
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
                             setTimeout(() => {
                                 $("#main1Hourglass").modal('hide');
                             }, 1000);
@@ -457,19 +459,19 @@
             var addcxt = 
             `<form>
                 <div class="form-group row">
-                    <label for="formTowjcode" class="col-sm-2 col-form-label col-form-label-sm">代码：</label>
+                    <label for="formTowjcode" class="col-sm-2 col-form-label col-form-label-sm">*代码：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowjcode" name="formTowjcode" placeholder="请输入代码">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowshortname" class="col-sm-2 col-form-label col-form-label-sm">中文名：</label>
+                    <label for="formTowshortname" class="col-sm-2 col-form-label col-form-label-sm">*中文名：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowshortname" name="formTowshortname" placeholder="请输入中文名">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="formTowcodestring" class="col-sm-2 col-form-label col-form-label-sm">更新代码：</label>
+                    <label for="formTowcodestring" class="col-sm-2 col-form-label col-form-label-sm">*更新代码：</label>
                     <div class="col-sm-8">
                         <input type="email" class="form-control form-control-sm" id="formTowcodestring" name="formTowcodestring" placeholder="请输入更新代码">
                     </div>
@@ -513,10 +515,12 @@
             $(".formTow").on("click","#submit",function(event){
                 var d = {};
                 var t = $('form').serializeArray();
+                var timers = new Date();
+
                 $.each(t, function () {
                     d[this.name] = this.value;
                 });
-                if( d.formTowjcode ) {
+                if( !d.formTowjcode || !d.formTowshortname || !d.formTowcodestring ) {
                     return false;
                 }
                 s = { 
@@ -524,7 +528,7 @@
                     shortname : d.formTowshortname,
                     codestring : d.formTowcodestring,
                     unit : d.formTowunit,
-                    startday: d.formTowcodestimer,
+                    startday: d.formTowcodestimer || (timers.getFullYear()+'-'+(timers.getMonth()+1)+'-'+timers.getDate()),
                     freq : d.formTowfreq,
                     note : d.formTowunit 
                 }
@@ -532,15 +536,16 @@
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
                 $.ajax({
-                    url: '/dfht/ajax_get_target',
+                    url: '/dfht/ajax_get_target/',
                     type: "post",
-                    data: s,
+                    data: JSON.stringify( s ),
                     success: function(res){
+                        let results = JSON.parse(res)
                         if(res.status===200){
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>添加成功</div></div>');
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
                             $('.formTow').empty();
                         }else{
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>添加失败</div></div>')
+                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                         }
                     },
                     error: function(err){

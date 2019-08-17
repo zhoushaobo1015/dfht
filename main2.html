@@ -295,7 +295,10 @@
                                 <span>《《（添加）</span>
                             </div>
                             <div class="selector_wrap segments_selector_wrap">
-                                <select class="selectors"> </select>
+                                <p>
+                                    <span>增加成分股</span>
+                                    <select class="selectors"> </select>
+                                </p>
                                 <div class="btn_wrap">
                                     <button class="confirm_btn btn btn-primary">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
                                     <button class="cancel_btn btn btn-primary">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
@@ -414,14 +417,14 @@
             let select2Data = [...ticket];
             var frag = document.createDocumentFragment();
             if (select2Data.length > 0) {
-                frag.append($('<option>请选择：</option>')[0]);
+                frag.append($('<option>请选择~：</option>')[0]);
             }
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
             $(`.ticket_selector_wrap .selector`).append(frag)
         }else {
-            // let url = "/dfht/ajax_get_options"; //上线解开这个即可
+            // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
             $.get(url,function(result){
                 // let { macro } = JSON.parse(result); //上线解开
@@ -457,7 +460,7 @@
             })
             $(`.segments_selector_wrap .selector`).append(frag)
         }else {
-            // let url = "/dfht/ajax_get_options"; //上线解开这个即可
+            // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
             $.get(url,function(result){
                 let sector = result.sector;
@@ -484,7 +487,7 @@
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
             
-            // let url = "/dfht/ajax_get_target" //线上解开
+            // let url = "/dfht/ajax_get_target/" //线上解开
             let url = "./static/json/sample_股票.json"
 
             $.get(url, {id:id}, function(result) {
@@ -499,8 +502,16 @@
                 $('.ticket_detail_wrap .main2_startdate').datepicker('update', datas.start_date);
                 $('.main2_enddate').datepicker('update', datas.end_date);
                 $('.selected_segments_wrap ul').empty();
-                let sector = datas.groupbelong;
+
+                // 1 select2 选择后
+                datas.groupbelong.map(item => {
+                    $('.selected_segments_wrap ul').append(`<li data-id=${item.id} class="list-group-item">${item.text}</li>`)
+                })
+                let {sector} = JSON.parse( sessionS );
                 var frag = document.createDocumentFragment();
+                if (sector.length > 0) {
+                    frag.append($('<option>请选择：</option>')[0]);
+                }
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
@@ -518,12 +529,11 @@
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
-            // let url = "/dfht/ajax_get_target" //线上时候需要开启这里
+            // let url = "/dfht/ajax_get_target/" //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
             $.get(url,{id: id}, function(result) {
-                // var data = JSON.parse(result); //线上解开
+                // var datas = JSON.parse(result); //线上解开
                 var datas = result;
-                console.log(datas)
                 $('.add_segments_wrap .code_input').val(datas.scode)
                 $('.add_segments_wrap .name_input').val(datas.shortname)
                 $('.add_segments_wrap .main2_startdate').datepicker('update', datas.startdate);
@@ -532,13 +542,20 @@
                 $('.add_segments_wrap .notes').val(datas.notes)
                 $('.add_segments_wrap ul').empty();
                 
-                let sector = datas.memberlist;
+                // 2 select2 选择后
+                datas.memberlist.map(item => {
+                    $('.add_segments_wrap .list-group').append(`<li data-id=${item.id} class="list-group-item">${item.text}</li>`)
+                })
+
+                let {ticket} = JSON.parse( sessionS );
                 var frag = document.createDocumentFragment();
-                sector.map(data => {
+                if (ticket.length > 0) {
+                    frag.append($('<option>请选择~：</option>')[0]);
+                }
+                ticket.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
                 $(`.ticket_selector_wrap .selectors`).append(frag);
-
             });
         })
 
@@ -570,9 +587,9 @@
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             $.ajax({
-                "url":"/dfht/ajax_get_target",
+                "url":"/dfht/ajax_get_target/",
                 "type":"post",
-                data: data,
+                data: JSON.stringify( data ),
                 success: function(res){
                     if(res.status===200){
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>提交成功</div></div>')
@@ -616,9 +633,9 @@
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             $.ajax({
-                "url":"/dfht/ajax_get_target",
+                "url":"/dfht/ajax_get_target/",
                 "type":"post",
-                data: data,
+                data: JSON.stringify( data ),
                 success: function(res){
                     if(res.status===200){
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>提交成功</div></div>')

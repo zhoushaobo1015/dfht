@@ -265,8 +265,19 @@ $(function() {
         $('.add_segments_wrap .name_input').val('')
         $('.add_segments_wrap .main2_startdate').val('');   
         $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
-        $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
-        $('.selected_cfg_wrap ul').empty()
+        // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
+        $('.selected_cfg_wrap ul').empty();
+        var sessionS = sessionStorage.getItem('myoptions');
+        let {ticket} = JSON.parse( sessionS );
+
+        var frag = document.createDocumentFragment();
+        if (ticket.length > 0) {
+            frag.append($('<option>请选择~：</option>')[0])
+        }
+        ticket.map(data => {
+            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $(".right_wrap .ticket_selector_wrap .selectors").append(frag);
 
         // 加上data-type="add"，表示这是添加板块
         $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
