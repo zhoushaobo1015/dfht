@@ -397,7 +397,9 @@
                     unit : d.formOneunit ,
                     startday:d.formOnecodestimer,
                     freq : d.formOnefreq ,
-                    note : d.formOnenote  }
+                    note : d.formOnenote,
+                    method: 'update',
+                }
 
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
@@ -433,7 +435,7 @@
                 $.ajax({
                     url: '/dfht/ajax_get_target/',
                     type: "post",
-                    data: JSON.stringify( formData.MID ),
+                    data: JSON.stringify( {MID:formData.MID,method:'delete'} ),
                     success: function(res){
                         let results = JSON.parse(res)
                         if(res.status===200){
@@ -536,9 +538,9 @@
                     unit : d.formTowunit,
                     startday: d.formTowcodestimer || (timers.getFullYear()+'-'+(timers.getMonth()+1)+'-'+timers.getDate()),
                     freq : d.formTowfreq,
-                    note : d.formTowunit 
+                    note : d.formTowunit,
+                    method: 'add',
                 }
-
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
                 $.ajax({
@@ -565,7 +567,6 @@
             })
         });
     </script>
-
 
 <footer class="bg-dark text-white mt-3">
     <div class="d-flex justify-content-between mx-2 ">

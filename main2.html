@@ -297,6 +297,7 @@
                             <div class="selector_wrap segments_selector_wrap">
                                 <p>
                                     <span>增加成分股</span>
+                                    <br />
                                     <select class="selectors"> </select>
                                 </p>
                                 <div class="btn_wrap">
@@ -357,6 +358,7 @@
                             <div class="selector_wrap ticket_selector_wrap">
                                 <p>
                                     <span>增加所在的板块</span>
+                                    <br />
                                     <select class="selectors"></select>
                                 </p>
                                 <div class="btn_wrap">
@@ -421,7 +423,7 @@
             let select2Data = [...ticket];
             var frag = document.createDocumentFragment();
             if (select2Data.length > 0) {
-                frag.append($('<option>请选择~：</option>')[0]);
+                frag.append($('<option>请选择：</option>')[0]);
             }
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
@@ -554,7 +556,7 @@
                 let {ticket} = JSON.parse( sessionS );
                 var frag = document.createDocumentFragment();
                 if (ticket.length > 0) {
-                    frag.append($('<option>请选择~：</option>')[0]);
+                    frag.append($('<option>请选择：</option>')[0]);
                 }
                 ticket.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
