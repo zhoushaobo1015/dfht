@@ -204,10 +204,11 @@ $(function() {
             return null;
         }
         let id = $(data.element).data('id')
+        let pinyin = $(data.element).data('pinyin')
         if (typeof id === 'undefined') {
             return null
         }
-        if (data.text.indexOf(params.term) > -1 || data.id.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
+        if (data.text.indexOf(params.term) > -1 || pinyin.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
         }
