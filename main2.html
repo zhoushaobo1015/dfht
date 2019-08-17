@@ -597,10 +597,11 @@
                 "type":"post",
                 data: JSON.stringify( data ),
                 success: function(res){
+                    let results = JSON.parse(res);
                     if(res.status===200){
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>提交成功</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }else{
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>提交失败</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
                 },
                 error: function(err){
@@ -643,10 +644,11 @@
                 "type":"post",
                 data: JSON.stringify( data ),
                 success: function(res){
+                    let results = JSON.parse(res)
                     if(res.status===200){
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>提交成功</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }else{
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>提交失败</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
                 },
                 error: function(err){
