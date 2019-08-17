@@ -512,6 +512,9 @@
             $('.formAdd').on('click', function(){
                 $('.formOne').empty();
                 $('.formTow').html(addcxt);
+                $('.page_datepicker').datepicker({
+                    format: 'yyyy-mm-dd'
+                });
             })
             
             // 添加后的确定
