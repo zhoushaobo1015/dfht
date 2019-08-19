@@ -518,6 +518,18 @@
 <script src="./static/js/common.js"></script>
 
 <script>
+    var select1SendData = null;
+    // 判断session中是否有内容如果没有请求数据
+    var sessionS = sessionStorage.getItem('myoptions');
+    if(sessionS === null || sessionS === "undefined" ){
+        // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
+        let url = './static/json/myoptions.json'; //上线需要删除
+        $.get(url,function(result){
+            // sessionStorage.setItem("myoptions", result );     //上线解开
+            sessionStorage.setItem("myoptions",JSON.stringify(result));
+        });
+    }
+
     $(function(){
         // 公共
         // 改变tab样式
@@ -552,18 +564,22 @@
                 standardize
             }
 
-            console.log('page1RequestData', data)
+            console.log('page1RequestData', data);
+
+            // // 发送请求地方
             // $.ajax({
-            //     url: 'dfht/ajax_drawchart',  //上线时候需要解开
+            //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
-            //     data: data,
-            //     success: function(res){
+            //     data: JSON.parse( data ),
+            //     success: function(response){
+            //         // let res = JSON.parse(response);
             //         console.log(res);
             //         // 这里需要将html和js添加到页面上去
             //     },
             //     error: function(err){
             //     }
             // })
+
         }
 
 
@@ -607,12 +623,13 @@
                 charttype
             }
 
-            console.log('page2RequestData', data)
+            console.log('page2RequestData', data);
             // $.ajax({
-            //     url: 'dfht/ajax_drawchart',  //上线时候需要解开
+            //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
-            //     data: data,
-            //     success: function(res){
+            //     data: JSON.stringify( data ),
+            //     success: function(response){
+            //      // let res = JSON.parse(response);
             //         console.log(res);
             //         // 这里需要将html和js添加到页面上去
             //     },
@@ -654,20 +671,28 @@
                 targets,
                 tabletype
             }
-            $.ajax({
-                // url: 'dfht/ajax_getstattable',  //上线时候需要解开
-                url: './static/json/sample_'+type+'.json',
-                // type: "post",    //上线时候需要解开
-                type: 'get',
-                data: data,
-                success: function(res){
-                    RenderingTable(res);
-                },
-                error: function(err){
-                    $(".page3-table-content thead").html("")
-                    $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
-                }
+            // let url = '/dfht/ajax_getstattable/',  //上线解开
+            let url = './static/json/sample_'+type+'.json';
+
+            $.get(url,data,function(){
+                RenderingTable(res);
             })
+
+            // $.ajax({
+            //     // url: '/dfht/ajax_getstattable/',  //上线时候需要解开
+            //     url: './static/json/sample_'+type+'.json',
+            //     // type: "post",    //上线时候需要解开
+            //     type: 'get',
+            //     data: JSON.stringify( data ),
+            //     success: function(response){
+            //     // let res = JSON.parse(response);
+            //         RenderingTable(res);
+            //     },
+            //     error: function(err){
+            //         $(".page3-table-content thead").html("")
+            //         $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
+            //     }
+            // })
         }
         var RenderingTable = function(data){
             var thead = "<tr><th>&nbsp;</th>"
@@ -715,6 +740,80 @@
             changeTabClass($(this))
         })
         // *********** 结束 下右 ***********
+
+        // 查询1弹框选定按钮点击事件
+        $('.search1_confirm_btn').click(function() {
+            let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
+            let dataArr = getSelectedListData(selectedListGroup)
+            // 获取到所有选中的数据
+            console.log('dataArr', dataArr)
+            // 获得弹框时从哪个page点击弹出的
+            let page = $('#search1Popup').data('page')
+            $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
+            // 清空数据
+            selectedListGroup.empty()
+            $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
+            $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
+            // 关闭弹框
+            $("#search1Popup").modal('toggle');
+            $('#search1Popup').removeAttr('data-page');
+        });
+
+        // 获取选择的列表数据
+        function getSelectedListData(selectedListGroup) {
+            let selectedItems = selectedListGroup.children()
+            let dataArr = []
+            Array.prototype.slice.call(selectedItems).map(item => {
+                let id = $(item).data('id')
+                let pinyin = $(item).data('pinyin')
+                let text = $(item).text()
+                dataArr.push({
+                    id,
+                    pinyin,
+                    text
+                })
+            })
+            return dataArr
+        }
+
+        // 查询2弹框选定按钮点击事件
+        $('.search2_confirm_btn').click(function() {
+            let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
+            let dataArr = getSelectedListData(selectedListGroup)
+            console.log('dataArr', dataArr)
+            // 获取数据预处理和标准化处理选中的值
+            let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
+            let outliers = Number(checkedRadio.val())
+            let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
+            let standardize = Number(checkedRadio2.val())
+            console.log('outliers', outliers)
+            console.log('standardize', standardize)
+            // 获取到所有选中的数据，存入隐藏的input中
+            let data = {
+                myfeatures: dataArr,
+                outliers,
+                standardize
+            }
+            // 获得弹框时从哪个page点击弹出的
+            let page = $('#search2Popup').data('page')
+            $(`.${page}_search2_data`).val(JSON.stringify(data))
+            // 清空数据
+            selectedListGroup.empty()
+            $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
+            initRadio()
+            // 关闭弹框
+            $("#search2Popup").modal('toggle');
+            $('#search2Popup').removeAttr('data-page')
+        })
+        
+        // 初始化单选按钮
+        function initRadio() {
+            $('.data_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
+            $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
+        }
+
+
+
     })
 </script>
 

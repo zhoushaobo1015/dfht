@@ -378,7 +378,10 @@
                     $('.formTow').empty();
                     $('.formOne').append(selcxt);
                     $('.page_datepicker').datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        todayBtn: "linked",
+                        clearBtn: true,
+                        language: "zh-CN"
                     });
                 })
             })
@@ -407,12 +410,12 @@
                     url: '/dfht/ajax_get_target/',  //获取线上代码需要解开这里
                     type: "post",
                     data: JSON.stringify( s ),
-                    success: function(res){
-                        let results = JSON.parse(res)
+                    success: function (response) {
+                        let res = JSON.parse(response);
                         if(res.status===200){
-                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>')
                         }else{
-                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>')
                         }
                     },
                     error: function(err){
@@ -436,16 +439,16 @@
                     url: '/dfht/ajax_get_target/',
                     type: "post",
                     data: JSON.stringify( {MID:formData.MID,method:'delete'} ),
-                    success: function(res){
-                        let results = JSON.parse(res)
+                    success: function (response) {
+                        let res = JSON.parse(response);
                         if(res.status===200){
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>');
                             $('.formOne').empty();
                             setTimeout(() => {
                                 $("#main1Hourglass").modal('hide');
                             }, 1000);
                         }else{
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>');
                             setTimeout(() => {
                                 $("#main1Hourglass").modal('hide');
                             }, 1000);
@@ -484,7 +487,7 @@
                 <div class="form-group row">
                     <label for="formTowcodestimer" class="col-sm-2 col-form-label col-form-label-sm">更新时间：</label>
                     <div class="col-sm-8">
-                        <input type="email" class="page1_startdate page_datepicker form-control form-control-sm" id="formTowcodestimer" name="formTowcodestimer" placeholder="请输入更新时间">
+                        <input class="page1_startdate page_datepicker form-control form-control-sm" id="formTowcodestimer" name="formTowcodestimer" data-date-end-date="0d" placeholder="请输入更新时间">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -515,7 +518,10 @@
                 $('.formOne').empty();
                 $('.formTow').html(addcxt);
                 $('.page_datepicker').datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    todayBtn: "linked",
+                    clearBtn: true,
+                    language: "zh-CN"
                 });
             })
             
@@ -547,13 +553,13 @@
                     url: '/dfht/ajax_get_target/',
                     type: "post",
                     data: JSON.stringify( s ),
-                    success: function(res){
-                        let results = JSON.parse(res)
+                    success: function (response) {
+                        let res = JSON.parse(response);
                         if(res.status===200){
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>');
                             $('.formTow').empty();
                         }else{
-                            $("#Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>')
                         }
                     },
                     error: function(err){
