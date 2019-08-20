@@ -405,20 +405,22 @@ if(sessionS === null || sessionS === "undefined" ){
 }
 
 var requestData = function(sendData){
+    $("#main3Hourglass").modal('toggle');
+    $("#main3Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
     $.ajax({
         url: '/dfht/ajax_runfunctions/',
         type: "post",
         data: JSON.stringify( sendData ),
         success: function(res){
             let results = JSON.parse(res)
-            if(res.status===200){
-                $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            if(results.status===200){
+                $("#main3Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
             }else{
-                $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                $("#main3Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
             }
         },
         error: function(err){
-            $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
+            $("#main3Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>更新失败</div></div>')
         }
     })
 }
@@ -439,9 +441,9 @@ var onShowSelect1Get = function() {
     }
     let { group, macro, sector, ticket } = JSON.parse( sessionS )
     // 查询1单标的选择数据
-    let select1Data = [...group, ...macro, ...sector, ...ticket]
+    let select1Data = [ ...macro, ...sector, ...ticket, ...group]
     // 查询1全部成分数据
-    let select2Data = [...ticket, ...group];
+    let select2Data = [...sector, ...group];
     appendData(select1Data, 'selector1')
     appendData(select2Data, 'selector2')
 }
