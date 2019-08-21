@@ -63,8 +63,8 @@ $(function() {
             return null;
         }
         let id = $(data.element).data('id')
-        let pinyin = $(data.element).data('pinyin')
-        if (typeof id === 'undefined') {
+        let pinyin = String($(data.element).data('pinyin'))
+        if (typeof id === 'undefined' || typeof pinyin === 'undefined') {
             return null
         }
         if (data.text.indexOf(params.term) > -1 || pinyin.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
