@@ -63,10 +63,11 @@ $(function() {
             return null;
         }
         let id = $(data.element).data('id')
-        let pinyin = String($(data.element).data('pinyin'))
+        let pinyin = $(data.element).data('pinyin')
         if (typeof id === 'undefined' || typeof pinyin === 'undefined') {
             return null
         }
+        pinyin = String(pinyin)
         if (data.text.indexOf(params.term) > -1 || pinyin.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
