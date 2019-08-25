@@ -549,11 +549,9 @@
             search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''};
             let { myfeatures, outliers, standardize } = search2Data
             let charttype = type || $('.page1 .tab_wrap .active').text();
-
-            if(!startDate || !endDate || !targets.length>0 || !myfeatures.length>0 ){
+            if(!startDate || !endDate || !mytargets.length>0 || !myfeatures.length>0 ){
                 return false;
             }
-
             let data = {
                 charttype, 
                 startdate: startDate,
@@ -623,7 +621,7 @@
                 charttype
             }
 
-            console.log('page2RequestData', data);
+            console.log('page2RequestData', data, "626");
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
@@ -654,7 +652,6 @@
         // 下右 请求数据公共方法 
         // *********** 开始 下右 *********** 
         var page3RequestData = function(type){
-            console.log(type)
             let targets = $('.page3_search1_data').val();
             targets = targets ? JSON.parse(targets) : [];
             let enddate = $('.page3_enddate').val();
@@ -674,25 +671,9 @@
             // let url = '/dfht/ajax_getstattable/',  //上线解开
             let url = './static/json/sample_'+type+'.json';
 
-            $.get(url,data,function(){
+            $.get(url,data,function(res){
                 RenderingTable(res);
             })
-
-            // $.ajax({
-            //     // url: '/dfht/ajax_getstattable/',  //上线时候需要解开
-            //     url: './static/json/sample_'+type+'.json',
-            //     // type: "post",    //上线时候需要解开
-            //     type: 'get',
-            //     data: JSON.stringify( data ),
-            //     success: function(response){
-            //     // let res = JSON.parse(response);
-            //         RenderingTable(res);
-            //     },
-            //     error: function(err){
-            //         $(".page3-table-content thead").html("")
-            //         $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
-            //     }
-            // })
         }
         var RenderingTable = function(data){
             var thead = "<tr><th>&nbsp;</th>"

@@ -291,15 +291,11 @@
                             </div>
                         </div>
                         <div class="right_wrap">
-                            <div class="add_wrap">
-                                <span>《《（添加）</span>
-                            </div>
                             <div class="selector_wrap segments_selector_wrap">
                                 <p>
                                     <span>增加成分股</span>
-                                    <br />
-                                    <select class="selectors"> </select>
                                 </p>
+                                <select class="selectors main2_1_selector"> </select>
                                 <div class="btn_wrap">
                                     <button class="confirm_btn btn btn-primary">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
                                     <button class="cancel_btn btn btn-primary">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
@@ -352,19 +348,16 @@
                             </div>
                         </div>
                         <div class="right_wrap">
-                            <div class="add_wrap">
-                                <span>《《（添加）</span>
-                            </div>
                             <div class="selector_wrap ticket_selector_wrap">
                                 <p>
                                     <span>增加所在的板块</span>
-                                    <br />
-                                    <select class="selectors"></select>
                                 </p>
+                                <select class="selectors main2_2_selector"></select>
+
                                 <div class="btn_wrap">
                                     <button class="confirm_btn btn btn-primary">&nbsp;确定&nbsp;</button>
                                     <button class="cancel_btn btn btn-primary">&nbsp;取消&nbsp;</button>
-                                    <button class="cancel_btn btn btn-primary">&nbsp;删除&nbsp;</button>
+                                    <button class="remove_btn btn btn-primary">&nbsp;删除&nbsp;</button>
                                 </div>
                             </div>
                         </div>
@@ -415,7 +408,6 @@
 
 <script>
     $(function(){
-
         // 判断session中是否有内容如果没有请求数据 -->> 股票
         var sessionS = sessionStorage.getItem('myoptions');
         if(sessionS !== null && sessionS !== "undefined" ){
@@ -537,7 +529,7 @@
             let text = checkedItem.text();
             // let url = "/dfht/ajax_get_target/" //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
-            $.get(url,{id: id}, function(result) {
+            $.get(url,{id: id,method:"update"}, function(result) {
                 // var datas = JSON.parse(result); //线上解开
                 var datas = result;
                 $('.add_segments_wrap .code_input').val(datas.scode)
@@ -547,7 +539,8 @@
                 $('.add_segments_wrap .grouping_selector_wrap .selector').val(datas.sec_group).select2()
                 $('.add_segments_wrap .notes').val(datas.notes)
                 $('.add_segments_wrap ul').empty();
-                
+                $('.ticket_selector_wrap .btn_wrap .remove_btn').show();
+                $('.ticket_selector_wrap .btn_wrap .confirm_btn').removeClass("new")
                 // 2 select2 选择后
                 datas.memberlist.map(item => {
                     $('.add_segments_wrap .list-group').append(`<li data-id=${item.id} class="list-group-item">${item.text}</li>`)
@@ -566,7 +559,7 @@
         })
 
         // main2-输入股票代码后确定按钮点击事件
-        $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {
+        $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {           
             let end_date = $('.main2_enddate').val()
             let start_date = $('.main2_startdate').val()
             let groupbelong = []
@@ -587,8 +580,9 @@
                 shortname,
                 start_date,
                 tcode,
+                method:"update"
             }
-            console.log('data', data,"main2 >>> 528行");
+            console.log('data', data,"main2 >>> 583行");
 
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
@@ -625,6 +619,13 @@
                 let name = $(item).text()
                 memberlist.push([id, name])
             })
+            if(!scode||!shortname){
+                return false;
+            }
+            let method = "update";
+            if ($('.ticket_selector_wrap .btn_wrap .confirm_btn').hasClass('new')){
+                method = "add"
+            }
             let data = {
                 memberlist,
                 notes,
@@ -632,9 +633,10 @@
                 sec_group,
                 shortname,
                 startdate,
-                stype
+                stype,
+                method,
             }
-            console.log('data', data,"main2 >>> 555行")
+            console.log('data', data,"main2 >>> 631")
 
 
             $("#main2Hourglass").modal('toggle');
@@ -656,6 +658,62 @@
                 }
             })
         })
+        // 删除事件
+        $('.add_segments_wrap .ticket_selector_wrap .remove_btn').click(function() {
+            let scode = $('.add_segments_wrap .code_input').val()
+            let shortname = $('.add_segments_wrap .name_input').val()
+            $("#main2Hourglass").modal('toggle');
+            $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            $.ajax({
+                "url":"/dfht/ajax_get_target/",
+                "type":"post",
+                data: JSON.stringify( {method:"remove",scode,shortname} ),
+                success: function(res){
+                    let results = JSON.parse(res)
+                    if(res.status===200){
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                    }else{
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                    }
+                },
+                error: function(err){
+                    $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>提交失败</div></div>')
+                }
+            })
+        })
+
+        // 添加股票事件
+        $('.main2_1_selector').on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id');
+            let text = checkedItem.text()
+            if (!id || itemIsExist(id, 'selected_segments')) {
+                return
+            }
+            $('.selected_segments_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+        })
+        // 添加板块事件
+        $('.main2_2_selector').on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id');
+            let text = checkedItem.text()
+            if (!id || itemIsExist(id, 'selected_cfg')) {
+                return
+            }
+            $('.selected_cfg_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+        })
+
+        // 判断选择的选项是否已在列表中
+        function itemIsExist(id, className) {
+            let exist = false
+            $(`.${className}_wrap .list-group`).children().each(function(i, item) {
+                if (id === $(item).data('id')) {
+                    exist = true
+                }
+            })
+            return exist
+        }
+
     })
 
 </script>

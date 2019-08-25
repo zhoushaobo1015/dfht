@@ -118,15 +118,23 @@ fieldset, img { border:0; vertical-align: middle;}
   cursor: pointer;
 }
 .container .right_wrap .selector_wrap {
+  margin-left: 50px;
   padding-top: 160px;
   box-sizing: border-box;
   height: 570px;
-  display: flex;
+  position: relative;
+  min-width: 250px;
+  /* display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
-.container .right_wrap .btn_wrap button:first-child {
-  margin-right: 30px;
+.container .right_wrap .btn_wrap {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.container .right_wrap .btn_wrap button {
+  margin-right: 10px;
 }
 .container .right_wrap .selector_wrap .selector {
   flex-grow: 1;

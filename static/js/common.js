@@ -74,33 +74,9 @@ $(function() {
         return null;
     }
 
-    // 添加板块事件
-    $('.ticket_detail_wrap .right_wrap .add_wrap').click(function() {
-        let checkedOption = $('.right_wrap .segments_selector_wrap .selectors').find('option:checked');
-        let id = checkedOption.data('id')
-        let text = checkedOption.text()
-        if (!id || itemIsExist(id, 'selected_segments')) {
-            return
-        }
-        $('.selected_segments_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
-    })
-
-    
-
     // main2-输入股票代码后取消按钮点击事件
     $('.segments_selector_wrap .cancel_btn').click(function() {
         $('.ticket_detail_wrap').addClass('hide')
-    })
-
-    // 添加股票事件
-    $('.add_segments_wrap .right_wrap .add_wrap').click(function() {
-        let checkedOption = $('.right_wrap .ticket_selector_wrap .selectors').find('option:checked');
-        let id = checkedOption.data('id')
-        let text = checkedOption.text()
-        if (!id || itemIsExist(id, 'selected_cfg')) {
-            return
-        }
-        $('.selected_cfg_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
     })
 
     // main2-输入板块代码后取消按钮点击事件
@@ -126,6 +102,8 @@ $(function() {
         $('.add_segments_wrap .main2_startdate').val('');   
         $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
         // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
+        $('.ticket_selector_wrap .btn_wrap .remove_btn').hide();
+        $('.ticket_selector_wrap .btn_wrap .confirm_btn').addClass("new")
         $('.selected_cfg_wrap ul').empty();
         var sessionS = sessionStorage.getItem('myoptions');
         let {ticket} = JSON.parse( sessionS );
@@ -382,17 +360,14 @@ $(function() {
 
     // 请求查询弹框1需要的数据
     function getSearch1Data() {
-        console.log("~.~")
-
-        $.get("/static/json/myoptions.json",function(result){
-            let { group, macro, sector, ticket } = result
-            // 查询1单标的选择数据
-            let select1Data = [...group, ...macro, ...sector, ...ticket]
-            // 查询1全部成分数据
-            let select2Data = [...ticket, ...group]
-            appendData(select1Data, 'selector1')
-            appendData(select2Data, 'selector2')
-        });
+        var sessionS = sessionStorage.getItem('myoptions');
+        let { group, macro, sector, ticket } = JSON.parse( sessionS )
+        // 查询1单标的选择数据
+        let select1Data = [...group, ...macro, ...sector, ...ticket]
+        // 查询1全部成分数据
+        let select2Data = [...ticket, ...group]
+        appendData(select1Data, 'selector1')
+        appendData(select2Data, 'selector2')
         
         function appendData(selectData, className) {
             var frag = document.createDocumentFragment();
@@ -408,16 +383,15 @@ $(function() {
 
     // 请求查询弹框2需要的数据
     function getSearch2Data() {
-        $.get("/static/json/myoptions.json",function(result){
-            let features = result.features
-            var frag = document.createDocumentFragment();
-            if (selectData.length > 0) {
-                frag.append($('<option>请选择：</option>')[0])
-            }
-            features.map(data => {
-                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-            })
-            $(`.target_selector_wrap .target_selector`).append(frag)
-        });
+        var sessionS = sessionStorage.getItem('myoptions');
+        let { features } = JSON.parse( sessionS )
+        var frag = document.createDocumentFragment();
+        if (selectData.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        features.map(data => {
+            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $(`.target_selector_wrap .target_selector`).append(frag)
     }
 });
