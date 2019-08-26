@@ -441,7 +441,7 @@ var onShowSelect1Get = function() {
     }
     let { group, macro, sector, ticket } = JSON.parse( sessionS )
     // 查询1单标的选择数据
-    let select1Data = [ ...macro, ...sector, ...ticket, ...group]
+    let select1Data = [ ...macro, ...sector, ...ticket, ...group];
     // 查询1全部成分数据
     let select2Data = [...sector, ...group];
     appendData(select1Data, 'selector1')

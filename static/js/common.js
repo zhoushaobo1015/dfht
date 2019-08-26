@@ -364,11 +364,11 @@ $(function() {
         var sessionS = sessionStorage.getItem('myoptions');
         let { group, macro, sector, ticket } = JSON.parse( sessionS )
         // 查询1单标的选择数据
-        let select1Data = [...group, ...macro, ...sector, ...ticket]
+        let select1Data = [ ...macro, ...sector, ...ticket, ...group]
         // 查询1全部成分数据
-        let select2Data = [...ticket, ...group]
-        appendData(select1Data, 'selector1')
-        appendData(select2Data, 'selector2')
+        let select2Data = [...sector, ...group]
+        appendData(select1Data, 'selector1');
+        appendData(select2Data, 'selector2');
         
         function appendData(selectData, className) {
             var frag = document.createDocumentFragment();
