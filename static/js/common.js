@@ -385,7 +385,7 @@ $(function() {
     // 请求查询弹框2需要的数据
     function getSearch2Data() {
         var sessionS = sessionStorage.getItem('myoptions');
-        let { features } = JSON.parse( sessionS )
+        let { features } = JSON.parse( sessionS );
         var frag = document.createDocumentFragment();
         if (selectData.length > 0) {
             frag.append($('<option>请选择：</option>')[0])

@@ -347,6 +347,9 @@ fieldset, img { border:0; vertical-align: middle;}
   justify-content: center;
   padding: 26px;
 }
+#main4Hourglass .modal-body {
+  text-align: center;
+}
 .selected_list_wrap {
   width: 200px;
   display: flex;

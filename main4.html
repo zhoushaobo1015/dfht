@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="./static/css/style.css">
     <link href="./static/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./static/css/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="./static/css/bokeh-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-widgets-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-tables-1.2.0.min.css">
+
     <title>
         宏观择时【1】
     </title>
@@ -77,6 +82,10 @@
 <script src="./static/js/popper-1.14.7.min.js"></script>
 <script src="./static/js/bootstrap-4.3.1.min.js"></script>
 
+<script src="./static/js/bokeh-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-widgets-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-tables-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-gl-1.2.0.min.js"></script>
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark my-2">
@@ -562,21 +571,25 @@
                 standardize
             }
 
-            console.log('page1RequestData', data);
+            console.log('page1RequestData >>> 565', data);
 
-            // // 发送请求地方
+            // 发送请求地方
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
-            //     data: JSON.parse( data ),
-            //     success: function(response){
-            //         // let res = JSON.parse(response);
-            //         console.log(res);
-            //         // 这里需要将html和js添加到页面上去
-            //     },
-            //     error: function(err){
+            //     data: JSON.stringify( data ),
+            //     success: function(res){
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //             console.log(results);
+            //             // 这里需要将html和js添加到页面上去
+            //         }else{
+            //             $("#main4Hourglass").modal('toggle');
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
+
 
         }
 
@@ -621,17 +634,20 @@
                 charttype
             }
 
-            console.log('page2RequestData', data, "626");
+            console.log('page2RequestData >>> 626', data );
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
             //     data: JSON.stringify( data ),
-            //     success: function(response){
-            //      // let res = JSON.parse(response);
-            //         console.log(res);
-            //         // 这里需要将html和js添加到页面上去
-            //     },
-            //     error: function(err){
+            //     success: function(res){
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //             console.log(results);
+            //             // 这里需要将html和js添加到页面上去
+            //         }else{
+            //             $("#main4Hourglass").modal('toggle');
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
         }
@@ -652,12 +668,14 @@
         // 下右 请求数据公共方法 
         // *********** 开始 下右 *********** 
         var page3RequestData = function(type){
+
             let targets = $('.page3_search1_data').val();
             targets = targets ? JSON.parse(targets) : [];
             let enddate = $('.page3_enddate').val();
             let cycles = $('.page3_time_span_input').val();
             let tabletype = type||$('.page3-table li.selected').text();
             
+
             if(!enddate || !targets.length>0){
                 return false;
             }
@@ -666,14 +684,32 @@
                 cycles,
                 enddate,
                 targets,
-                tabletype
+                tabletype,
             }
-            // let url = '/dfht/ajax_getstattable/',  //上线解开
-            let url = './static/json/sample_'+type+'.json';
 
+            //上线解开
+            // $("#main4Hourglass").modal('toggle');
+            // $("#main4Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>'); 
+            // $.ajax({
+            //     url: '/dfht/ajax_getstattable/',
+            //     type: "post",
+            //     data: JSON.stringify(data),
+                // success: function(res){
+                //     let results = JSON.parse(res);
+                //     if(results.status===200){
+                //         $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                //     }else{
+                //         $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                //     }
+            //     }
+            // })
+
+            // 上线删除
+            let url = './static/json/sample_'+type+'.json';
             $.get(url,data,function(res){
                 RenderingTable(res);
-            })
+            });
+
         }
         var RenderingTable = function(data){
             var thead = "<tr><th>&nbsp;</th>"
