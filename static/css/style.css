@@ -475,6 +475,7 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   justify-content: center;
   align-self: center;
+  text-align: center;
 }
 #main1Hourglass .modal-body .btn-warning {
   margin-left: 60px;

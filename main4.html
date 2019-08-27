@@ -687,6 +687,8 @@
                 tabletype,
             }
 
+            console.log( data );
+
             //上线解开
             // $("#main4Hourglass").modal('toggle');
             // $("#main4Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>'); 
@@ -704,6 +706,8 @@
             //     }
             // })
 
+
+            
             // 上线删除
             let url = './static/json/sample_'+type+'.json';
             $.get(url,data,function(res){
@@ -724,9 +728,10 @@
                 tbody += "<tr><td>"+data.index[x]+"</td>"
                 for(var y=0;y<data.data[x].length;y++){
                     if(y===1){
-                        if(Number(data.data[x][y].split('%')[0]<25)){
+                        // 修改百分比值的颜色
+                        if(Number(data.data[x][y].split('%')[0]<=25)){
                             tbody += "<td class='red'>"+data.data[x][y]+"</td>"
-                        }else if(Number(data.data[x][y].split('%')[0]>75)){
+                        }else if(Number(data.data[x][y].split('%')[0]>=75)){
                             tbody += "<td class='blue'>"+data.data[x][y]+"</td>"
                         }else {
                             tbody += "<td>"+data.data[x][y]+"</td>"
