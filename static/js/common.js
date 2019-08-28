@@ -91,37 +91,6 @@ $(function() {
         $(this).remove();
     })
 
-    // 添加板块按钮点击事件
-    $('.container .top_wrap .add_btn').click(function() {
-        $('.add_segments_wrap').removeClass('hide')
-        $('.ticket_detail_wrap').addClass('hide')
-        // 清空数据
-        $('.add_segments_wrap .notes').val('')
-        $('.add_segments_wrap .code_input').val('')
-        $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
-        $('.add_segments_wrap .name_input').val('')
-        $('.add_segments_wrap .main2_startdate').val('');   
-        $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
-        // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
-        $('.ticket_selector_wrap .btn_wrap .remove_btn').hide();
-        $('.ticket_selector_wrap .btn_wrap .confirm_btn').addClass("new")
-        $('.selected_cfg_wrap ul').empty();
-        var sessionS = sessionStorage.getItem('myoptions');
-        let {ticket} = JSON.parse( sessionS );
-
-        var frag = document.createDocumentFragment();
-        if (ticket.length > 0) {
-            frag.append($('<option>请选择：</option>')[0])
-        }
-        ticket.map(data => {
-            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-        })
-        $(".right_wrap .ticket_selector_wrap .selectors").append(frag);
-
-        // 加上data-type="add"，表示这是添加板块
-        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
-    })
-
     // main4
 	$('.pages .switch').click(function(){
 		var $this = $(this);

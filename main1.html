@@ -312,7 +312,13 @@
             var selcxt = "";
             var formData = "";
             $('.js-example-basic-multiple').on('select2:select', function(){
-                let checkedItem = $(this).find('option:checked')
+                let checkedItem = $(this).find('option:checked');
+                if($(this).find('option:checked').text() === "请选择："){
+                    $(this).find('option:checked').siblings().checked = false;
+                    $('.formOne').empty();
+                    return false;
+                }   
+                Disabled(true);
                 let id = checkedItem.data('id');
                 // let url = '/dfht/ajax_get_target/'; //上线解开
                 let url = './static/json/sample_宏观.json'
@@ -409,6 +415,8 @@
 
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+                Disabled(false);
+                // $('.formOne').empty();
                 $.ajax({
                     url: '/dfht/ajax_get_target/',  //获取线上代码需要解开这里
                     type: "post",
@@ -430,14 +438,18 @@
             // 选择框后的 取消
             $(".formOne").on("click",".formOneCel",function(event){
                 $('.formOne').empty();
+                Disabled(false);
             })
             // 选择框后的 删除
             $(".formOne").on("click",".formOneDel",function(event){
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button><button type="button" class="btn btn-warning">确认删除</button>');
+                
             });
 
             $("#main1Hourglass .modal-body").on("click",".btn-warning",function(){
+                Disabled(false);
+                // $('.formOne').empty();
                 $.ajax({
                     url: '/dfht/ajax_get_target/',
                     type: "post",
@@ -459,9 +471,6 @@
                     },
                     error: function(err){
                         $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>删除失败</div></div>');
-                        setTimeout(() => {
-                            $("#main1Hourglass").modal('hide');
-                        }, 1000);
                     }
                 });
             })
@@ -526,6 +535,7 @@
                     clearBtn: true,
                     language: "zh-CN"
                 });
+                Disabled(true);
             })
             
             // 添加后的确定
@@ -552,6 +562,8 @@
                 }
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+                Disabled(false);
+                // $('.formTow').empty();
                 $.ajax({
                     url: '/dfht/ajax_get_target/',
                     type: "post",
@@ -573,7 +585,18 @@
             // 添加后的取消
             $(".formTow").on("click",".formTowCel",function(event){
                 $('.formTow').empty();
-            })
+                Disabled(false);
+            });
+
+            function Disabled(type){
+                if(type){
+                    $('.formAdd').attr('disabled',true);
+                    $('.main1-select1').attr('disabled',true);
+                }else{
+                    $('.formAdd').attr('disabled',false);
+                    $('.main1-select1').attr('disabled',false);
+                }
+            }
         });
     </script>
 

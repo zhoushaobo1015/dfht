@@ -485,6 +485,15 @@
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
             
+            if($(this).find('option:checked').text() === "请选择："){
+                $(this).find('option:checked').siblings().checked = false;
+                $('.add_segments_wrap').addClass('hide')
+                $('.ticket_detail_wrap').addClass('hide')
+                return false;
+            }
+
+            Disabled(true);
+
             // let url = "/dfht/ajax_get_target/" //线上解开
             let url = "./static/json/sample_股票.json"
 
@@ -518,6 +527,38 @@
         })
 
 
+        // 添加板块按钮点击事件
+        $('.container .top_wrap .add_btn').click(function() {
+            Disabled(true);
+            $('.add_segments_wrap').removeClass('hide')
+            $('.ticket_detail_wrap').addClass('hide')
+            // 清空数据
+            $('.add_segments_wrap .notes').val('')
+            $('.add_segments_wrap .code_input').val('')
+            $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
+            $('.add_segments_wrap .name_input').val('')
+            $('.add_segments_wrap .main2_startdate').val('');   
+            $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
+            // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
+            $('.ticket_selector_wrap .btn_wrap .remove_btn').hide();
+            $('.ticket_selector_wrap .btn_wrap .confirm_btn').addClass("new")
+            $('.selected_cfg_wrap ul').empty();
+            var sessionS = sessionStorage.getItem('myoptions');
+            let {ticket} = JSON.parse( sessionS );
+
+            var frag = document.createDocumentFragment();
+            if (ticket.length > 0) {
+                frag.append($('<option>请选择：</option>')[0])
+            }
+            ticket.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(".right_wrap .ticket_selector_wrap .selectors").append(frag);
+
+            // 加上data-type="add"，表示这是添加板块
+            $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
+        })
+
         // 选择板块选项
         $('.top_wrap .segments_selector_wrap .selector').on('select2:select', function() {
             $('.add_segments_wrap').removeClass('hide')
@@ -527,6 +568,16 @@
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
+
+            if($(this).find('option:checked').text() === "请选择："){
+                $(this).find('option:checked').siblings().checked = false;
+                $('.add_segments_wrap').addClass('hide')
+                $('.ticket_detail_wrap').addClass('hide')
+                return false;
+            }
+
+            Disabled(true);
+
             // let url = "/dfht/ajax_get_target/" //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
             $.get(url,{id: id,method:"update"}, function(result) {
@@ -586,6 +637,7 @@
 
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
@@ -641,6 +693,7 @@
 
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
@@ -664,6 +717,10 @@
             let shortname = $('.add_segments_wrap .name_input').val()
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
+
+            $('.add_segments_wrap').addClass('hide')
+
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
@@ -712,6 +769,32 @@
                 }
             })
             return exist
+        }
+
+
+        // main2-输入股票代码后取消按钮点击事件
+        $('.segments_selector_wrap .cancel_btn').click(function() {
+            Disabled(false);
+            $('.ticket_detail_wrap').addClass('hide')
+        })
+
+        // main2-输入板块代码后取消按钮点击事件
+        $('.add_segments_wrap .cancel_btn').click(function() {
+            Disabled(false);
+            $('.add_segments_wrap').addClass('hide');
+            $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').removeAttr('data-type')
+        })
+
+        function Disabled(type){
+            if(type){
+                $('.add_btn').attr('disabled',true);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').attr('disabled',true);
+                $('.segments_selector_wrap .selector.select2-hidden-accessible').attr('disabled',true);
+            }else{
+                $('.add_btn').attr('disabled',false);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+                $('.segments_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+            }
         }
 
     })
