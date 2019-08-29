@@ -75,16 +75,6 @@ $(function() {
         return null;
     }
 
-    // main2-输入股票代码后取消按钮点击事件
-    $('.segments_selector_wrap .cancel_btn').click(function() {
-        $('.ticket_detail_wrap').addClass('hide')
-    })
-
-    // main2-输入板块代码后取消按钮点击事件
-    $('.add_segments_wrap .cancel_btn').click(function() {
-        $('.add_segments_wrap').addClass('hide');
-        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').removeAttr('data-type')
-    })
 
     // 已选择的板块或成分股点击事件
     $('.center_wrap >div ul').on('dblclick', 'li', function() {
