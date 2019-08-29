@@ -175,28 +175,62 @@ $(function() {
     // 查询弹框中选择事件
     function selectData(className) {
         $(`.${className}`).on('select2:select', function(){
+            // 判断标的选择查询1
+            if(className === 'target_selector'){
+                let mytargets = $('.page1_search1_data').val() || $('.page2_search1_data').val();
+                mytargets = mytargets ? JSON.parse(mytargets) : [];
+                if(mytargets.length > 1){
+                    $(".target_selector").attr('disabled',true);
+                }
+            }
+
+            if(className === "selector1" || className === "selector2"){
+                let search2Data = $('.page1_search2_data').val() || $('.page2_search2_data').val() ;
+                search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''};
+                let { myfeatures, outliers, standardize } = search2Data;
+                if(myfeatures.length>1){
+                    $(".selector1").attr('disabled',true);
+                    $(".selector2").attr('disabled',true);
+                }
+            }
+
             let checkedItem = $(this).find('option:checked')
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text()
-
-            let canAdd = true
-            let selector1Length = $('.selector1_wrap .list-group').children().length
-            let selector2Length = $('.selector2_wrap .list-group').children().length
-            if (className === 'selector1') {
-                // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
-                if (selector2Length > 1 && selector1Length === 1) {
-                    canAdd = false
+            if('selector2'!==className) {
+                let canAdd = true
+                let selector1Length = $('.selector1_wrap .list-group').children().length
+                let selector2Length = $('.selector2_wrap .list-group').children().length
+                if (className === 'selector1') {
+                    // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
+                    if (selector2Length > 1 && selector1Length === 1) {
+                        canAdd = false
+                    }
+                } else if (className === 'selector2') {
+                    // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
+                    if (selector1Length > 1 && selector2Length === 1) {
+                        canAdd = false
+                    }
                 }
-            } else if (className === 'selector2') {
-                // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
-                if (selector1Length > 1 && selector2Length === 1) {
-                    canAdd = false
+    
+                if (canAdd && !itemIsExist(id, className) && text !== '请选择：') {
+                    $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
                 }
-            }
-
-            if (canAdd && !itemIsExist(id, className) && text !== '请选择：') {
-                $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
+            }else{
+                // let url = "/dfht/ajax_get_target/?id="+id+"&detail=0"; //上线解开这个即可
+                let url = './static/json/sample_组.json'; //上线需要删除
+                $.get(url,function(res){
+                    // let result = JSON.parse(res);  //上线解开
+                    let result = res;   //上线需要删除
+                    if(result.memberlist.length>0){
+                        let li = ""
+                        for(let i=0;i<result.memberlist.length;i++){
+                            li += `<li class="list-group-item" data-id=${result.memberlist[i]["id"]} data-pinyin=${result.memberlist[i]["pinyin"]}>${result.memberlist[i]["text"]}</li>`
+                        }
+                        $(`.${className}_wrap .list-group`).append(li);
+                    }
+                });
             }
         })
     }

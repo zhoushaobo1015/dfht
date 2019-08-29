@@ -571,7 +571,7 @@
                 standardize
             }
 
-            console.log('page1RequestData >>> 565', data);
+            console.log('page1RequestData >>> 574', data);
 
             // 发送请求地方
             // $.ajax({
@@ -579,6 +579,9 @@
             //     type: "post",    //上线时候需要解开
             //     data: JSON.stringify( data ),
             //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
             //             console.log(results);
@@ -634,12 +637,15 @@
                 charttype
             }
 
-            console.log('page2RequestData >>> 626', data );
+            console.log('page2RequestData >>> 640', data );
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
             //     data: JSON.stringify( data ),
             //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
             //             console.log(results);
@@ -696,18 +702,20 @@
             //     url: '/dfht/ajax_getstattable/',
             //     type: "post",
             //     data: JSON.stringify(data),
-                // success: function(res){
-                //     let results = JSON.parse(res);
-                //     if(results.status===200){
-                //         $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
-                //     }else{
-                //         $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
-                //     }
+            //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+            //             RenderingTable(res);
+            //         }else{
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
 
-
-            
             // 上线删除
             let url = './static/json/sample_'+type+'.json';
             $.get(url,data,function(res){
@@ -716,6 +724,10 @@
 
         }
         var RenderingTable = function(data){
+            
+            $(".target_selector").attr('disabled',false);
+            $(".selector1").attr('disabled',false);
+            $(".selector2").attr('disabled',false);
             var thead = "<tr><th>&nbsp;</th>"
             var tbody = "<tr>"
             for(var i=0;i<=data.columns.length;i++){
