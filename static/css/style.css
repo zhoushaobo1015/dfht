@@ -184,6 +184,12 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;   
   position: relative;         
 }
+.page1 .result_wrap {
+  min-height: 365px;
+}
+.page2 .result_wrap {
+  min-height: 330px;
+}
 .left_search_wrap {
   box-sizing: border-box;
   width: 10%;
