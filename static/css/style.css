@@ -307,6 +307,7 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 .page3 .page3_time_span_input {
   width: 100px;
+  text-align: center;
 }
 .page3 .search1_wrap span {
   display: block;
@@ -491,6 +492,12 @@ fieldset, img { border:0; vertical-align: middle;}
   min-height: 400px;
   border: 1px solid rgba(0,0,0,.125);
   border-radius: 5px;
+}
+#main2Hourglass .modal-body {
+  text-align: center;
+}
+#main2Hourglass .modal-body .btn-warning {
+  margin-left: 60px;
 }
 /* 3 */
 .container .main3 {

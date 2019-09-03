@@ -327,7 +327,7 @@
                                     </div>
                                     <div class="text_input_wrap time_span_wrap">
                                         <span>时间跨度</span>
-                                        <input class="page3_time_span_input" type="text" />年
+                                        <input class="page3_time_span_input" type="number" />年
                                     </div>
                                 </div>
                             </div>
@@ -536,6 +536,35 @@
     }
 
     $(function(){
+
+        let d = new Date();
+        let year = d.getFullYear();  // 获取完整的年份(4位,1970)
+        let month = d.getMonth()+1;  // 获取月份(0-11,0代表1月,用的时候记得加上1)
+        let day = d.getDate();  // 获取日(1-31)
+        let hours = d.getHours()+1;  // 获取小时数(0-23)
+        if(hours < 20){
+            day = day - 1;
+        }
+        let InitializationEndDate = year+"-"+month+"-"+day;
+
+        //获取系统当前时间
+        let curDate = (d).getTime();
+        // 将4年的时间单位换算成毫秒
+        let fourYearsTime = (365*3)*24*60*60*1000;
+        //用当前时间-3年时间，得到3年前当前时间
+        let result = curDate - fourYearsTime;
+        let resultDate = new Date(result);
+        let resultyear = resultDate .getFullYear();
+        let resultmonth = resultDate .getMonth() + 1;
+        let resultday = resultDate .getDate();
+        let InitializationStartDate = resultyear+"-"+resultmonth+"-"+resultday
+
+        $(".page1 .select_date_wrap .page1_startdate").val(InitializationStartDate);
+        $(".page1 .select_date_wrap .page1_enddate").val(InitializationEndDate);
+        $(".page2 .select_date_wrap .page2_enddate").val(InitializationEndDate);
+        $(".page3 .select_date_wrap .page3_enddate").val(InitializationEndDate);
+        
+
         // 公共
         // 改变tab样式
         function changeTabClass(el) {
@@ -546,6 +575,9 @@
         // 上半 请求数据公共方法
         // *********** 开始 上半 *********** 
         var page1RequestData = function(type){
+            clearSelect2();
+            $('.page2 .right_result_wrap .result_wrap').html('');
+            $('.page3 .right_result_wrap .result_wrap').html('');
             let startDate = $('.page1_startdate').val();
             let endDate = $('.page1_enddate').val();
             let mytargets = $('.page1_search1_data').val();
@@ -580,6 +612,7 @@
             //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
+            //              $("#main4Hourglass").hide();
             //             console.log(results);
             //             // 这里需要将html和js添加到页面上去
             //         }else{
@@ -592,22 +625,24 @@
 
         }
 
-
         // page1-确定按钮点击事件
         $('.page1_confirm_btn').click(function() {
-            page1RequestData($('.page1 .tab_wrap .active').text())
+            page1RequestData($('.page1 .tab_wrap .active').text());
         })
 
         // main4 page1 切换tab
         $('.page1 .right_result_wrap .tab_wrap').on('click', 'span', function() {
             changeTabClass($(this));
-            page1RequestData($(this).text())
+            page1RequestData($(this).text());
         })
         // *********** 结束 上半 *********** 
 
         // 下左 请求数据公共方法
         // *********** 开始 下左 *********** 
         var page2RequestData = function(type){
+            clearSelect2();
+            $('.page1 .right_result_wrap .result_wrap').html('');
+            $('.page3 .right_result_wrap .result_wrap').html('');
             let timespan = $('.selected_time_span').text();
             let cycles = Number($('.selected_cycle_num').text());
             let enddate = $('.page2_enddate').val();
@@ -644,6 +679,7 @@
             //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
+            //              $("#main4Hourglass").hide();
             //             console.log(results);
             //             // 这里需要将html和js添加到页面上去
             //         }else{
@@ -670,13 +706,14 @@
         // 下右 请求数据公共方法 
         // *********** 开始 下右 *********** 
         var page3RequestData = function(type){
-
+            clearSelect2();
+            $('.page1 .right_result_wrap .result_wrap').html('');
+            $('.page2 .right_result_wrap .result_wrap').html('');
             let targets = $('.page3_search1_data').val();
             targets = targets ? JSON.parse(targets) : [];
             let enddate = $('.page3_enddate').val();
             let cycles = $('.page3_time_span_input').val();
             let tabletype = type||$('.page3-table li.selected').text();
-            
 
             if(!enddate || !targets.length>0){
                 return false;
@@ -704,7 +741,7 @@
             //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
-            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+            //              $("#main4Hourglass").hide();
             //             RenderingTable(res);
             //         }else{
             //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
@@ -770,6 +807,19 @@
             changeTabClass($(this))
         })
         // *********** 结束 下右 ***********
+
+        // 
+        $(".page3_time_span_input").on('change',function(){
+            if($(this).val() < 1){
+                $(this).val(1)
+            }else {
+                let regPos = / ^\d+$/; // 非负整数
+                let regNeg = /^[1-9][0-9]*$/; // 正整数
+                if(regPos.test($(this).val()) || regNeg.test($(this).val())){
+                    $(this).val(1)
+                }
+            }
+        })
 
         // 查询1弹框选定按钮点击事件
         $('.search1_confirm_btn').click(function() {
@@ -842,7 +892,18 @@
             $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
         }
 
-
+        // 清理select2选择
+        function clearSelect2(){
+            // 
+            $(".selector.selector1.select2-hidden-accessible").val("请选择：").select2({});
+            $(".selector.selector2.select2-hidden-accessible").val("请选择：").select2({});
+            $(".selector.target_selector.select2-hidden-accessible").val("请选择：").select2({});
+            // 
+            $(".selector.target_selector.select2-hidden-accessible").attr('disabled',false);
+            // 
+            $(".page1_search1_data").val("");
+            $(".page1_search2_data").val("");
+        }
 
     })
 </script>

@@ -420,7 +420,7 @@
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.ticket_selector_wrap .selector`).append(frag)
+            $(`.ticket_selector_wrap .selector`).html(frag)
         }else {
             // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
@@ -438,7 +438,7 @@
                 select2Data.map(data => {
                     frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $('#main1-select1').append(frag)
+                $('#main1-select1').html(frag)
             });
         }
 
@@ -456,7 +456,7 @@
             sectorData.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.segments_selector_wrap .selector`).append(frag)
+            $(`.segments_selector_wrap .selector`).html(frag)
         }else {
             // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
@@ -472,7 +472,7 @@
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.segments_selector_wrap .selector`).append(frag)
+                $(`.segments_selector_wrap .selector`).html(frag)
             });
         }
 
@@ -522,10 +522,9 @@
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.segments_selector_wrap .selectors`).append(frag);
+                $(`.segments_selector_wrap .selectors`).html(frag);
             });
         })
-
 
         // 添加板块按钮点击事件
         $('.container .top_wrap .add_btn').click(function() {
@@ -553,7 +552,7 @@
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(".right_wrap .ticket_selector_wrap .selectors").append(frag);
+            $(".right_wrap .ticket_selector_wrap .selectors").html(frag);
 
             // 加上data-type="add"，表示这是添加板块
             $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
@@ -605,7 +604,7 @@
                 ticket.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.ticket_selector_wrap .selectors`).append(frag);
+                $(`.ticket_selector_wrap .selectors`).html(frag);
             });
         })
 
@@ -634,7 +633,7 @@
                 method:"update"
             }
             console.log('data', data,"main2 >>> 583行");
-
+            
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             Disabled(false);
@@ -645,7 +644,8 @@
                 success: function(res){
                     let results = JSON.parse(res);
                     if(res.status===200){
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+                        $('.ticket_detail_wrap').addClass('hide');
                     }else{
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
@@ -655,7 +655,6 @@
                 }
             })
         })
-
 
         // main2-输入板块代码后确定按钮点击事件
         $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').click(function() {
@@ -690,7 +689,6 @@
             }
             console.log('data', data,"main2 >>> 631")
 
-
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             Disabled(false);
@@ -702,6 +700,7 @@
                     let results = JSON.parse(res)
                     if(res.status===200){
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                        $('.add_segments_wrap').addClass('hide');
                     }else{
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
@@ -713,9 +712,12 @@
         })
         // 删除事件
         $('.add_segments_wrap .ticket_selector_wrap .remove_btn').click(function() {
+            $("#main2Hourglass").modal('toggle');
+            $("#main2Hourglass .modal-body").html('<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button><button type="button" class="btn btn-warning">确认删除</button>');
+        })
+        $("#main2Hourglass .modal-body").on("click",".btn-warning",function(){
             let scode = $('.add_segments_wrap .code_input').val()
             let shortname = $('.add_segments_wrap .name_input').val()
-            $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             Disabled(false);
 
@@ -793,7 +795,9 @@
             }else{
                 $('.add_btn').attr('disabled',false);
                 $('.ticket_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').val("请选择：").select2({});
                 $('.segments_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+                $(".segments_selector_wrap .selector.select2-hidden-accessible").val("请选择：").select2({});
             }
         }
 

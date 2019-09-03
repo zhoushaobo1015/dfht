@@ -405,6 +405,9 @@ if(sessionS === null || sessionS === "undefined" ){
 }
 
 var requestData = function(sendData){
+    $(".selector.selector1.select2-hidden-accessible").val("请选择：").select2({});
+    $(".selector.selector2.select2-hidden-accessible").val("请选择：").select2({});
+    $(".selector.target_selector.select2-hidden-accessible").val("请选择：").select2({});
     $("#main3Hourglass").modal('toggle');
     $("#main3Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
     $.ajax({
@@ -436,7 +439,7 @@ var onShowSelect1Get = function() {
         selectData.map(data => {
             frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
         })
-        $(`.${className}_wrap .${className}`).append(frag)
+        $(`.${className}_wrap .${className}`).html(frag)
     }
     let { group, macro, sector, ticket } = JSON.parse( sessionS )
     // 查询1单标的选择数据
@@ -491,7 +494,7 @@ var onShowSelect2Get = function() {
     features.map(data => {
         frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
     })
-    $(`.target_selector_wrap .target_selector`).append(frag)
+    $(`.target_selector_wrap .target_selector`).html(frag)
 }
 
 // main3 btn1

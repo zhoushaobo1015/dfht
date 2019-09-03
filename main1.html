@@ -267,7 +267,7 @@
                 select2Data.map(data => {
                     frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0]);
                 })
-                $('#main1-select1').append(frag);
+                $('#main1-select1').html(frag);
             }else {
                 $.get("/dfht/ajax_get_options/",function(result){
                     let { macro } = JSON.parse(result);
@@ -282,7 +282,7 @@
                     select2Data.map(data => {
                         frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                     })
-                    $('#main1-select1').append(frag)
+                    $('#main1-select1').html(frag)
                 });
             }
 
@@ -416,7 +416,6 @@
                 $("#main1Hourglass").modal('toggle');
                 $("#main1Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
                 Disabled(false);
-                // $('.formOne').empty();
                 $.ajax({
                     url: '/dfht/ajax_get_target/',  //获取线上代码需要解开这里
                     type: "post",
@@ -425,6 +424,7 @@
                         let res = JSON.parse(response);
                         if(res.status===200){
                             $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>')
+                            $('.formOne').empty();
                         }else{
                             $("#main1Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+res.msg+'</div></div>')
                         }
@@ -595,6 +595,7 @@
                 }else{
                     $('.formAdd').attr('disabled',false);
                     $('.main1-select1').attr('disabled',false);
+                    $("#main1-select1").val("请选择：").select2({});
                 }
             }
         });

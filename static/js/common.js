@@ -281,77 +281,6 @@ $(function() {
         return selected
     }
 
-    // // 查询1弹框选定按钮点击事件
-    // $('.search1_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     // 获取到所有选中的数据
-    //     console.log('dataArr', dataArr)
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search1Popup').data('page')
-    //     $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
-    //     $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
-    //     // 关闭弹框
-    //     $("#search1Popup").modal('toggle');
-    //     $('#search1Popup').removeAttr('data-page');
-    // })
-
-    // // 获取选择的列表数据
-    // function getSelectedListData(selectedListGroup) {
-    //     let selectedItems = selectedListGroup.children()
-    //     let dataArr = []
-    //     Array.prototype.slice.call(selectedItems).map(item => {
-    //         let id = $(item).data('id')
-    //         let pinyin = $(item).data('pinyin')
-    //         let text = $(item).text()
-    //         dataArr.push({
-    //             id,
-    //             pinyin,
-    //             text
-    //         })
-    //     })
-    //     return dataArr
-    // }
-
-    // // 查询2弹框选定按钮点击事件
-    // $('.search2_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     console.log('dataArr', dataArr)
-    //     // 获取数据预处理和标准化处理选中的值
-    //     let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
-    //     let outliers = Number(checkedRadio.val())
-    //     let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
-    //     let standardize = Number(checkedRadio2.val())
-    //     console.log('outliers', outliers)
-    //     console.log('standardize', standardize)
-    //     // 获取到所有选中的数据，存入隐藏的input中
-    //     let data = {
-    //         myfeatures: dataArr,
-    //         outliers,
-    //         standardize
-    //     }
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search2Popup').data('page')
-    //     $(`.${page}_search2_data`).val(JSON.stringify(data))
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
-    //     initRadio()
-    //     // 关闭弹框
-    //     $("#search2Popup").modal('toggle');
-    //     $('#search2Popup').removeAttr('data-page')
-    // })
-    
-    // // 初始化单选按钮
-    // function initRadio() {
-    //     $('.data_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
-    //     $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
-    // }
-
     // 请求查询弹框1需要的数据
     function getSearch1Data() {
         var sessionS = sessionStorage.getItem('myoptions');
@@ -371,7 +300,7 @@ $(function() {
             selectData.map(data => {
                 frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.${className}_wrap .${className}`).append(frag)
+            $(`.${className}_wrap .${className}`).html(frag)
         }
     }
 
@@ -386,6 +315,6 @@ $(function() {
         features.map(data => {
             frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
         })
-        $(`.target_selector_wrap .target_selector`).append(frag)
+        $(`.target_selector_wrap .target_selector`).html(frag)
     }
 });
