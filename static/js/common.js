@@ -6,25 +6,26 @@ var onClickModule = function(id, type){
     }
 }
 
-$(function() {
-
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
-    
-    var csrftoken = getCookie('csrftoken');
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+$(function() {
+
     
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
@@ -228,7 +229,7 @@ $(function() {
                         for(let i=0;i<result.memberlist.length;i++){
                             li += `<li class="list-group-item" data-id=${result.memberlist[i]["id"]} data-pinyin=${result.memberlist[i]["pinyin"]}>${result.memberlist[i]["text"]}</li>`
                         }
-                        $(`.${className}_wrap .list-group`).append(li);
+                        $(`.${className}_wrap .list-group`).html(li);
                     }
                 });
             }

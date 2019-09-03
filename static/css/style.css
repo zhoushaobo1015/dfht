@@ -198,6 +198,7 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .search_wrap {
   height: 100%;
@@ -209,6 +210,11 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 .left_search_wrap .confirm_btn {
   width: 60%;
+  position: absolute;
+  top: 5px;
+}
+.left_search_wrap .page_confirm_btn_again {
+ display: none;
 }
 .text_input_wrap, .time_span_wrap {
   /* width: 140px; */
