@@ -550,7 +550,7 @@
             let { myfeatures, outliers, standardize } = search2Data
             let charttype = type || $('.page1 .tab_wrap .active').text();
 
-            if(!startDate || !endDate || !targets.length>0 || !myfeatures.length>0 ){
+            if(!startDate || !endDate || !mytargets || !mytargets.length>0 || !myfeatures || !myfeatures.length>0 ){
                 return false;
             }
 
@@ -608,7 +608,7 @@
             let { myfeatures, outliers, standardize } = search2Data;
             let charttype = type || $('.page2 .tab_wrap .active').text();
 
-            if(!enddate || !targets.length>0 || !myfeatures.length>0 ){
+            if(!enddate || !targets || !targets.length>0 || !myfeatures || !myfeatures.length>0 ){
                 return false;
             }
 
@@ -661,7 +661,7 @@
             let cycles = $('.page3_time_span_input').val();
             let tabletype = type||$('.page3-table li.selected').text();
             
-            if(!enddate || !targets.length>0){
+            if(!enddate || !targets || !targets.length>0){
                 return false;
             }
 
@@ -748,7 +748,7 @@
             // 获取到所有选中的数据
             console.log('dataArr', dataArr)
             // 获得弹框时从哪个page点击弹出的
-            let page = $('#search1Popup').data('page')
+            let page = $('#search1Popup').attr('data-page')
             $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
             // 清空数据
             selectedListGroup.empty()
@@ -795,7 +795,7 @@
                 standardize
             }
             // 获得弹框时从哪个page点击弹出的
-            let page = $('#search2Popup').data('page')
+            let page = $('#search2Popup').attr('data-page')
             $(`.${page}_search2_data`).val(JSON.stringify(data))
             // 清空数据
             selectedListGroup.empty()
