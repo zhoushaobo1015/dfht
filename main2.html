@@ -227,8 +227,8 @@
                             <select class="selector">
                             </select>
                         </div>
+                        <button class="add_btn btn btn-primary">&nbsp;添加板块&nbsp;</button>
                     </div>
-                    <button class="add_btn btn btn-primary">&nbsp;添加板块&nbsp;</button>
                 </div>
                 <div class="content_wrap">
                     <div class="ticket_detail_wrap hide">
@@ -291,15 +291,11 @@
                             </div>
                         </div>
                         <div class="right_wrap">
-                            <div class="add_wrap">
-                                <span>《《（添加）</span>
-                            </div>
                             <div class="selector_wrap segments_selector_wrap">
                                 <p>
-                                    <span>增加成分股</span>
-                                    <br />
-                                    <select class="selectors"> </select>
+                                    <span>增板块</span>
                                 </p>
+                                <select class="selectors main2_1_selector"> </select>
                                 <div class="btn_wrap">
                                     <button class="confirm_btn btn btn-primary">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
                                     <button class="cancel_btn btn btn-primary">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
@@ -352,19 +348,16 @@
                             </div>
                         </div>
                         <div class="right_wrap">
-                            <div class="add_wrap">
-                                <span>《《（添加）</span>
-                            </div>
                             <div class="selector_wrap ticket_selector_wrap">
                                 <p>
-                                    <span>增加所在的板块</span>
-                                    <br />
-                                    <select class="selectors"></select>
+                                    <span>增加成分股</span>
                                 </p>
+                                <select class="selectors main2_2_selector"></select>
+
                                 <div class="btn_wrap">
                                     <button class="confirm_btn btn btn-primary">&nbsp;确定&nbsp;</button>
                                     <button class="cancel_btn btn btn-primary">&nbsp;取消&nbsp;</button>
-                                    <button class="cancel_btn btn btn-primary">&nbsp;删除&nbsp;</button>
+                                    <button class="remove_btn btn btn-primary">&nbsp;删除&nbsp;</button>
                                 </div>
                             </div>
                         </div>
@@ -415,7 +408,6 @@
 
 <script>
     $(function(){
-
         // 判断session中是否有内容如果没有请求数据 -->> 股票
         var sessionS = sessionStorage.getItem('myoptions');
         if(sessionS !== null && sessionS !== "undefined" ){
@@ -428,7 +420,7 @@
             ticket.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.ticket_selector_wrap .selector`).append(frag)
+            $(`.ticket_selector_wrap .selector`).html(frag)
         }else {
             // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
@@ -446,7 +438,7 @@
                 select2Data.map(data => {
                     frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $('#main1-select1').append(frag)
+                $('#main1-select1').html(frag)
             });
         }
 
@@ -464,7 +456,7 @@
             sectorData.map(data => {
                 frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.segments_selector_wrap .selector`).append(frag)
+            $(`.segments_selector_wrap .selector`).html(frag)
         }else {
             // let url = "/dfht/ajax_get_options/"; //上线解开这个即可
             let url = './static/json/myoptions.json'; //上线需要删除
@@ -480,7 +472,7 @@
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.segments_selector_wrap .selector`).append(frag)
+                $(`.segments_selector_wrap .selector`).html(frag)
             });
         }
 
@@ -493,6 +485,15 @@
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
             
+            if($(this).find('option:checked').text() === "请选择："){
+                $(this).find('option:checked').siblings().checked = false;
+                $('.add_segments_wrap').addClass('hide')
+                $('.ticket_detail_wrap').addClass('hide')
+                return false;
+            }
+
+            Disabled(true);
+
             // let url = "/dfht/ajax_get_target/" //线上解开
             let url = "./static/json/sample_股票.json"
 
@@ -521,10 +522,41 @@
                 sector.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.segments_selector_wrap .selectors`).append(frag);
+                $(`.segments_selector_wrap .selectors`).html(frag);
             });
         })
 
+        // 添加板块按钮点击事件
+        $('.container .top_wrap .add_btn').click(function() {
+            Disabled(true);
+            $('.add_segments_wrap').removeClass('hide')
+            $('.ticket_detail_wrap').addClass('hide')
+            // 清空数据
+            $('.add_segments_wrap .notes').val('')
+            $('.add_segments_wrap .code_input').val('')
+            $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
+            $('.add_segments_wrap .name_input').val('')
+            $('.add_segments_wrap .main2_startdate').val('');   
+            $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
+            // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
+            $('.ticket_selector_wrap .btn_wrap .remove_btn').hide();
+            $('.ticket_selector_wrap .btn_wrap .confirm_btn').addClass("new")
+            $('.selected_cfg_wrap ul').empty();
+            var sessionS = sessionStorage.getItem('myoptions');
+            let {ticket} = JSON.parse( sessionS );
+
+            var frag = document.createDocumentFragment();
+            if (ticket.length > 0) {
+                frag.append($('<option>请选择：</option>')[0])
+            }
+            ticket.map(data => {
+                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+            })
+            $(".right_wrap .ticket_selector_wrap .selectors").html(frag);
+
+            // 加上data-type="add"，表示这是添加板块
+            $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
+        })
 
         // 选择板块选项
         $('.top_wrap .segments_selector_wrap .selector').on('select2:select', function() {
@@ -535,9 +567,19 @@
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text();
+
+            if($(this).find('option:checked').text() === "请选择："){
+                $(this).find('option:checked').siblings().checked = false;
+                $('.add_segments_wrap').addClass('hide')
+                $('.ticket_detail_wrap').addClass('hide')
+                return false;
+            }
+
+            Disabled(true);
+
             // let url = "/dfht/ajax_get_target/" //线上时候需要开启这里
             let url = "./static/json/sample_板块.json"
-            $.get(url,{id: id}, function(result) {
+            $.get(url,{id: id,method:"update"}, function(result) {
                 // var datas = JSON.parse(result); //线上解开
                 var datas = result;
                 $('.add_segments_wrap .code_input').val(datas.scode)
@@ -547,7 +589,8 @@
                 $('.add_segments_wrap .grouping_selector_wrap .selector').val(datas.sec_group).select2()
                 $('.add_segments_wrap .notes').val(datas.notes)
                 $('.add_segments_wrap ul').empty();
-                
+                $('.ticket_selector_wrap .btn_wrap .remove_btn').show();
+                $('.ticket_selector_wrap .btn_wrap .confirm_btn').removeClass("new")
                 // 2 select2 选择后
                 datas.memberlist.map(item => {
                     $('.add_segments_wrap .list-group').append(`<li data-id=${item.id} class="list-group-item">${item.text}</li>`)
@@ -561,12 +604,12 @@
                 ticket.map(data => {
                     frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
                 })
-                $(`.ticket_selector_wrap .selectors`).append(frag);
+                $(`.ticket_selector_wrap .selectors`).html(frag);
             });
         })
 
         // main2-输入股票代码后确定按钮点击事件
-        $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {
+        $('.ticket_detail_wrap .segments_selector_wrap .confirm_btn').click(function() {           
             let end_date = $('.main2_enddate').val()
             let start_date = $('.main2_startdate').val()
             let groupbelong = []
@@ -587,11 +630,13 @@
                 shortname,
                 start_date,
                 tcode,
+                method:"update"
             }
-            console.log('data', data,"main2 >>> 528行");
-
+            console.log('data', data,"main2 >>> 583行");
+            
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
@@ -599,7 +644,8 @@
                 success: function(res){
                     let results = JSON.parse(res);
                     if(res.status===200){
-                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
+                        $('.ticket_detail_wrap').addClass('hide');
                     }else{
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
@@ -609,7 +655,6 @@
                 }
             })
         })
-
 
         // main2-输入板块代码后确定按钮点击事件
         $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').click(function() {
@@ -625,6 +670,13 @@
                 let name = $(item).text()
                 memberlist.push([id, name])
             })
+            if(!scode||!shortname){
+                return false;
+            }
+            let method = "update";
+            if ($('.ticket_selector_wrap .btn_wrap .confirm_btn').hasClass('new')){
+                method = "add"
+            }
             let data = {
                 memberlist,
                 notes,
@@ -632,17 +684,49 @@
                 sec_group,
                 shortname,
                 startdate,
-                stype
+                stype,
+                method,
             }
-            console.log('data', data,"main2 >>> 555行")
-
+            console.log('data', data,"main2 >>> 631")
 
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
                 data: JSON.stringify( data ),
+                success: function(res){
+                    let results = JSON.parse(res)
+                    if(res.status===200){
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                        $('.add_segments_wrap').addClass('hide');
+                    }else{
+                        $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+                    }
+                },
+                error: function(err){
+                    $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>提交失败</div></div>')
+                }
+            })
+        })
+        // 删除事件
+        $('.add_segments_wrap .ticket_selector_wrap .remove_btn').click(function() {
+            $("#main2Hourglass").modal('toggle');
+            $("#main2Hourglass .modal-body").html('<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button><button type="button" class="btn btn-warning">确认删除</button>');
+        })
+        $("#main2Hourglass .modal-body").on("click",".btn-warning",function(){
+            let scode = $('.add_segments_wrap .code_input').val()
+            let shortname = $('.add_segments_wrap .name_input').val()
+            $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
+            Disabled(false);
+
+            $('.add_segments_wrap').addClass('hide')
+
+            $.ajax({
+                "url":"/dfht/ajax_get_target/",
+                "type":"post",
+                data: JSON.stringify( {method:"remove",scode,shortname} ),
                 success: function(res){
                     let results = JSON.parse(res)
                     if(res.status===200){
@@ -656,6 +740,67 @@
                 }
             })
         })
+
+        // 添加股票事件
+        $('.main2_1_selector').on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id');
+            let text = checkedItem.text()
+            if (!id || itemIsExist(id, 'selected_segments')) {
+                return
+            }
+            $('.selected_segments_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+        })
+        // 添加板块事件
+        $('.main2_2_selector').on('select2:select', function(){
+            let checkedItem = $(this).find('option:checked')
+            let id = checkedItem.data('id');
+            let text = checkedItem.text()
+            if (!id || itemIsExist(id, 'selected_cfg')) {
+                return
+            }
+            $('.selected_cfg_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
+        })
+
+        // 判断选择的选项是否已在列表中
+        function itemIsExist(id, className) {
+            let exist = false
+            $(`.${className}_wrap .list-group`).children().each(function(i, item) {
+                if (id === $(item).data('id')) {
+                    exist = true
+                }
+            })
+            return exist
+        }
+
+
+        // main2-输入股票代码后取消按钮点击事件
+        $('.segments_selector_wrap .cancel_btn').click(function() {
+            Disabled(false);
+            $('.ticket_detail_wrap').addClass('hide')
+        })
+
+        // main2-输入板块代码后取消按钮点击事件
+        $('.add_segments_wrap .cancel_btn').click(function() {
+            Disabled(false);
+            $('.add_segments_wrap').addClass('hide');
+            $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').removeAttr('data-type')
+        })
+
+        function Disabled(type){
+            if(type){
+                $('.add_btn').attr('disabled',true);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').attr('disabled',true);
+                $('.segments_selector_wrap .selector.select2-hidden-accessible').attr('disabled',true);
+            }else{
+                $('.add_btn').attr('disabled',false);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+                $('.ticket_selector_wrap .selector.select2-hidden-accessible').val("请选择：").select2({});
+                $('.segments_selector_wrap .selector.select2-hidden-accessible').attr('disabled',false);
+                $(".segments_selector_wrap .selector.select2-hidden-accessible").val("请选择：").select2({});
+            }
+        }
+
     })
 
 </script>

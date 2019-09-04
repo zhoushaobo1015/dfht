@@ -6,25 +6,26 @@ var onClickModule = function(id, type){
     }
 }
 
-$(function() {
-
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
-    
-    var csrftoken = getCookie('csrftoken');
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+$(function() {
+
     
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
@@ -75,73 +76,10 @@ $(function() {
         return null;
     }
 
-    // 添加板块事件
-    $('.ticket_detail_wrap .right_wrap .add_wrap').click(function() {
-        let checkedOption = $('.right_wrap .segments_selector_wrap .selectors').find('option:checked');
-        let id = checkedOption.data('id')
-        let text = checkedOption.text()
-        if (!id || itemIsExist(id, 'selected_segments')) {
-            return
-        }
-        $('.selected_segments_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
-    })
-
-    
-
-    // main2-输入股票代码后取消按钮点击事件
-    $('.segments_selector_wrap .cancel_btn').click(function() {
-        $('.ticket_detail_wrap').addClass('hide')
-    })
-
-    // 添加股票事件
-    $('.add_segments_wrap .right_wrap .add_wrap').click(function() {
-        let checkedOption = $('.right_wrap .ticket_selector_wrap .selectors').find('option:checked');
-        let id = checkedOption.data('id')
-        let text = checkedOption.text()
-        if (!id || itemIsExist(id, 'selected_cfg')) {
-            return
-        }
-        $('.selected_cfg_wrap ul').append(`<li data-id=${id} class="list-group-item">${text}</li>`)
-    })
-
-    // main2-输入板块代码后取消按钮点击事件
-    $('.add_segments_wrap .cancel_btn').click(function() {
-        $('.add_segments_wrap').addClass('hide');
-        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').removeAttr('data-type')
-    })
 
     // 已选择的板块或成分股点击事件
     $('.center_wrap >div ul').on('dblclick', 'li', function() {
         $(this).remove();
-    })
-
-    // 添加板块按钮点击事件
-    $('.container .top_wrap .add_btn').click(function() {
-        $('.add_segments_wrap').removeClass('hide')
-        $('.ticket_detail_wrap').addClass('hide')
-        // 清空数据
-        $('.add_segments_wrap .notes').val('')
-        $('.add_segments_wrap .code_input').val('')
-        $('.add_segments_wrap .grouping_selector_wrap .selector').val('').select2()
-        $('.add_segments_wrap .name_input').val('')
-        $('.add_segments_wrap .main2_startdate').val('');   
-        $('.add_segments_wrap .type_selector_wrap .selector').val('').select2();
-        // $(".right_wrap .ticket_selector_wrap .selectors").html('').select2();
-        $('.selected_cfg_wrap ul').empty();
-        var sessionS = sessionStorage.getItem('myoptions');
-        let {ticket} = JSON.parse( sessionS );
-
-        var frag = document.createDocumentFragment();
-        if (ticket.length > 0) {
-            frag.append($('<option>请选择：</option>')[0])
-        }
-        ticket.map(data => {
-            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-        })
-        $(".right_wrap .ticket_selector_wrap .selectors").append(frag);
-
-        // 加上data-type="add"，表示这是添加板块
-        $('.add_segments_wrap .ticket_selector_wrap .confirm_btn').attr('data-type', 'add')
     })
 
     // main4
@@ -238,28 +176,62 @@ $(function() {
     // 查询弹框中选择事件
     function selectData(className) {
         $(`.${className}`).on('select2:select', function(){
+            // 判断标的选择查询1
+            if(className === 'target_selector'){
+                let mytargets = $('.page1_search1_data').val() || $('.page2_search1_data').val();
+                mytargets = mytargets ? JSON.parse(mytargets) : [];
+                if(mytargets.length > 1){
+                    $(".target_selector").attr('disabled',true);
+                }
+            }
+
+            if(className === "selector1" || className === "selector2"){
+                let search2Data = $('.page1_search2_data').val() || $('.page2_search2_data').val() ;
+                search2Data = search2Data ? JSON.parse(search2Data) : {myfeatures: [], outliers: '', standardize: ''};
+                let { myfeatures, outliers, standardize } = search2Data;
+                if(myfeatures.length>1){
+                    $(".selector1").attr('disabled',true);
+                    $(".selector2").attr('disabled',true);
+                }
+            }
+
             let checkedItem = $(this).find('option:checked')
             let id = checkedItem.data('id')
             let pinyin = checkedItem.data('pinyin')
             let text = checkedItem.text()
-
-            let canAdd = true
-            let selector1Length = $('.selector1_wrap .list-group').children().length
-            let selector2Length = $('.selector2_wrap .list-group').children().length
-            if (className === 'selector1') {
-                // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
-                if (selector2Length > 1 && selector1Length === 1) {
-                    canAdd = false
+            if('selector2'!==className) {
+                let canAdd = true
+                let selector1Length = $('.selector1_wrap .list-group').children().length
+                let selector2Length = $('.selector2_wrap .list-group').children().length
+                if (className === 'selector1') {
+                    // 如果selector2已经选了多个，并且selector1已经选了1个，不可继续添加
+                    if (selector2Length > 1 && selector1Length === 1) {
+                        canAdd = false
+                    }
+                } else if (className === 'selector2') {
+                    // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
+                    if (selector1Length > 1 && selector2Length === 1) {
+                        canAdd = false
+                    }
                 }
-            } else if (className === 'selector2') {
-                // 如果selector1已经选了多个，并且selector2已经选了1个，不可继续添加
-                if (selector1Length > 1 && selector2Length === 1) {
-                    canAdd = false
+    
+                if (canAdd && !itemIsExist(id, className) && text !== '请选择：') {
+                    $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
                 }
-            }
-
-            if (canAdd && !itemIsExist(id, className) && text !== '请选择：') {
-                $(`.${className}_wrap .list-group`).append(`<li class="list-group-item" data-id=${id} data-pinyin=${pinyin}>${text}</li>`)
+            }else{
+                // let url = "/dfht/ajax_get_target/?id="+id+"&detail=0"; //上线解开这个即可
+                let url = './static/json/sample_组.json'; //上线需要删除
+                $.get(url,function(res){
+                    // let result = JSON.parse(res);  //上线解开
+                    let result = res;   //上线需要删除
+                    if(result.memberlist.length>0){
+                        let li = ""
+                        for(let i=0;i<result.memberlist.length;i++){
+                            li += `<li class="list-group-item" data-id=${result.memberlist[i]["id"]} data-pinyin=${result.memberlist[i]["pinyin"]}>${result.memberlist[i]["text"]}</li>`
+                        }
+                        $(`.${className}_wrap .list-group`).html(li);
+                    }
+                });
             }
         })
     }
@@ -310,90 +282,16 @@ $(function() {
         return selected
     }
 
-    // // 查询1弹框选定按钮点击事件
-    // $('.search1_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     // 获取到所有选中的数据
-    //     console.log('dataArr', dataArr)
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search1Popup').data('page')
-    //     $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
-    //     $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
-    //     // 关闭弹框
-    //     $("#search1Popup").modal('toggle');
-    //     $('#search1Popup').removeAttr('data-page');
-    // })
-
-    // // 获取选择的列表数据
-    // function getSelectedListData(selectedListGroup) {
-    //     let selectedItems = selectedListGroup.children()
-    //     let dataArr = []
-    //     Array.prototype.slice.call(selectedItems).map(item => {
-    //         let id = $(item).data('id')
-    //         let pinyin = $(item).data('pinyin')
-    //         let text = $(item).text()
-    //         dataArr.push({
-    //             id,
-    //             pinyin,
-    //             text
-    //         })
-    //     })
-    //     return dataArr
-    // }
-
-    // // 查询2弹框选定按钮点击事件
-    // $('.search2_confirm_btn').click(function() {
-    //     let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
-    //     let dataArr = getSelectedListData(selectedListGroup)
-    //     console.log('dataArr', dataArr)
-    //     // 获取数据预处理和标准化处理选中的值
-    //     let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
-    //     let outliers = Number(checkedRadio.val())
-    //     let checkedRadio2 = $('#search2Popup .standard_preprocessing_radio_wrap .radio input:checked')
-    //     let standardize = Number(checkedRadio2.val())
-    //     console.log('outliers', outliers)
-    //     console.log('standardize', standardize)
-    //     // 获取到所有选中的数据，存入隐藏的input中
-    //     let data = {
-    //         myfeatures: dataArr,
-    //         outliers,
-    //         standardize
-    //     }
-    //     // 获得弹框时从哪个page点击弹出的
-    //     let page = $('#search2Popup').data('page')
-    //     $(`.${page}_search2_data`).val(JSON.stringify(data))
-    //     // 清空数据
-    //     selectedListGroup.empty()
-    //     $('#search2Popup .target_selector_wrap .selected_item_wrap ul').empty()
-    //     initRadio()
-    //     // 关闭弹框
-    //     $("#search2Popup").modal('toggle');
-    //     $('#search2Popup').removeAttr('data-page')
-    // })
-    
-    // // 初始化单选按钮
-    // function initRadio() {
-    //     $('.data_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
-    //     $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
-    // }
-
     // 请求查询弹框1需要的数据
     function getSearch1Data() {
-        console.log("~.~")
-
-        $.get("/static/json/myoptions.json",function(result){
-            let { group, macro, sector, ticket } = result
-            // 查询1单标的选择数据
-            let select1Data = [...group, ...macro, ...sector, ...ticket]
-            // 查询1全部成分数据
-            let select2Data = [...ticket, ...group]
-            appendData(select1Data, 'selector1')
-            appendData(select2Data, 'selector2')
-        });
+        var sessionS = sessionStorage.getItem('myoptions');
+        let { group, macro, sector, ticket } = JSON.parse( sessionS )
+        // 查询1单标的选择数据
+        let select1Data = [ ...macro, ...sector, ...ticket, ...group]
+        // 查询1全部成分数据
+        let select2Data = [...sector, ...group]
+        appendData(select1Data, 'selector1');
+        appendData(select2Data, 'selector2');
         
         function appendData(selectData, className) {
             var frag = document.createDocumentFragment();
@@ -403,22 +301,21 @@ $(function() {
             selectData.map(data => {
                 frag.append($(`<option data-id=${data.id} value=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
             })
-            $(`.${className}_wrap .${className}`).append(frag)
+            $(`.${className}_wrap .${className}`).html(frag)
         }
     }
 
     // 请求查询弹框2需要的数据
     function getSearch2Data() {
-        $.get("/static/json/myoptions.json",function(result){
-            let features = result.features
-            var frag = document.createDocumentFragment();
-            if (selectData.length > 0) {
-                frag.append($('<option>请选择：</option>')[0])
-            }
-            features.map(data => {
-                frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
-            })
-            $(`.target_selector_wrap .target_selector`).append(frag)
-        });
+        var sessionS = sessionStorage.getItem('myoptions');
+        let { features } = JSON.parse( sessionS );
+        var frag = document.createDocumentFragment();
+        if (selectData.length > 0) {
+            frag.append($('<option>请选择：</option>')[0])
+        }
+        features.map(data => {
+            frag.append($(`<option data-id=${data.id} val=${data.pinyin} data-pinyin=${data.pinyin}>${data.text}</option>`)[0])
+        })
+        $(`.target_selector_wrap .target_selector`).html(frag)
     }
 });

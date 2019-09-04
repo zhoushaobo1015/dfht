@@ -1,0 +1,162 @@
+
+
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="./static/img/dfht_favicon.ico"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.3.1.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome-5.9.0.all.min.css">
+    <link rel="stylesheet" href="./static/css/style.css">
+    <link href="./static/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./static/css/bootstrap-datepicker.css">
+    <!-- 画图css -->
+    <link rel="stylesheet" href="./static/css/bokeh-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-widgets-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-tables-1.2.0.min.css">
+
+    <title>
+        宏观择时【1】
+    </title>
+    
+    <style>
+        .nav-item {
+            font-size: 36px;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        /* Sidebar sizes when expanded and expanded */
+        .sidebar-expanded {
+            width: 150px;
+        }
+
+        .sidebar-collapsed {
+            width: 60px;
+        }
+
+        #sidebar-container .list-group a {
+            height: 50px;
+            color: white;
+        }
+
+        /* Separators */
+        .sidebar-separator-title {
+            background-color: #333;
+            height: 35px;
+        }
+
+        .sidebar-separator {
+            background-color: #333;
+            height: 25px;
+        }
+
+        #sidebar-container {
+            min-height: 100%;
+            background-color: #333;
+            padding: 1px;
+        }
+
+        body {
+            background: url("/static/img/bg01.jpg") center / cover no-repeat;
+            min-height: 100vh;
+        }
+
+        .flex-grow {
+            flex: 1;
+        }
+        
+    </style>
+
+</head>
+<body class="d-flex flex-column">
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="./static/js/jquery-3.4.1.min.js"></script>
+<script src="./static/js/popper-1.14.7.min.js"></script>
+<script src="./static/js/bootstrap-4.3.1.min.js"></script>
+<!-- 画图js -->
+<script src="./static/js/bokeh-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-widgets-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-tables-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-gl-1.2.0.min.js"></script>
+
+<button type="button" onclick="chartFunction('卡1_django','chart1')">卡1</button>
+<button type="button" onclick="chartFunction('卡2_python','chart2')">卡2</button>
+<div id="chart1"></div>
+<div id="chart2"></div>
+
+
+
+
+
+</body>
+<script src="./static/js/select2.min.js"></script>
+<script src="./static/js/bootstrap-datepicker.js"></script>
+<script src="./static/js/common.js"></script>
+
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            let cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function chartFunction(charttype,container) {
+        // 获取其它值：startdate,enddate,mytargets, myfeatures, outliers, standardize
+        var postdata = {
+            charttype: charttype,
+            startdate: "2018-01-01",
+            enddate: "2019-01-01",
+            targets: ['000001.XSHG:S', '000016.XSHG:S', '000300.XSHG:S', '000852.XSHG:S', '000905.XSHG:S', '000985.XSHG:S'],
+            features: ["pe_TTM"],
+            outliers: 0,
+            standardize: 2,
+        };
+        var csrftoken = getCookie('csrftoken');
+        var fetchopt = {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify(postdata), // must match 'Content-Type' header 返回在request.body中
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+                'user-agent': 'Mozilla/4.0 MDN Example',
+                'content-type': 'application/json',
+                'X-CSRFToken': csrftoken,   // 必须，否则无法通过 django csrf
+                'X-Requested-With': 'XMLHttpRequest'    // 需要，否则没有django is_ajax()
+            },
+            mode: 'cors', // no-cors, cors, *same-origin#}
+            redirect: 'follow', // manual, *follow, error#}
+            referrer: 'no-referrer', // *client, no-referrer#}
+        };
+
+        $.get('./static/json/画图数据.json',function(data){
+            Bokeh.embed.embed_item(data,container)
+        })
+
+        // fetch("{% url 'dfht:ajax1' %}", fetchopt)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         Bokeh.embed.embed_item(data,container)
+        //         // container 画图div的ID
+        //     })
+        //     .catch(error => console.error(error))
+    }
+</script>
+
+
+</html>

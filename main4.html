@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="./static/css/style.css">
     <link href="./static/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./static/css/bootstrap-datepicker.css">
+    <!-- 画图css -->
+    <link rel="stylesheet" href="./static/css/bokeh-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-widgets-1.2.0.min.css">
+    <link rel="stylesheet" href="./static/css/bokeh-tables-1.2.0.min.css">
+
     <title>
         宏观择时【1】
     </title>
@@ -76,7 +81,11 @@
 <script src="./static/js/jquery-3.4.1.min.js"></script>
 <script src="./static/js/popper-1.14.7.min.js"></script>
 <script src="./static/js/bootstrap-4.3.1.min.js"></script>
-
+<!-- 画图js -->
+<script src="./static/js/bokeh-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-widgets-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-tables-1.2.0.min.js"></script>
+<script src="./static/js/bokeh-gl-1.2.0.min.js"></script>
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark my-2">
@@ -212,7 +221,7 @@
                     });
                 </script>
             </div>
-            <div class="container col mx-3">
+            <div class="container col bg-light mx-3">
                 <!-- ----------------------- -->
                 <div class="main4">
                     <div class="wrap">
@@ -221,6 +230,7 @@
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
                                     <button class="page1_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <br/>
                                     <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
                                     <input class="page1_search1_data" type="hidden">
                                     <input class="page1_search2_data" type="hidden">
@@ -235,6 +245,7 @@
                                     <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
                                 </div>
+                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="tab_wrap">
@@ -245,9 +256,7 @@
                                     <span>卡5</span>
                                     <span>卡6</span>
                                 </div>
-                                <div class="result_wrap">
-                                    <div class="datepicker" data-date-end-date="0d"></div>
-                                </div>
+                                <div class="result_wrap" id="page1_result_wrap"></div>
                             </div>
                         </div>
                         <div class="pages page2">
@@ -255,6 +264,8 @@
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
                                     <button class="page2_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <br />
+                                    <br />
                                     <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
                                     <input class="page2_search1_data" type="hidden">
                                     <input class="page2_search2_data" type="hidden">
@@ -288,7 +299,9 @@
                                     </div>
                                     <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
+
                                 </div>
+                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="tab_wrap">
@@ -299,9 +312,7 @@
                                     <span>卡5</span>
                                     <span>卡6</span>
                                 </div>
-                                <div class="result_wrap">
-
-                                </div>
+                                <div class="result_wrap" id="page2_result_wrap"></div>
                             </div>
                         </div>
                         <div class="pages page3">
@@ -309,6 +320,8 @@
                             <div class="left_search_wrap">
                                 <div class="search_wrap">
                                     <button class="page3_confirm_btn confirm_btn btn btn-primary">确定</button>
+                                    <br />
+                                    <br />
                                     <!-- 隐藏input框，用于存储查询弹框选择的数据 -->
                                     <input class="page3_search1_data" type="hidden">
                                     <input class="page3_search2_data" type="hidden">
@@ -322,9 +335,11 @@
                                     </div>
                                     <div class="text_input_wrap time_span_wrap">
                                         <span>时间跨度</span>
-                                        <input class="page3_time_span_input" type="text" />年
+                                        <input class="page3_time_span_input" type="number" />
+                                        <p>年</p>
                                     </div>
                                 </div>
+                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="result_wrap">
@@ -531,6 +546,35 @@
     }
 
     $(function(){
+
+        let d = new Date();
+        let year = d.getFullYear();  // 获取完整的年份(4位,1970)
+        let month = d.getMonth()+1;  // 获取月份(0-11,0代表1月,用的时候记得加上1)
+        let day = d.getDate();  // 获取日(1-31)
+        let hours = d.getHours()+1;  // 获取小时数(0-23)
+        if(hours < 20){
+            day = day - 1;
+        }
+        let InitializationEndDate = year+"-"+month+"-"+day;
+
+        //获取系统当前时间
+        let curDate = (d).getTime();
+        // 将4年的时间单位换算成毫秒
+        let fourYearsTime = (365*3)*24*60*60*1000;
+        //用当前时间-3年时间，得到3年前当前时间
+        let result = curDate - fourYearsTime;
+        let resultDate = new Date(result);
+        let resultyear = resultDate .getFullYear();
+        let resultmonth = resultDate .getMonth() + 1;
+        let resultday = resultDate .getDate();
+        let InitializationStartDate = resultyear+"-"+resultmonth+"-"+resultday
+
+        $(".page1 .select_date_wrap .page1_startdate").val(InitializationStartDate);
+        $(".page1 .select_date_wrap .page1_enddate").val(InitializationEndDate);
+        $(".page2 .select_date_wrap .page2_enddate").val(InitializationEndDate);
+        $(".page3 .select_date_wrap .page3_enddate").val(InitializationEndDate);
+        
+
         // 公共
         // 改变tab样式
         function changeTabClass(el) {
@@ -538,9 +582,55 @@
             el.siblings().removeClass('active');
         }
 
+
+        // 绘制charts图
+        function chartFunction(upData,container) {
+            // 获取其它值：startdate,enddate,mytargets, myfeatures, outliers, standardize
+            var postdata = {
+                charttype: upData.charttype,
+                startdate: upData.startdate,
+                enddate: upData.enddate,
+                targets:  upData.targets,
+                features: upData.features,
+                outliers: upData.outliers,
+                standardize: upData.standardize,
+            };
+            var csrftoken = getCookie('csrftoken');
+            var fetchopt = {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                body: JSON.stringify(postdata), // must match 'Content-Type' header 返回在request.body中
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, same-origin, *omit
+                headers: {
+                    'user-agent': 'Mozilla/4.0 MDN Example',
+                    'content-type': 'application/json',
+                    'X-CSRFToken': csrftoken,   // 必须，否则无法通过 django csrf
+                    'X-Requested-With': 'XMLHttpRequest'    // 需要，否则没有django is_ajax()
+                },
+                mode: 'cors', // no-cors, cors, *same-origin#}
+                redirect: 'follow', // manual, *follow, error#}
+                referrer: 'no-referrer', // *client, no-referrer#}
+            };
+            console.log("chartFunction")
+            $.get('./static/json/画图数据.json',function(data){
+                Bokeh.embed.embed_item(data,container)
+            })
+
+            // fetch("{% url 'dfht:ajax1' %}", fetchopt)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         Bokeh.embed.embed_item(data,container)
+            //         // container 画图div的ID
+            //     })
+            //     .catch(error => console.error(error))
+        }
+
         // 上半 请求数据公共方法
         // *********** 开始 上半 *********** 
         var page1RequestData = function(type){
+            clearSelect2();
+            $('.page2 .right_result_wrap .result_wrap').html('');
+            $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
             let startDate = $('.page1_startdate').val();
             let endDate = $('.page1_enddate').val();
             let mytargets = $('.page1_search1_data').val();
@@ -553,7 +643,7 @@
             if(!startDate || !endDate || !mytargets || !mytargets.length>0 || !myfeatures || !myfeatures.length>0 ){
                 return false;
             }
-
+            showAndHide(true,'page1');
             let data = {
                 charttype, 
                 startdate: startDate,
@@ -564,40 +654,68 @@
                 standardize
             }
 
-            console.log('page1RequestData', data);
+            console.log('page1RequestData >>> 574', data);
 
-            // // 发送请求地方
+            // 测试绘制charts图
+
+            chartFunction(
+                {
+                    charttype: "Top",
+                    startdate: data.startdate,
+                    enddate: data.enddate,
+                    targets:  ['000001.XSHG:S', '000016.XSHG:S', '000300.XSHG:S', '000852.XSHG:S', '000905.XSHG:S', '000985.XSHG:S'],
+                    features: ["pe_TTM"],
+                    outliers: data.outliers,
+                    standardize: data.standardize,
+                },
+                "page1_result_wrap"
+            )
+
+
+
+
+            // 发送请求地方
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
-            //     data: JSON.parse( data ),
-            //     success: function(response){
-            //         // let res = JSON.parse(response);
-            //         console.log(res);
-            //         // 这里需要将html和js添加到页面上去
-            //     },
-            //     error: function(err){
+            //     data: JSON.stringify( data ),
+            //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //              $("#main4Hourglass").hide();
+            //             console.log(results);
+            //             // 这里需要将html和js添加到页面上去
+            //         }else{
+            //             $("#main4Hourglass").modal('toggle');
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
 
-        }
 
+        }
 
         // page1-确定按钮点击事件
         $('.page1_confirm_btn').click(function() {
-            page1RequestData($('.page1 .tab_wrap .active').text())
+            page1RequestData($('.page1 .tab_wrap .active').text());
         })
 
         // main4 page1 切换tab
         $('.page1 .right_result_wrap .tab_wrap').on('click', 'span', function() {
             changeTabClass($(this));
-            page1RequestData($(this).text())
+            page1RequestData($(this).text());
         })
         // *********** 结束 上半 *********** 
 
         // 下左 请求数据公共方法
         // *********** 开始 下左 *********** 
         var page2RequestData = function(type){
+            clearSelect2();
+            $('.page1 .right_result_wrap .result_wrap').html('');
+            $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
             let timespan = $('.selected_time_span').text();
             let cycles = Number($('.selected_cycle_num').text());
             let enddate = $('.page2_enddate').val();
@@ -611,6 +729,7 @@
             if(!enddate || !targets || !targets.length>0 || !myfeatures || !myfeatures.length>0 ){
                 return false;
             }
+            showAndHide(true,'page2');
 
             let data = {
                 timespan,
@@ -623,17 +742,24 @@
                 charttype
             }
 
-            console.log('page2RequestData', data);
+            console.log('page2RequestData >>> 640', data );
             // $.ajax({
             //     url: '/dfht/ajax_drawchart/',  //上线时候需要解开
             //     type: "post",    //上线时候需要解开
             //     data: JSON.stringify( data ),
-            //     success: function(response){
-            //      // let res = JSON.parse(response);
-            //         console.log(res);
-            //         // 这里需要将html和js添加到页面上去
-            //     },
-            //     error: function(err){
+            //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //              $("#main4Hourglass").hide();
+            //             console.log(results);
+            //             // 这里需要将html和js添加到页面上去
+            //         }else{
+            //             $("#main4Hourglass").modal('toggle');
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
         }
@@ -654,7 +780,9 @@
         // 下右 请求数据公共方法 
         // *********** 开始 下右 *********** 
         var page3RequestData = function(type){
-            console.log(type)
+            clearSelect2();
+            $('.page1 .right_result_wrap .result_wrap').html('');
+            $('.page2 .right_result_wrap .result_wrap').html('');
             let targets = $('.page3_search1_data').val();
             targets = targets ? JSON.parse(targets) : [];
             let enddate = $('.page3_enddate').val();
@@ -664,37 +792,50 @@
             if(!enddate || !targets || !targets.length>0){
                 return false;
             }
+            showAndHide(true,'page3');
 
             let data = {
                 cycles,
                 enddate,
                 targets,
-                tabletype
+                tabletype,
             }
-            // let url = '/dfht/ajax_getstattable/',  //上线解开
-            let url = './static/json/sample_'+type+'.json';
 
-            $.get(url,data,function(){
-                RenderingTable(res);
-            })
+            console.log( data );
 
+            //上线解开
+            // $("#main4Hourglass").modal('toggle');
+            // $("#main4Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>'); 
             // $.ajax({
-            //     // url: '/dfht/ajax_getstattable/',  //上线时候需要解开
-            //     url: './static/json/sample_'+type+'.json',
-            //     // type: "post",    //上线时候需要解开
-            //     type: 'get',
-            //     data: JSON.stringify( data ),
-            //     success: function(response){
-            //     // let res = JSON.parse(response);
-            //         RenderingTable(res);
-            //     },
-            //     error: function(err){
-            //         $(".page3-table-content thead").html("")
-            //         $(".page3-table-content tbody").html("<tr><td>暂无数据</td></tr>")
+            //     url: '/dfht/ajax_getstattable/',
+            //     type: "post",
+            //     data: JSON.stringify(data),
+            //     success: function(res){
+            //         $(".target_selector").attr('disabled',false);
+            //         $(".selector1").attr('disabled',false);
+            //         $(".selector2").attr('disabled',false);
+            //         let results = JSON.parse(res);
+            //         if(results.status===200){
+            //              $("#main4Hourglass").hide();
+            //             RenderingTable(res);
+            //         }else{
+            //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
+            //         }
             //     }
             // })
+
+            // 上线删除
+            let url = './static/json/sample_'+type+'.json';
+            $.get(url,data,function(res){
+                RenderingTable(res);
+            });
+
         }
         var RenderingTable = function(data){
+            
+            $(".target_selector").attr('disabled',false);
+            $(".selector1").attr('disabled',false);
+            $(".selector2").attr('disabled',false);
             var thead = "<tr><th>&nbsp;</th>"
             var tbody = "<tr>"
             for(var i=0;i<=data.columns.length;i++){
@@ -707,9 +848,10 @@
                 tbody += "<tr><td>"+data.index[x]+"</td>"
                 for(var y=0;y<data.data[x].length;y++){
                     if(y===1){
-                        if(Number(data.data[x][y].split('%')[0]<25)){
+                        // 修改百分比值的颜色
+                        if(Number(data.data[x][y].split('%')[0]<=25)){
                             tbody += "<td class='red'>"+data.data[x][y]+"</td>"
-                        }else if(Number(data.data[x][y].split('%')[0]>75)){
+                        }else if(Number(data.data[x][y].split('%')[0]>=75)){
                             tbody += "<td class='blue'>"+data.data[x][y]+"</td>"
                         }else {
                             tbody += "<td>"+data.data[x][y]+"</td>"
@@ -741,10 +883,23 @@
         })
         // *********** 结束 下右 ***********
 
+        // 
+        $(".page3_time_span_input").on('change',function(){
+            if($(this).val() < 1){
+                $(this).val(1)
+            }else {
+                let regPos = /^\d+$/; // 非负整数
+                let regNeg = /^[1-9][0-9]*$/; // 正整数
+                if(regPos.test($(this).val()) && !regNeg.test($(this).val())){
+                    $(this).val(1)
+                }
+            }
+        })
+
         // 查询1弹框选定按钮点击事件
         $('.search1_confirm_btn').click(function() {
             let selectedListGroup = $('#search1Popup .selected_list_wrap .list-group')
-            let dataArr = getSelectedListData(selectedListGroup)
+            let dataArr = getSelectedListData(selectedListGroup);
             // 获取到所有选中的数据
             console.log('dataArr', dataArr)
             // 获得弹框时从哪个page点击弹出的
@@ -752,8 +907,8 @@
             $(`.${page}_search1_data`).val(JSON.stringify(dataArr))
             // 清空数据
             selectedListGroup.empty()
-            $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty()
-            $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty()
+            $('#search1Popup .selector1_wrap .selected_item_wrap ul').empty();
+            $('#search1Popup .selector2_wrap .selected_item_wrap ul').empty();
             // 关闭弹框
             $("#search1Popup").modal('toggle');
             $('#search1Popup').removeAttr('data-page');
@@ -773,13 +928,14 @@
                     text
                 })
             })
+            console.log( dataArr )
             return dataArr
         }
 
         // 查询2弹框选定按钮点击事件
         $('.search2_confirm_btn').click(function() {
             let selectedListGroup = $('#search2Popup .selected_list_wrap .list-group')
-            let dataArr = getSelectedListData(selectedListGroup)
+            let dataArr = getSelectedListData(selectedListGroup);
             console.log('dataArr', dataArr)
             // 获取数据预处理和标准化处理选中的值
             let checkedRadio = $('#search2Popup .data_preprocessing_radio_wrap .radio input:checked')
@@ -812,6 +968,40 @@
             $('.standard_preprocessing_radio_wrap .radio:first input').attr('checked', 'checked')
         }
 
+        // 清理select2选择
+        function clearSelect2(){
+            // 
+            $(".selector.selector1.select2-hidden-accessible").val("请选择：").select2({});
+            $(".selector.selector2.select2-hidden-accessible").val("请选择：").select2({});
+            $(".selector.target_selector.select2-hidden-accessible").val("请选择：").select2({});
+            // 
+            $(".selector.target_selector.select2-hidden-accessible").attr('disabled',false);
+            // 
+            // $(".page1_search1_data").val("");
+            // $(".page1_search2_data").val("");
+        }
+
+        $(".page3 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+            showAndHide(false,'page3');
+        })
+        $(".page2 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+            showAndHide(false,'page2');
+        })
+        $(".page1 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+            showAndHide(false,'page1');
+        })
+
+        function showAndHide(type,pageInfo){
+            if(type){
+                $("."+pageInfo+" .left_search_wrap .search_wrap").hide();
+                $("."+pageInfo+" .left_search_wrap .page_confirm_btn_again").show();
+                $("."+pageInfo+" .left_search_wrap").css({"width":"auto","min-width":"55px"});
+            }else{
+                $("."+pageInfo+" .left_search_wrap .search_wrap").show();
+                $("."+pageInfo+" .left_search_wrap .page_confirm_btn_again").hide();
+                $("."+pageInfo+" .left_search_wrap").css({"width":"auto","min-width":"110px"});
+            }
+        }
 
 
     })

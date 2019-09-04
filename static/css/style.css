@@ -118,15 +118,23 @@ fieldset, img { border:0; vertical-align: middle;}
   cursor: pointer;
 }
 .container .right_wrap .selector_wrap {
+  margin-left: 50px;
   padding-top: 160px;
   box-sizing: border-box;
   height: 570px;
-  display: flex;
+  position: relative;
+  min-width: 250px;
+  /* display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
-.container .right_wrap .btn_wrap button:first-child {
-  margin-right: 30px;
+.container .right_wrap .btn_wrap {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.container .right_wrap .btn_wrap button {
+  margin-right: 10px;
 }
 .container .right_wrap .selector_wrap .selector {
   flex-grow: 1;
@@ -176,6 +184,12 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;   
   position: relative;         
 }
+.page1 .result_wrap {
+  min-height: 365px;
+}
+.page2 .result_wrap {
+  min-height: 330px;
+}
 .left_search_wrap {
   box-sizing: border-box;
   width: 10%;
@@ -184,6 +198,7 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .search_wrap {
   height: 100%;
@@ -195,6 +210,11 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 .left_search_wrap .confirm_btn {
   width: 60%;
+  position: absolute;
+  top: 5px;
+}
+.left_search_wrap .page_confirm_btn_again {
+ display: none;
 }
 .text_input_wrap, .time_span_wrap {
   /* width: 140px; */
@@ -293,6 +313,7 @@ fieldset, img { border:0; vertical-align: middle;}
 }
 .page3 .page3_time_span_input {
   width: 100px;
+  text-align: center;
 }
 .page3 .search1_wrap span {
   display: block;
@@ -338,6 +359,9 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   justify-content: center;
   padding: 26px;
+}
+#main4Hourglass .modal-body {
+  text-align: center;
 }
 .selected_list_wrap {
   width: 200px;
@@ -464,6 +488,7 @@ fieldset, img { border:0; vertical-align: middle;}
   display: flex;
   justify-content: center;
   align-self: center;
+  text-align: center;
 }
 #main1Hourglass .modal-body .btn-warning {
   margin-left: 60px;
@@ -473,6 +498,12 @@ fieldset, img { border:0; vertical-align: middle;}
   min-height: 400px;
   border: 1px solid rgba(0,0,0,.125);
   border-radius: 5px;
+}
+#main2Hourglass .modal-body {
+  text-align: center;
+}
+#main2Hourglass .modal-body .btn-warning {
+  margin-left: 60px;
 }
 /* 3 */
 .container .main3 {
