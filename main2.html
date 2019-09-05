@@ -637,6 +637,7 @@
             $("#main2Hourglass").modal('toggle');
             $("#main2Hourglass .modal-body").html('<i class="fa fa-hourglass-start fa-spin fa-3x fa-fw margin-bottom"></i>');
             Disabled(false);
+            // $('.ticket_detail_wrap').empty();
             $.ajax({
                 "url":"/dfht/ajax_get_target/",
                 "type":"post",
@@ -645,7 +646,7 @@
                     let results = JSON.parse(res);
                     if(res.status===200){
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>');
-                        $('.ticket_detail_wrap').addClass('hide');
+                        $('.ticket_detail_wrap').empty();
                     }else{
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }
@@ -700,7 +701,7 @@
                     let results = JSON.parse(res)
                     if(res.status===200){
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-check" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
-                        $('.add_segments_wrap').addClass('hide');
+                        $('.add_segments_wrap').empty();
                     }else{
                         $("#main2Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
                     }

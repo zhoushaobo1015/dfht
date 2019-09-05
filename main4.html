@@ -245,10 +245,12 @@
                                     <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
                                 </div>
-                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="tab_wrap">
+                                    <ul class="confirm_btn_wrap">
+                                        <li class="fa-pull-left"><a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a></li>
+                                    </ul>
                                     <span class="active">卡1</span>
                                     <span>卡2</span>
                                     <span>卡3</span>
@@ -299,12 +301,13 @@
                                     </div>
                                     <button class="search1_btn btn btn-primary">标的选择<br/>查询1</button>
                                     <button class="search2_btn btn btn-primary">指标选择<br/>查询2</button>
-
                                 </div>
-                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="tab_wrap">
+                                    <ul class="confirm_btn_wrap">
+                                        <li class="fa-pull-left"><a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a></li>
+                                    </ul>
                                     <span class="active">卡1</span>
                                     <span>卡2</span>
                                     <span>卡3</span>
@@ -339,14 +342,16 @@
                                         <p>年</p>
                                     </div>
                                 </div>
-                                <a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a>
                             </div>
                             <div class="right_result_wrap">
                                 <div class="result_wrap">
                                     <div class="page3-table">
                                         <div class="tags">
+                                            <ul class="confirm_btn_wrap">
+                                                <li class="fa-pull-left"><a href="javascript:;" class="confirm_btn page_confirm_btn_again">重选</a></li>
+                                            </ul>
                                             <ol class="clearfix">
-                                                <li class="fa-pull-left selected" onclick="">PE</li>
+                                                <li class="fa-pull-left selected">PE</li>
                                                 <li class="fa-pull-left">PB</li>
                                                 <li class="fa-pull-left">PCF</li>
                                                 <li class="fa-pull-left">ROE</li>
@@ -611,6 +616,8 @@
                 redirect: 'follow', // manual, *follow, error#}
                 referrer: 'no-referrer', // *client, no-referrer#}
             };
+            // 绘制图前清空内容
+            $("#"+container).html("");
             $.get('./static/json/画图数据.json',function(data){
                 Bokeh.embed.embed_item(data,container)
             })
@@ -628,8 +635,11 @@
         // *********** 开始 上半 *********** 
         var page1RequestData = function(type){
             clearSelect2();
-            $('.page2 .right_result_wrap .result_wrap').html('');
-            $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
+
+            // 清空page2/page3内容
+            // $('.page2 .right_result_wrap .result_wrap').html('');
+            // $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
+
             let startDate = $('.page1_startdate').val();
             let endDate = $('.page1_enddate').val();
             let mytargets = $('.page1_search1_data').val();
@@ -713,8 +723,11 @@
         // *********** 开始 下左 *********** 
         var page2RequestData = function(type){
             clearSelect2();
-            $('.page1 .right_result_wrap .result_wrap').html('');
-            $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
+
+            // 清空page1/page3内容
+            // $('.page1 .right_result_wrap .result_wrap').html('');
+            // $('.page3 .right_result_wrap .result_wrap .page3-table-content table').html('');
+
             let timespan = $('.selected_time_span').text();
             let cycles = Number($('.selected_cycle_num').text());
             let enddate = $('.page2_enddate').val();
@@ -780,8 +793,11 @@
         // *********** 开始 下右 *********** 
         var page3RequestData = function(type){
             clearSelect2();
-            $('.page1 .right_result_wrap .result_wrap').html('');
-            $('.page2 .right_result_wrap .result_wrap').html('');
+
+            // 清空page1/page2内容
+            // $('.page1 .right_result_wrap .result_wrap').html('');
+            // $('.page2 .right_result_wrap .result_wrap').html('');
+
             let targets = $('.page3_search1_data').val();
             targets = targets ? JSON.parse(targets) : [];
             let enddate = $('.page3_enddate').val();
@@ -980,25 +996,23 @@
             // $(".page1_search2_data").val("");
         }
 
-        $(".page3 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+        $(".page3 .confirm_btn_wrap .page_confirm_btn_again").on("click",function(){
             showAndHide(false,'page3');
         })
-        $(".page2 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+        $(".page2 .confirm_btn_wrap .page_confirm_btn_again").on("click",function(){
             showAndHide(false,'page2');
         })
-        $(".page1 .left_search_wrap .page_confirm_btn_again").on("click",function(){
+        $(".page1 .confirm_btn_wrap .page_confirm_btn_again").on("click",function(){
             showAndHide(false,'page1');
         })
 
         function showAndHide(type,pageInfo){
             if(type){
-                $("."+pageInfo+" .left_search_wrap .search_wrap").hide();
-                $("."+pageInfo+" .left_search_wrap .page_confirm_btn_again").show();
-                $("."+pageInfo+" .left_search_wrap").css({"width":"auto","min-width":"55px"});
+                $("."+pageInfo+" .left_search_wrap").hide();
+                $("."+pageInfo+" .confirm_btn_wrap .page_confirm_btn_again").show();
             }else{
-                $("."+pageInfo+" .left_search_wrap .search_wrap").show();
-                $("."+pageInfo+" .left_search_wrap .page_confirm_btn_again").hide();
-                $("."+pageInfo+" .left_search_wrap").css({"width":"auto","min-width":"110px"});
+                $("."+pageInfo+" .left_search_wrap").show();
+                $("."+pageInfo+" .confirm_btn_wrap .page_confirm_btn_again").hide();
             }
         }
 

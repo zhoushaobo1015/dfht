@@ -322,12 +322,22 @@ fieldset, img { border:0; vertical-align: middle;}
   text-align: center;
   margin-bottom: 5px;
 }
-.page3 .page3-table .tags ol li {
-  padding-right: 20px;
+.pages ul.confirm_btn_wrap li a{
+  display: inline-block;
+  min-width: 35px;
+  padding-right: 5px;
   cursor: pointer;
   font-size: 14px;
-  height: 38px;
-  line-height: 38px;
+  height: 28px;
+  line-height: 28px;
+  display: none;
+}
+.page3 .page3-table .tags ol li {
+  padding-right: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 28px;
+  line-height: 28px;
 }
 .page3 .page3-table .tags ol li.selected {
   color: #487af7;

@@ -50,11 +50,12 @@ $(function() {
     }
 
     // 初始化选择框
-    function initSelector() {
-        $('.selector, .selectors').select2({
-            matcher: matchStart
-        });
-    }
+    $('.selector').select2({
+        matcher: matchStart
+    });
+    $('.selectors').select2({
+        matcher: matchStart
+    });
 
     function matchStart(params, data) {
         if ($.trim(params.term) === '') {
@@ -63,11 +64,12 @@ $(function() {
         if (typeof data.text === 'undefined') {
             return null;
         }
-        let id = $(data.element).attr('data-id')
-        let pinyin = $(data.element).attr('data-pinyin')
+        let id = $(data.element).data('id')
+        let pinyin = $(data.element).data('pinyin')
         if (typeof id === 'undefined' || typeof pinyin === 'undefined') {
             return null
         }
+        pinyin = String(pinyin)
         if (data.text.indexOf(params.term) > -1 || pinyin.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
@@ -111,8 +113,12 @@ $(function() {
             $("#search1Popup").attr('data-page', page)
             $("#search1Popup").modal('toggle');
             getSearch1Data()
-            
-            initSelector()
+            $('.selector').select2({
+                matcher: matchStart
+            });
+            $('.selectors').select2({
+                matcher: matchStart
+            });
         })
 
     }
@@ -127,8 +133,6 @@ $(function() {
             $("#search2Popup").attr('data-page', page)
             $("#search2Popup").modal('toggle');
             getSearch2Data()
-
-            initSelector()
         })
     }
 
@@ -136,15 +140,6 @@ $(function() {
     for (let i = 0; i < 20; i++) {
         $('.cycle_num_wrap .dropdown-menu').append(`<li class="dropdown-item">${i + 1}</li>`)
     }
-
-    // 全屏展示下左page2
-    $('.page2 .switch').click(function() {
-        let display = 'flex'
-        // if (!$('.page2').hasClass('all')) {
-        //     display = 'none'
-        // }
-        $('.page2 .left_search_wrap, .page2 .right_result_wrap').css('display', display)
-    })
     
     // 选择时间跨度
     $('.page2 .time_span_wrap .dropdown-menu').on('click', 'li', function() {
@@ -154,15 +149,6 @@ $(function() {
     // 选择周期数目
     $('.page2 .cycle_num_wrap .dropdown-menu').on('click', 'li', function() {
         $('.page2 .selected_cycle_num').text($(this).text())
-    })
-
-    // 全屏展示下右page3
-    $('.page3 .switch').click(function() {
-        let display = 'flex'
-        // if (!$('.page3').hasClass('all')) {
-        //     display = 'none'
-        // }
-        $('.page3 .left_search_wrap, .page3 .right_result_wrap').css('display', display)
     })
 
     // 查询弹框中的列表项点击事件
