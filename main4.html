@@ -611,7 +611,6 @@
                 redirect: 'follow', // manual, *follow, error#}
                 referrer: 'no-referrer', // *client, no-referrer#}
             };
-            console.log("chartFunction")
             $.get('./static/json/画图数据.json',function(data){
                 Bokeh.embed.embed_item(data,container)
             })
@@ -815,8 +814,8 @@
             //         $(".selector2").attr('disabled',false);
             //         let results = JSON.parse(res);
             //         if(results.status===200){
-            //              $("#main4Hourglass").hide();
-            //             RenderingTable(res);
+            //              $("#main4Hourglass").modal("hide");
+            //             RenderingTable(results.data);
             //         }else{
             //             $("#main4Hourglass .modal-body").html('<div class="wrappers"><div><i class="fa fa-times" aria-hidden="true" style="margin-right:10px;"></i>'+results.msg+'</div></div>')
             //         }
