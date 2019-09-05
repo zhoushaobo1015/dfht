@@ -49,13 +49,13 @@ $(function() {
         });
     }
 
-    // 选择框
-    $('.selector').select2({
-        matcher: matchStart
-    });
-    $('.selectors').select2({
-        matcher: matchStart
-    });
+    // 初始化选择框
+    function initSelector() {
+        $('.selector, .selectors').select2({
+            matcher: matchStart
+        });
+    }
+
     function matchStart(params, data) {
         if ($.trim(params.term) === '') {
             return data;
@@ -63,12 +63,11 @@ $(function() {
         if (typeof data.text === 'undefined') {
             return null;
         }
-        let id = $(data.element).data('id')
-        let pinyin = $(data.element).data('pinyin')
+        let id = $(data.element).attr('data-id')
+        let pinyin = $(data.element).attr('data-pinyin')
         if (typeof id === 'undefined' || typeof pinyin === 'undefined') {
             return null
         }
-        pinyin = String(pinyin)
         if (data.text.indexOf(params.term) > -1 || pinyin.indexOf(params.term) > -1 || id.indexOf(params.term) > -1) {
             var modifiedData = $.extend({}, data, true);
             return modifiedData;
@@ -112,7 +111,10 @@ $(function() {
             $("#search1Popup").attr('data-page', page)
             $("#search1Popup").modal('toggle');
             getSearch1Data()
+            
+            initSelector()
         })
+
     }
 
     search2BtnClick('page1');
@@ -125,6 +127,8 @@ $(function() {
             $("#search2Popup").attr('data-page', page)
             $("#search2Popup").modal('toggle');
             getSearch2Data()
+
+            initSelector()
         })
     }
 
