@@ -24,6 +24,7 @@ function getCookie(name) {
 
 var csrftoken = getCookie('csrftoken');
 
+
 $(function() {
 
     
@@ -84,22 +85,63 @@ $(function() {
     })
 
     // main4
-	$('.pages .switch').click(function(){
-		var $this = $(this);
-        var $parent = $(this).parent();
-        var $brother = $parent.siblings();
-		$this.toggleClass('check');
-		$parent.toggleClass("all");
-        // $parent.animate();
-		if($this.attr('class').indexOf('check')>-1){
-            $brother.css('display','none');
-			$this.html('<i class="fas fa-compress-arrows-alt"></i>')
-        }else{
-            $brother.css('display','flex');
-			$this.html('<i class="fas fa-expand-arrows-alt"></i>')
-		}
-        
+	$('.page1 .switch').click(function(){
+		onClickChange(this,"page1_result_wrap");
     })
+
+    // main4
+	$('.page2 .switch').click(function(){
+		onClickChange(this,"page2_result_wrap");
+    })
+
+    // main4
+	$('.page3 .switch').click(function(){
+		onClickChange(this,null);
+    })
+
+    // 重绘图
+    function onClickChange(_this,id){
+        if(!id){
+            var $this = $(_this);
+            var $parent = $(_this).parent();
+            var $brother = $parent.siblings();
+            $this.toggleClass('check');
+            $parent.toggleClass("all");
+            // $parent.animate();
+            if($this.attr('class').indexOf('check')>-1){
+                $brother.css('display','none');
+                $this.html('<i class="fas fa-compress-arrows-alt"></i>');
+            }else{
+                $brother.css('display','flex');
+                $this.html('<i class="fas fa-expand-arrows-alt"></i>');
+            }
+        }else{
+            var $this = $(_this);
+            var $parent = $(_this).parent();
+            var $brother = $parent.siblings();
+            $this.toggleClass('check');
+            $parent.toggleClass("all");
+            if($this.attr('class').indexOf('check')>-1){
+                $brother.css('display','none');
+                $this.html('<i class="fas fa-compress-arrows-alt"></i>');
+                chartsFn(id)
+            }else{
+                $brother.css('display','flex');
+                $this.html('<i class="fas fa-expand-arrows-alt"></i>');
+                chartsFn(id)
+            }
+        }
+    }
+
+    function chartsFn(id){
+        let chartsJson = window.sessionStorage.getItem(id);
+        if(chartsJson){
+            chartFunction(
+                JSON.parse(chartsJson),id
+            )
+        }
+    }
+
 
     $('.page3_time_span_input').val(1);
 
